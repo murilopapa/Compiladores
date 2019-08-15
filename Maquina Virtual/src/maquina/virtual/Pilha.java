@@ -5,23 +5,31 @@ import java.util.ArrayList;
 
 public class Pilha {
 
-    ArrayList<Integer> dados = new ArrayList<Integer>(); // Classe Pilha
+    private ArrayList<Integer> dados = new ArrayList<Integer>(); // Classe Pilha
     private int s = -1;
 
-    //pop tira
     public int getTopoPilha() {
+        int valor_topo = dados.get(s);
+        dados.remove(s);
         s--;
-        return dados.get(s + 1);
+        return valor_topo;
     }
 
     public int getIndexPilha(int index) {
         return dados.get(index);
     }
 
-    //push coloca
+    public void setIndexPilha(int index, int value) {
+        dados.set(index, value);
+        s--;
+    }
+
     public void setTopoPilha(int variavel) {
         dados.add(variavel);
         s++;
     }
 
+    public int getDadosSize() {
+        return dados.size();
+    }
 }
