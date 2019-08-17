@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 public class Memoria {
 
-    ArrayList<Funcoes> funcoes = new ArrayList<Funcoes>();
+    private ArrayList<Funcoes> funcoes = new ArrayList<Funcoes>();
+    private ArrayList<Label> labels = new ArrayList<Label>();
     private int i = 0;
+    private int utlima_linha_lida = 0;
 
     public int getI() {
         return i;
@@ -15,16 +17,26 @@ public class Memoria {
         this.i = i;
     }
 
-    public void addFuncao(String nome, int arg1, int arg2) {
+    public void addFuncao(String nome, String arg1, String arg2) {
         Funcoes funcao = new Funcoes();
         funcao.setFuncao(nome);
         funcao.setArg1(arg1);
         funcao.setArg2(arg2);
         funcoes.add(funcao);
+        if (nome.equals("NULL")) {
+            Label new_label = new Label();
+            new_label.setLabel(arg1);
+            new_label.setLinha(utlima_linha_lida);
+        }
+        utlima_linha_lida++;
     }
 
     public Funcoes getFuncByIndex(int index) {
         return funcoes.get(index);
     }
 
+    public ArrayList<Label> getLabels() {
+        return labels;
+    }
+    
 }
