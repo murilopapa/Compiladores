@@ -21,7 +21,6 @@ public class Pilha {
 
     public void setIndexPilha(int index, int value) {
         dados.set(index, value);
-        s--;
     }
 
     public void setTopoPilha(int variavel) {

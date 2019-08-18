@@ -23,10 +23,11 @@ public class Memoria {
         funcao.setArg1(arg1);
         funcao.setArg2(arg2);
         funcoes.add(funcao);
-        if (nome.equals("NULL")) {
+        if ("NULL".equals(nome)) {
             Label new_label = new Label();
             new_label.setLabel(arg1);
             new_label.setLinha(utlima_linha_lida);
+            labels.add(new_label);
         }
         utlima_linha_lida++;
     }
