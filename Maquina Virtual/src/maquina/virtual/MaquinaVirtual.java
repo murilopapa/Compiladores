@@ -18,8 +18,7 @@ public class MaquinaVirtual {
         //carrega o programa na Memoria (instruções)
 
         //TESTE
-        List<String> list = new ArrayList<String>();
-        File file = new File("/home/mateus/Área de Trabalho/testeAssembly-1.obj");
+        File file = new File("/home/murilo/Downloads/testeAssembly-2.obj");
         BufferedReader reader = null;
 
         try {
@@ -28,7 +27,28 @@ public class MaquinaVirtual {
 
             while ((text = reader.readLine()) != null) {
                 System.out.println(text);
-                //list.add(text);
+                String func = null, arg1 = null, arg2 = null;
+                String[] splited = text.split(" ");
+                for (int i = 0; i < splited.length; i++) {
+                    switch (i) {
+                        case 0:
+                            func = splited[i];
+                            break;
+                        case 1:
+                            arg1 = splited[i];
+                            if (arg1.equals("NULL")) {
+                                String aux;
+                                aux = func;
+                                func = arg1;
+                                arg1 = aux;
+                            }
+                            break;
+                        case 2:
+                            arg2 = splited[i];
+                            break;
+                    }
+                }
+                memoria.addFuncao(func, arg1, arg2);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -42,37 +62,6 @@ public class MaquinaVirtual {
             } catch (IOException e) {
             }
         }
-
-//print out the list
-        System.out.println(list);
-
-        memoria.addFuncao("START", "0", "0");
-        memoria.addFuncao("ALLOC", "0", "3");
-        memoria.addFuncao("RD", "0", "0");
-        memoria.addFuncao("STR", "1", "0");
-        memoria.addFuncao("LDV", "1", "0");
-        memoria.addFuncao("LDC", "1", "0");
-        memoria.addFuncao("ADD", "0", "0");
-        memoria.addFuncao("STR", "1", "0");
-        memoria.addFuncao("LDV", "1", "0");
-        memoria.addFuncao("LDC", "10", "0");
-        memoria.addFuncao("CMA", "0", "0");
-        memoria.addFuncao("JMPF", "L1", "0");
-        memoria.addFuncao("LDC", "1", "0");
-        memoria.addFuncao("STR", "3", "0");
-        memoria.addFuncao("JMP", "L2", "0");
-        memoria.addFuncao("NULL", "L1", "0");
-        memoria.addFuncao("LDC", "2", "0");
-        memoria.addFuncao("STR", "3", "0");
-        memoria.addFuncao("NULL", "L2", "0");
-        memoria.addFuncao("LDV", "1", "0");
-        memoria.addFuncao("LDV", "3", "0");
-        memoria.addFuncao("ADD", "0", "0");
-        memoria.addFuncao("STR", "2", "0");
-        memoria.addFuncao("LDV", "2", "0");
-        memoria.addFuncao("PRN", "0", "0");
-        memoria.addFuncao("DALLOC", "0", "3");
-        memoria.addFuncao("HLT", "0", "0");
 
         boolean execute = true;
 
@@ -277,16 +266,10 @@ public class MaquinaVirtual {
                 case "STR":         //pega o valor do topo, remove, e salva em uma posiçao ja existente
                     arg1s = funcao_atual.getArg1();
                     arg1i = Integer.parseInt(arg1s);
-                    if (pilha.getDadosSize() - 1 == arg1i) {
-                        pilha.getTopoPilha();
-                    } else {
-                        if (pilha.getDadosSize() - 1 < arg1i) {
 
-                        } else {
-                            arg2i = pilha.getTopoPilha();
-                            pilha.setIndexPilha(arg1i, arg2i);
-                        }
-                    }
+                    arg2i = pilha.getTopoPilha();
+                    pilha.setIndexPilha(arg1i, arg2i);
+
                     memoria.setI(memoria.getI() + 1);
                     printaPilha(pilha, funcao_atual.getFuncao());
                     break;
@@ -343,7 +326,7 @@ public class MaquinaVirtual {
                         if ((arg1i + i) < pilha.getDadosSize()) {
                             pilha.setTopoPilha(pilha.getIndexPilha(arg1i + i));
                         } else {
-                            pilha.setTopoPilha(-999999);
+                            pilha.setTopoPilha(0);
                         }
 
                     }
@@ -355,7 +338,7 @@ public class MaquinaVirtual {
                     arg2s = funcao_atual.getArg2();
                     arg1i = Integer.parseInt(arg1s);
                     arg2i = Integer.parseInt(arg2s);
-
+                    // O ERRO DO EXEMPLO 2 ESTA NA CONDIÇÃO DO IF, ARRUMAR
                     for (int i = arg2i - 1; i >= 0; i--) {
                         if (i == (pilha.getDadosSize() - 1)) {
                             pilha.getTopoPilha();
@@ -367,10 +350,19 @@ public class MaquinaVirtual {
                     printaPilha(pilha, funcao_atual.getFuncao());
                     break;
                 case "CALL":
+                    arg1s = funcao_atual.getArg1();
+
+                    for (int i = 0; i < labels.size(); i++) {           //percorro
+                        Label aux_label = labels.get(i);
+                        if (aux_label.getLabel().equals(arg1s)) {       //se achar a label que eu quero dar o jump
+                            memoria.setI(aux_label.getLinha());         //seto o "i" para o indice dessa label
+                            pilha.setTopoPilha(memoria.getI() + 1);
+                        }
+                    }
 
                     break;
                 case "RETURN":
-
+                    memoria.setI(pilha.getTopoPilha());
                     break;
             }
         }
