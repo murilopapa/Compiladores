@@ -1,8 +1,8 @@
 package maquina.virtual;
 
 public class Funcoes {
-    private String funcao = new String();
-    private String arg1, arg2;
+
+    private String funcao, arg1, arg2;
 
     public String getFuncao() {
         return funcao;
@@ -28,7 +28,4 @@ public class Funcoes {
         this.arg2 = arg2;
     }
 
-    
-    
-    
 }

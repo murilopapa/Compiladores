@@ -1,6 +1,12 @@
 package maquina.virtual;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MaquinaVirtual {
@@ -10,6 +16,35 @@ public class MaquinaVirtual {
         Memoria memoria = new Memoria();
         Pilha pilha = new Pilha();
         //carrega o programa na Memoria (instruções)
+
+        //TESTE
+        List<String> list = new ArrayList<String>();
+        File file = new File("/home/mateus/Área de Trabalho/testeAssembly-1.obj");
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String text = null;
+
+            while ((text = reader.readLine()) != null) {
+                System.out.println(text);
+                //list.add(text);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+
+//print out the list
+        System.out.println(list);
 
         memoria.addFuncao("START", "0", "0");
         memoria.addFuncao("ALLOC", "0", "3");
