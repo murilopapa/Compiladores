@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MaquinaVirtual {
@@ -15,16 +14,16 @@ public class MaquinaVirtual {
         Scanner scanner = new Scanner(System.in);
         Memoria memoria = new Memoria();
         Pilha pilha = new Pilha();
-        //carrega o programa na Memoria (instruções)
+        ArrayList<Label> labels = new ArrayList<Label>();      //pego todas as labels que registrei
 
-        //TESTE
+        
         File file = new File("/home/murilo/Downloads/testeAssembly-2.obj");
         BufferedReader reader = null;
 
         try {
             reader = new BufferedReader(new FileReader(file));
-            String text = null;
-
+            String text;
+            int count_linha = 0;
             while ((text = reader.readLine()) != null) {
                 System.out.println(text);
                 String func = null, arg1 = null, arg2 = null;
@@ -37,10 +36,16 @@ public class MaquinaVirtual {
                         case 1:
                             arg1 = splited[i];
                             if (arg1.equals("NULL")) {
+
                                 String aux;
                                 aux = func;
                                 func = arg1;
                                 arg1 = aux;
+
+                                Label newLabel = new Label();
+                                newLabel.setLabel(arg1);
+                                newLabel.setLinha(count_linha);
+                                labels.add(newLabel);
                             }
                             break;
                         case 2:
@@ -49,6 +54,7 @@ public class MaquinaVirtual {
                     }
                 }
                 memoria.addFuncao(func, arg1, arg2);
+                count_linha++;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -70,7 +76,6 @@ public class MaquinaVirtual {
             String arg1s, arg2s;
             int arg1i, arg2i;
             Funcoes funcao_atual = memoria.getFuncByIndex(memoria.getI());
-            ArrayList<Label> labels = memoria.getLabels();      //pego todas as labels que registrei
             switch (funcao_atual.getFuncao()) {
                 case "LDC":     //coloca uma constante no topo da pilha
                     arg1s = funcao_atual.getArg1();
@@ -340,11 +345,12 @@ public class MaquinaVirtual {
                     arg2i = Integer.parseInt(arg2s);
                     // O ERRO DO EXEMPLO 2 ESTA NA CONDIÇÃO DO IF, ARRUMAR
                     for (int i = arg2i - 1; i >= 0; i--) {
-                        if (i == (pilha.getDadosSize() - 1)) {
+                        if ((arg1i + i) >= pilha.getDadosSize()-1) {
                             pilha.getTopoPilha();
                         } else {
                             pilha.setIndexPilha(arg1i + i, pilha.getTopoPilha());
                         }
+
                     }
                     memoria.setI(memoria.getI() + 1);
                     printaPilha(pilha, funcao_atual.getFuncao());
@@ -355,8 +361,8 @@ public class MaquinaVirtual {
                     for (int i = 0; i < labels.size(); i++) {           //percorro
                         Label aux_label = labels.get(i);
                         if (aux_label.getLabel().equals(arg1s)) {       //se achar a label que eu quero dar o jump
-                            memoria.setI(aux_label.getLinha());         //seto o "i" para o indice dessa label
                             pilha.setTopoPilha(memoria.getI() + 1);
+                            memoria.setI(aux_label.getLinha());         //seto o "i" para o indice dessa label
                         }
                     }
 
