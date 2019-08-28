@@ -28,5 +28,7 @@ public class Memoria {
         return funcoes.get(index);
     }
 
-    
+    public int getTotalLinhas(){
+        return funcoes.size();
+    }
 }

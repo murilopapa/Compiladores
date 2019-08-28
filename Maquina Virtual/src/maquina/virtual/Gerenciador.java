@@ -391,4 +391,14 @@ public class Gerenciador {
         }
         System.out.println("----------");
     }
+
+    public static int TamanhoMemoria() {
+        return memoria.getTotalLinhas();
+    }
+
+    public static Memoria getMemoria() {
+        return memoria;
+    }
+    
+
 }
