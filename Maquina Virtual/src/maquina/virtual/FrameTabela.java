@@ -38,7 +38,7 @@ public class FrameTabela {
     public FrameTabela(File recebe_arquivo_obj) {
         arquivo_obj = recebe_arquivo_obj;
         
-        if (INSTANCE.addExecutavel(arquivo_obj) == false) {
+        if (INSTANCE.LerArquivo(arquivo_obj) == false) {
             JOptionPane.showMessageDialog(null, "Erro ao abrir arquivo");
         }
     }
