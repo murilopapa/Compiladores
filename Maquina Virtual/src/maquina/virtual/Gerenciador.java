@@ -25,7 +25,7 @@ public class Gerenciador {
         return INSTANCE;
     }
 
-    public static boolean LerArquivo(File objLido) {
+    public boolean LerArquivo(File objLido) {
         BufferedReader reader = null;
 
         try {
@@ -81,7 +81,8 @@ public class Gerenciador {
         return true;
     }
 
-    public static void ExecutaLinha() {
+    public boolean ExecutaLinha() {
+        boolean finished = false;
         int aux;
         String arg1s, arg2s;
         int arg1i, arg2i;
@@ -274,6 +275,8 @@ public class Gerenciador {
 
             case "HLT":         //termina o codigo
                 System.out.println("Finalizado!");
+                finished = true;
+                memoria.setI(0);
                 printaPilha(pilha, funcao_atual.getFuncao());     //funcao extra para printar a pilha
                 break;  //OK
 
@@ -380,9 +383,15 @@ public class Gerenciador {
                 memoria.setI(pilha.getTopoPilha());
                 break;
         }
+        if (finished) {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
-    public static void printaPilha(Pilha pilha, String comando) {
+    public void printaPilha(Pilha pilha, String comando) {
         System.out.println("----------");
         System.out.println("COMANDO: " + comando);
         System.out.println("PILHA:");
@@ -392,13 +401,16 @@ public class Gerenciador {
         System.out.println("----------");
     }
 
-    public static int TamanhoMemoria() {
+    public int TamanhoMemoria() {
         return memoria.getTotalLinhas();
     }
 
-    public static Memoria getMemoria() {
+    public Memoria getMemoria() {
         return memoria;
     }
-    
 
+    public Pilha getPilha() {
+        return pilha;
+    }
+    
 }

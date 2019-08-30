@@ -31,4 +31,5 @@ public class Pilha {
     public int getDadosSize() {
         return dados.size();
     }
+    
 }

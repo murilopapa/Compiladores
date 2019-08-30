@@ -14,15 +14,14 @@ import javax.swing.JScrollPane;
 
 public class FrameTabela extends JPanel {
 
-    private FrameTabela frameTabela = this;
-    private File arquivo_obj;
+    private final FrameTabela frameTabela = this;
+    private final File arquivo_obj;
 
-    private Object[][] codigo;
-    private String[] titulos;
+    private final Object[][] codigo;
+    private final String[] titulos;
 
-    private JTable table;
-    private JPanel tabela = this;
-    private JScrollPane barraRolagem;
+    private final JTable table;
+    private final JScrollPane barraRolagem;
 
     Gerenciador INSTANCE = Gerenciador.getInstance();
 
