@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 public class Gerenciador {
 
@@ -16,6 +17,7 @@ public class Gerenciador {
     private static Memoria memoria = new Memoria();
     private static Pilha pilha = new Pilha();
     private static ArrayList<Label> labels = new ArrayList<Label>();      //pego todas as labels que registrei
+    private static ArrayList<String> prints = new ArrayList<String>();
 
     public static Gerenciador getInstance() {
         if (INSTANCE == null) {
@@ -322,13 +324,15 @@ public class Gerenciador {
                 break;  //OK
             case "RD":          //le um inteiro do terminal
                 System.out.println("ENTRADA:");
-                arg1i = scanner.nextInt();
+                arg1i = Integer.parseInt(JOptionPane.showInputDialog(null, "Digite o numero: "));
+                //arg1i = scanner.nextInt();
                 pilha.setTopoPilha(arg1i);
                 memoria.setI(memoria.getI() + 1);
                 printaPilha(pilha, funcao_atual.getFuncao());
                 break;  //OK
             case "PRN":         //printa o valor do topo e remove ele
                 arg1i = pilha.getTopoPilha();
+                prints.add("" + arg1i);
                 System.out.println("SAIDA: " + arg1i);
                 memoria.setI(memoria.getI() + 1);
                 printaPilha(pilha, funcao_atual.getFuncao());
@@ -384,9 +388,9 @@ public class Gerenciador {
                 break;
         }
         if (finished) {
+            prints.clear();
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -411,6 +415,10 @@ public class Gerenciador {
 
     public Pilha getPilha() {
         return pilha;
+    }
+
+    public static ArrayList<String> getPrints() {
+        return prints;
     }
     
 }

@@ -1,11 +1,14 @@
 package maquina.virtual;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.io.File;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class teste extends javax.swing.JFrame {
 
@@ -29,8 +32,6 @@ public class teste extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
@@ -46,7 +47,6 @@ public class teste extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Maquina Virtual");
-        setPreferredSize(new java.awt.Dimension(1000, 700));
         setResizable(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -97,8 +97,6 @@ public class teste extends javax.swing.JFrame {
             jTable2.getColumnModel().getColumn(0).setResizable(false);
             jTable2.getColumnModel().getColumn(1).setResizable(false);
         }
-
-        jLabel1.setText("Entrada");
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -165,15 +163,11 @@ public class teste extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45))
@@ -186,23 +180,19 @@ public class teste extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(45, 45, 45)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4))))
                 .addGap(38, 38, 38))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //funcao para carregar o arquivo
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 
         JFileChooser abrir_arquivo = new JFileChooser();
@@ -214,9 +204,6 @@ public class teste extends javax.swing.JFrame {
 
         if (valor == JFileChooser.APPROVE_OPTION) {
             arquivo_obj = abrir_arquivo.getSelectedFile(); //pego o arquivo escolhido
-
-            Object[][] codigo;
-            String[] titulos;
 
             if (INSTANCE.LerArquivo(arquivo_obj)
                     == false) {
@@ -234,9 +221,7 @@ public class teste extends javax.swing.JFrame {
             titulos[3] = "ARG1";
             titulos[4] = "ARG2";
             Memoria recebe_memoria = INSTANCE.getMemoria();
-            for (int i = 0;
-                    i < recebe_memoria.getTotalLinhas();
-                    i++) {
+            for (int i = 0; i < recebe_memoria.getTotalLinhas(); i++) { //loop percorrendo todas as linhas lidas do codigo, e instanciando na tabela
                 Funcoes funcao_atual = recebe_memoria.getFuncByIndex(i);
                 codigo[i][0] = i + 1;
                 codigo[i][1] = null;
@@ -244,7 +229,7 @@ public class teste extends javax.swing.JFrame {
                 codigo[i][3] = funcao_atual.getArg1();
                 codigo[i][4] = funcao_atual.getArg2();
             }
-            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            jTable1.setModel(new javax.swing.table.DefaultTableModel( //codigo ja criado pelo BUILDER com a implementação pra add a tabela que acabmos de criar
                     codigo,
                     titulos
             ) {
@@ -256,36 +241,56 @@ public class teste extends javax.swing.JFrame {
                     return canEdit[columnIndex];
                 }
             });
+
+            int linha_atual = INSTANCE.getMemoria().getI();
+
+            jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                    final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    c.setBackground(row == linha_atual ? Color.RED : Color.WHITE);
+                    return c;
+                }
+            });
+
             jTable1.setColumnSelectionAllowed(true);
             jScrollPane1.setViewportView(jTable1);
-            jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-            if (jTable1.getColumnModel().getColumnCount() > 0) {
+
+            jTable1.getColumnModel()
+                    .getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+            if (jTable1.getColumnModel()
+                    .getColumnCount() > 0) {
                 jTable1.getColumnModel().getColumn(0).setResizable(false);
                 jTable1.getColumnModel().getColumn(1).setResizable(false);
                 jTable1.getColumnModel().getColumn(2).setResizable(false);
                 jTable1.getColumnModel().getColumn(3).setResizable(false);
                 jTable1.getColumnModel().getColumn(4).setResizable(false);
             }
+
             jScrollPane1.setViewportView(jTable1);
         }
         jMenuItem2.setEnabled(true);
         jMenuItem3.setEnabled(true);
-        jMenuItem4.setEnabled(true);
+        jMenuItem4.setEnabled(true);    //ate aqui é o codigo do builder re-escrito
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    //ação do botao executar, que executa o codigo todo
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        boolean finished = false;
-        jButton1.setEnabled(true);
+        boolean finished = false;   //para saber se acabou o codigo ou nao
+        jButton1.setEnabled(true);  //eu deixo o botao de "proximo passo" ativo, pq ele tava desabilitado
         do {
-            finished = INSTANCE.ExecutaLinha();
-            Pilha pilha_aux = INSTANCE.getPilha();
-            Object[][] dados_pilha = new Object[pilha_aux.getDadosSize()][2];
+            jTable1.updateUI();
+            jTable2.updateUI();
+            jTextArea1.updateUI();
+            finished = INSTANCE.ExecutaLinha(); //executo a linha
+            Pilha pilha_aux = INSTANCE.getPilha();  //pego toda a pilha
+            Object[][] dados_pilha = new Object[pilha_aux.getDadosSize()][2];   //instancio um object do tamanho da pilha (numero de linhas)
 
-            for (int i = 0; i < pilha_aux.getDadosSize(); i++) {
+            for (int i = 0; i < pilha_aux.getDadosSize(); i++) {    //preencho esse obj
                 dados_pilha[i][0] = i;
                 dados_pilha[i][1] = pilha_aux.getIndexPilha(i);
             }
-            jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            jTable2.setModel(new javax.swing.table.DefaultTableModel( //re-instancio a tabela de pilha, com os dados atualizados
                     dados_pilha,
                     new String[]{
                         "Endereço", "Pilha"
@@ -303,14 +308,28 @@ public class teste extends javax.swing.JFrame {
             if (jTable2.getColumnModel().getColumnCount() > 0) {
                 jTable2.getColumnModel().getColumn(0).setResizable(false);
             }
-
-        } while (!finished);
-        jButton1.setEnabled(false);
+            //ate ai em cima, é codigo do builder, re-utilizado
+            String output_text = "";    //crio uma string vazia pra mostrar os outputs
+            java.util.ArrayList<String> prints = INSTANCE.getPrints();  //pego a lista de outputs feitos
+            for (int i = 0; i < prints.size(); i++) {
+                output_text.concat("OUTPUT: " + prints.get(i) + "\n");   //trato elas melhor, pra printar com o /n
+            }
+            //codigo do builder para instanciar bonitinho o textarea
+            jTextArea1 = new javax.swing.JTextArea(output_text);
+            jTextArea1.setColumns(20);
+            jTextArea1.setRows(5);
+            jTextArea1.setEditable(false);
+            jScrollPane4.setViewportView(jTextArea1);
+        } while (!finished);    //faço o loop enquanto aquela primeira variavel booleana nao for alterada
+        //eu achei melhor fazer por while, pq pode ser que no codigo eu tenha um "loop infinito", entao aqui ficaria em loop infinito
+        jButton1.setEnabled(false); //desabilito o botao, pq acabou a execução do codigo
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+//opção de passo-a-passo, na hr que eu clico, ele executa o codigo uma vez
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        jButton1.setEnabled(true);
-        boolean finished = INSTANCE.ExecutaLinha();
+        jButton1.setEnabled(true);  //habilito o botao pra poder dar o proximo passo
+        boolean finished = INSTANCE.ExecutaLinha(); //executo uma linha
+        //mesma coisa do codigo acima, mas tirando o loop, pq é uma linha por vez
         Pilha pilha_aux = INSTANCE.getPilha();
         Object[][] dados_pilha = new Object[pilha_aux.getDadosSize()][2];
 
@@ -332,16 +351,42 @@ public class teste extends javax.swing.JFrame {
                 return canEdit[columnIndex];
             }
         });
+
+        String output_text = "";
+        java.util.ArrayList<String> prints = INSTANCE.getPrints();
+        for (int i = 0; i < prints.size(); i++) {
+            output_text.concat(prints.get(i) + "\n");
+        }
+
+        jTextArea1 = new javax.swing.JTextArea(output_text);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setEditable(false);
+        jScrollPane4.setViewportView(jTextArea1);
         jScrollPane2.setViewportView(jTable2);
+
         if (jTable2.getColumnModel().getColumnCount() > 0) {
             jTable2.getColumnModel().getColumn(0).setResizable(false);
         }
         if (finished) {
             jButton1.setEnabled(false);
         }
+        int linha_atual = INSTANCE.getMemoria().getI();
+
+        jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(row == linha_atual ? Color.RED : Color.WHITE);
+                return c;
+            }
+        });
+        jTable1.updateUI();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    //botao de execução passo-a-passo
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //mesmo codigo da func acima
         jButton1.setEnabled(false);
         boolean finished = INSTANCE.ExecutaLinha();
         Pilha pilha_aux = INSTANCE.getPilha();
@@ -369,10 +414,33 @@ public class teste extends javax.swing.JFrame {
         if (jTable2.getColumnModel().getColumnCount() > 0) {
             jTable2.getColumnModel().getColumn(0).setResizable(false);
         }
+        String output_text = "";
+        java.util.ArrayList<String> prints = INSTANCE.getPrints();
+        for (int i = 0; i < prints.size(); i++) {
+            output_text = output_text.concat(prints.get(i) + "\n");
+        }
+        System.out.println("OUTPUT TEXT:" + output_text);
+        jTextArea1 = new javax.swing.JTextArea(output_text);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setEditable(false);
+        jScrollPane4.setViewportView(jTextArea1);
         jButton1.setEnabled(true);
         if (finished) {
             jButton1.setEnabled(false);
         }
+        int linha_atual = INSTANCE.getMemoria().getI();
+
+        jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(row == linha_atual ? Color.RED : Color.WHITE);
+                return c;
+            }
+        });
+        jTable1.updateUI();
+        System.out.println("executou linha " + linha_atual);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -412,7 +480,6 @@ public class teste extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -428,6 +495,9 @@ public class teste extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
+    private Object[][] codigo;  //crio as variaveis que vao na tabela
+    private String[] titulos;
+
 }
