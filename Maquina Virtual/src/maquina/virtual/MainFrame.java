@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -27,6 +28,9 @@ public class MainFrame extends JFrame {
     private JMenuItem importar;
     private Gerenciador INSTANCE = Gerenciador.getInstance();
     private Panel planoFundo = new Panel();
+    
+    // Ícones
+    private ImageIcon arquivoImg = new ImageIcon(getClass().getResource("images/arquivoImg.png"));
 
     public MainFrame() {
         super("Maquina Virtual");
@@ -37,6 +41,7 @@ public class MainFrame extends JFrame {
         menuBar = new JMenuBar();
         // Variáveis Items Barra Menu
         arquivos = new JMenu("Arquivos");
+        arquivos.setIcon(arquivoImg);
         executar = new JMenu("Executar");
         sobre = new JMenu("Sobre...");
         // Variáveis Opcoes Items Menu
