@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ public class Gerenciador {
     private static Gerenciador INSTANCE;
     private static Scanner scanner = new Scanner(System.in);
     private static Lexico analisadorLexico;
+    private ArrayList<Token> tokens = new ArrayList<Token>();
 
     public static Gerenciador getInstance() {
         if (INSTANCE == null) {
@@ -36,6 +38,7 @@ public class Gerenciador {
         try {
             reader = new BufferedReader(new FileReader(lpdLido));
             analisadorLexico = new Lexico(reader);
+            printaTokens();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Gerenciador.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -46,4 +49,17 @@ public class Gerenciador {
 
         return true;
     }
+
+    public void addToken(Token new_token) {
+        tokens.add(new_token);
+    }
+
+    public void printaTokens() {
+        for (Token token : tokens) {
+            System.out.println("token.lexema: " + token.getLexema());
+            System.out.println("token.simbolo: " + token.getSimbolo());
+            System.out.println("----------------");
+        }
+    }
+
 }
