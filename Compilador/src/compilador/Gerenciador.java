@@ -22,6 +22,7 @@ public class Gerenciador {
 
     private static Gerenciador INSTANCE;
     private static Scanner scanner = new Scanner(System.in);
+    private static Lexico analisadorLexico;
 
     public static Gerenciador getInstance() {
         if (INSTANCE == null) {
@@ -34,10 +35,7 @@ public class Gerenciador {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(lpdLido));
-            String text;
-            while ((text = reader.readLine()) != null) {
-                System.out.println(text);
-            }
+            analisadorLexico = new Lexico(reader);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Gerenciador.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -45,6 +43,7 @@ public class Gerenciador {
             Logger.getLogger(Gerenciador.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+
         return true;
     }
 }
