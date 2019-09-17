@@ -20,6 +20,7 @@ public class Interface extends JFrame {
      * Creates new form Interface
      */
     Gerenciador INSTANCE = Gerenciador.getInstance();
+    private static Lexico analisadorLexico;
     
     public Interface() {
         initComponents();
@@ -34,11 +35,21 @@ public class Interface extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         barraMenu = new javax.swing.JMenuBar();
         arquivoButton = new javax.swing.JMenu();
         importarLPDItem = new javax.swing.JMenuItem();
+        compilarButton = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTextArea1.setBackground(new java.awt.Color(39, 40, 34));
+        jTextArea1.setColumns(20);
+        jTextArea1.setForeground(new java.awt.Color(250, 250, 250));
+        jTextArea1.setRows(5);
+        jTextArea1.setSelectedTextColor(new java.awt.Color(230, 230, 230));
+        jScrollPane1.setViewportView(jTextArea1);
 
         arquivoButton.setText("Arquivo");
 
@@ -53,17 +64,25 @@ public class Interface extends JFrame {
 
         barraMenu.add(arquivoButton);
 
+        compilarButton.setText("Compilar");
+        compilarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                compilarButtonActionPerformed(evt);
+            }
+        });
+        barraMenu.add(compilarButton);
+
         setJMenuBar(barraMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1002, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 326, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
         );
 
         pack();
@@ -86,6 +105,11 @@ public class Interface extends JFrame {
             
         }
     }//GEN-LAST:event_importarLPDItemActionPerformed
+
+    private void compilarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compilarButtonActionPerformed
+        // TODO add your handling code here:
+        //analisadorLexico = new Lexico(reader);
+    }//GEN-LAST:event_compilarButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,6 +149,9 @@ public class Interface extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu arquivoButton;
     private javax.swing.JMenuBar barraMenu;
+    private javax.swing.JMenu compilarButton;
     private javax.swing.JMenuItem importarLPDItem;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

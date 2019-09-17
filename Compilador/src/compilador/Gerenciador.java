@@ -37,8 +37,18 @@ public class Gerenciador {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(lpdLido));
-            analisadorLexico = new Lexico(reader);
-            printaTokens();
+            String atual = reader.readLine();
+            while (atual != null) {
+                System.out.println(atual);
+                
+                
+                
+                
+                
+                atual = reader.readLine();
+        }
+            //analisadorLexico = new Lexico(reader);
+            //printaTokens();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Gerenciador.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -53,13 +63,13 @@ public class Gerenciador {
     public void addToken(Token new_token) {
         tokens.add(new_token);
     }
-
+/*
     public void printaTokens() {
         for (Token token : tokens) {
             System.out.println("token.lexema: " + token.getLexema());
             System.out.println("token.simbolo: " + token.getSimbolo());
             System.out.println("----------------");
         }
-    }
+    }*/
 
 }
