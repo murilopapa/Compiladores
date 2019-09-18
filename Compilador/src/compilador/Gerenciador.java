@@ -25,7 +25,7 @@ public class Gerenciador {
     private static Scanner scanner = new Scanner(System.in);
     private static Lexico analisadorLexico;
     private ArrayList<Token> tokens = new ArrayList<Token>();
-
+    
     public static Gerenciador getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new Gerenciador();
@@ -33,18 +33,14 @@ public class Gerenciador {
         return INSTANCE;
     }
 
-    public boolean LerArquivo(File lpdLido) {
+    public boolean LerArquivo(File lpdLido, javax.swing.JTextArea jTextArea1) {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(lpdLido));
             String atual = reader.readLine();
             while (atual != null) {
-                System.out.println(atual);
-                
-                
-                
-                
-                
+                //System.out.println(atual);
+                jTextArea1.read(reader, "jTextArea1");
                 atual = reader.readLine();
         }
             //analisadorLexico = new Lexico(reader);
@@ -56,6 +52,8 @@ public class Gerenciador {
             Logger.getLogger(Gerenciador.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+        //String text = jTextArea1.getText();
+        //System.out.println(text);
 
         return true;
     }
@@ -63,13 +61,13 @@ public class Gerenciador {
     public void addToken(Token new_token) {
         tokens.add(new_token);
     }
-/*
+
     public void printaTokens() {
         for (Token token : tokens) {
             System.out.println("token.lexema: " + token.getLexema());
             System.out.println("token.simbolo: " + token.getSimbolo());
             System.out.println("----------------");
         }
-    }*/
+    }
 
 }

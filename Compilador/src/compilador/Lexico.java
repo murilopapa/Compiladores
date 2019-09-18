@@ -8,13 +8,16 @@ public class Lexico {
     Gerenciador INSTANCE = Gerenciador.getInstance();
 
     private int linha_atual = 1;
+    private int tamanho_string;
     private char caracter;
     private boolean file_not_finished = true;
+    private int char_to_read = 0;
 
-    Lexico(BufferedReader reader) throws IOException {
-
-        int caractere_int = reader.read();      //pego 1 char
-        if (caractere_int == -1) {
+    Lexico(String reader) throws IOException {
+        tamanho_string = reader.length();
+        int caractere_int = reader.charAt(char_to_read);      //pego 1 char
+        char_to_read++;
+        if (char_to_read == tamanho_string) {
             file_not_finished = false;
         }
         caracter = (char) caractere_int;    //converto pra char
@@ -25,8 +28,9 @@ public class Lexico {
                 case '{':               //se for comentário
                     boolean stop_loop = false;  //crio uma variavel pra controlar o while
                     do {
-                        caractere_int = reader.read();  //leio o char
-                        if (caractere_int == -1) {        //se for eof, paro o loop
+                        caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                        char_to_read++;
+                        if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                             stop_loop = true;            //paro ESSE do while
                             file_not_finished = false;  //paro o while externo
                         } else {
@@ -37,8 +41,9 @@ public class Lexico {
                         }
                     } while (!stop_loop);
                     //depois do loop, eu tenho que ler mais um, pra enviar na proxima vez do while
-                    caractere_int = reader.read();  //leio o char
-                    if (caractere_int == -1) {        //se for eof, paro o loop
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                         file_not_finished = false;  //paro o while externo
                     } else {
                         caracter = (char) caractere_int;
@@ -46,8 +51,9 @@ public class Lexico {
                     break;
                 case ' ':
                     //se for espaço, eu só ignoro e pego o proximo
-                    caractere_int = reader.read();  //leio o char
-                    if (caractere_int == -1) {        //se for eof, paro o loop
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                         file_not_finished = false;  //paro o while externo
                     } else {
                         caracter = (char) caractere_int;
@@ -55,8 +61,9 @@ public class Lexico {
                     break;
                 case 13:
                     //n sei pq, mas tem que ler essa merda
-                    caractere_int = reader.read();  //leio o char
-                    if (caractere_int == -1) {        //se for eof, paro o loop
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                         file_not_finished = false;  //paro o while externo
                     } else {
                         caracter = (char) caractere_int;
@@ -65,8 +72,9 @@ public class Lexico {
                 case '\n':
                     //se for \n eu tb so ignoro, mas eu add 1 na linha que eu to lendo, pra ter o controle de qual linha é e pego o prox char
                     linha_atual++;
-                    caractere_int = reader.read();  //leio o char
-                    if (caractere_int == -1) {        //se for eof, paro o loop
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                         file_not_finished = false;  //paro o while externo
                     } else {
                         caracter = (char) caractere_int;
@@ -78,11 +86,11 @@ public class Lexico {
             }
 
         }
-
     }
 
-    public void pegaToken(BufferedReader reader) throws IOException {
+    public void pegaToken(String reader) throws IOException {
         //se for digito
+        int caractere_int;
         if (caracter >= 48 && caracter <= 57) {
             trataDigito(reader);
         } //se for letra
@@ -92,8 +100,9 @@ public class Lexico {
         } //se for :
         else if (caracter == 58) {
             trataAtribuicao(reader);
-            int caractere_int = reader.read();  //leio o char
-            if (caractere_int == -1) {        //se for eof, paro o loop
+            caractere_int = reader.charAt(char_to_read);      //pego 1 char
+            char_to_read++;
+            if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                 file_not_finished = false;  //paro o while externo
             } else {
                 caracter = (char) caractere_int;
@@ -101,8 +110,9 @@ public class Lexico {
         } //se for + - *
         else if (caracter == 43 || caracter == 45 || caracter == 42) {
             trataOpAritimetica(reader);
-            int caractere_int = reader.read();  //leio o char
-            if (caractere_int == -1) {        //se for eof, paro o loop
+            caractere_int = reader.charAt(char_to_read);      //pego 1 char
+            char_to_read++;
+            if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                 file_not_finished = false;  //paro o while externo
             } else {
                 caracter = (char) caractere_int;
@@ -110,8 +120,9 @@ public class Lexico {
         } //se for < > = !=
         else if ((caracter >= 60 && caracter <= 62) || (caracter == 33)) {
             trataOpRelacional(reader);
-            int caractere_int = reader.read();  //leio o char
-            if (caractere_int == -1) {        //se for eof, paro o loop
+            caractere_int = reader.charAt(char_to_read);      //pego 1 char
+            char_to_read++;
+            if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                 file_not_finished = false;  //paro o while externo
             } else {
                 caracter = (char) caractere_int;
@@ -119,8 +130,9 @@ public class Lexico {
         } //se for ; , ( ) .
         else if (caracter == 59 || caracter == 44 || caracter == 40 || caracter == 41 || caracter == 46) {
             trataPontuacao(reader);
-            int caractere_int = reader.read();  //leio o char
-            if (caractere_int == -1) {        //se for eof, paro o loop
+            caractere_int = reader.charAt(char_to_read);      //pego 1 char
+            char_to_read++;
+            if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                 file_not_finished = false;  //paro o while externo
             } else {
                 caracter = (char) caractere_int;
@@ -134,14 +146,15 @@ public class Lexico {
 
     }
 
-    public void trataDigito(BufferedReader reader) throws IOException {
+    public void trataDigito(String reader) throws IOException {
         String palavra = "";
         palavra = palavra.concat(String.valueOf(caracter));
 
         boolean stop_loop = false;
         do {
-            int caractere_int = reader.read();  //leio o char
-            if (caractere_int == -1) {          //se for eof, paro o loop
+            int caractere_int = reader.charAt(char_to_read);      //pego 1 char
+            char_to_read++;
+            if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                 file_not_finished = false;
                 stop_loop = true;               //paro ESSE do while
             } else {
@@ -161,14 +174,15 @@ public class Lexico {
         INSTANCE.addToken(new_token);
     }
 
-    public void trataIdentificador(BufferedReader reader) throws IOException {
+    public void trataIdentificador(String reader) throws IOException {
         String palavra = "";
         palavra = palavra.concat(String.valueOf(caracter));
 
         boolean stop_loop = false;
         do {
-            int caractere_int = reader.read();  //leio o char
-            if (caractere_int == -1) {          //se for eof, paro o loop
+            int caractere_int = reader.charAt(char_to_read);      //pego 1 char
+            char_to_read++;
+            if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                 file_not_finished = false;
                 stop_loop = true;               //paro ESSE do while
             } else {
@@ -257,12 +271,13 @@ public class Lexico {
         INSTANCE.addToken(new_token);
     }
 
-    public void trataAtribuicao(BufferedReader reader) throws IOException {
+    public void trataAtribuicao(String reader) throws IOException {
         String palavra = "";
         palavra = palavra.concat(String.valueOf(caracter));
 
-        int caractere_int = reader.read();  //leio o char
-        if (caractere_int == -1) {          //se for eof, paro o loop
+        int caractere_int = reader.charAt(char_to_read);      //pego 1 char
+        char_to_read++;
+        if (char_to_read == tamanho_string) {          //se for eof, paro o loop
             file_not_finished = false;
         } else {
             caracter = (char) caractere_int; //se nao, continuo
@@ -273,8 +288,9 @@ public class Lexico {
                 new_token.setSimbolo("satribuicao");
                 INSTANCE.addToken(new_token);
                 //aqui eu leio um char de novo, pq eu trato o : e o =, entao tenho que ler outro
-                caractere_int = reader.read();  //leio o char
-                if (caractere_int == -1) {          //se for eof, paro o loop
+                caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                char_to_read++;
+                if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                     file_not_finished = false;          //paro ESSE do while
                 } else {
                     caracter = (char) caractere_int; //se nao, continuo
@@ -292,7 +308,7 @@ public class Lexico {
 
     }
 
-    public void trataOpAritimetica(BufferedReader reader) {
+    public void trataOpAritimetica(String reader) {
         String palavra = "";
         palavra = palavra.concat(String.valueOf(caracter));
         Token new_token = new Token();
@@ -312,7 +328,7 @@ public class Lexico {
 
     }
 
-    public void trataOpRelacional(BufferedReader reader) throws IOException {
+    public void trataOpRelacional(String reader) throws IOException {
         String palavra = "";
         palavra = palavra.concat(String.valueOf(caracter));
         Token new_token = new Token();
@@ -334,8 +350,9 @@ public class Lexico {
                 INSTANCE.addToken(new_token);
                 break;
             case "!":
-                int caractere_int = reader.read();  //leio o char
-                if (caractere_int == -1) {          //se for eof, paro o loop
+                int caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                char_to_read++;
+                if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                     file_not_finished = false;
                 } else {
                     caracter = (char) caractere_int; //se nao, continuo
@@ -346,8 +363,9 @@ public class Lexico {
                     new_token.setSimbolo("sdif");
                     INSTANCE.addToken(new_token);
 
-                    caractere_int = reader.read();  //leio o char
-                    if (caractere_int == -1) {          //se for eof, paro o loop
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                         file_not_finished = false;
                     } else {
                         caracter = (char) caractere_int; //se nao, continuo
@@ -361,7 +379,7 @@ public class Lexico {
 
     }
 
-    public void trataPontuacao(BufferedReader reader) {
+    public void trataPontuacao(String reader) {
         String palavra = "";
         palavra = palavra.concat(String.valueOf(caracter));
         Token new_token = new Token();

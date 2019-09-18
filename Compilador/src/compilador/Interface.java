@@ -6,6 +6,9 @@
 package compilador;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -35,12 +38,16 @@ public class Interface extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem1 = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         barraMenu = new javax.swing.JMenuBar();
         arquivoButton = new javax.swing.JMenu();
         importarLPDItem = new javax.swing.JMenuItem();
-        compilarButton = new javax.swing.JMenu();
+        executarButton = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -48,6 +55,7 @@ public class Interface extends JFrame {
         jTextArea1.setColumns(20);
         jTextArea1.setForeground(new java.awt.Color(250, 250, 250));
         jTextArea1.setRows(5);
+        jTextArea1.setCaretColor(new java.awt.Color(255, 255, 255));
         jTextArea1.setSelectedTextColor(new java.awt.Color(230, 230, 230));
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -64,13 +72,18 @@ public class Interface extends JFrame {
 
         barraMenu.add(arquivoButton);
 
-        compilarButton.setText("Compilar");
-        compilarButton.addActionListener(new java.awt.event.ActionListener() {
+        executarButton.setText("Compilar");
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
+        jMenuItem2.setText("Executar");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                compilarButtonActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        barraMenu.add(compilarButton);
+        executarButton.add(jMenuItem2);
+
+        barraMenu.add(executarButton);
 
         setJMenuBar(barraMenu);
 
@@ -78,11 +91,11 @@ public class Interface extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE)
         );
 
         pack();
@@ -99,17 +112,25 @@ public class Interface extends JFrame {
         
         if (valor == JFileChooser.APPROVE_OPTION) {
             arquivo_lpd = abrir_arquivo.getSelectedFile(); //pego o arquivo escolhido
-            if (INSTANCE.LerArquivo(arquivo_lpd) == false) {
+            if (INSTANCE.LerArquivo(arquivo_lpd, jTextArea1) == false) {
                 JOptionPane.showMessageDialog(null, "Erro ao abrir arquivo");
             }
             
         }
     }//GEN-LAST:event_importarLPDItemActionPerformed
 
-    private void compilarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compilarButtonActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        //analisadorLexico = new Lexico(reader);
-    }//GEN-LAST:event_compilarButtonActionPerformed
+        String codigo = jTextArea1.getText();
+        System.out.println(codigo);
+        try {
+            analisadorLexico = new Lexico(codigo);
+            
+            INSTANCE.printaTokens();
+        } catch (IOException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -149,8 +170,10 @@ public class Interface extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu arquivoButton;
     private javax.swing.JMenuBar barraMenu;
-    private javax.swing.JMenu compilarButton;
+    private javax.swing.JMenu executarButton;
     private javax.swing.JMenuItem importarLPDItem;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
