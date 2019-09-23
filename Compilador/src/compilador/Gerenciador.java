@@ -33,14 +33,14 @@ public class Gerenciador {
         return INSTANCE;
     }
 
-    public boolean LerArquivo(File lpdLido, javax.swing.JTextArea jTextArea1) {
+    public boolean LerArquivo(File lpdLido, javax.swing.JTextArea jTextAreaPrograma) {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(lpdLido));
             String atual = reader.readLine();
             while (atual != null) {
                 //System.out.println(atual);
-                jTextArea1.read(reader, "jTextArea1");
+                jTextAreaPrograma.read(reader, "jTextAreaPrograma");
                 atual = reader.readLine();
         }
             //analisadorLexico = new Lexico(reader);
@@ -52,7 +52,7 @@ public class Gerenciador {
             Logger.getLogger(Gerenciador.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
-        //String text = jTextArea1.getText();
+        //String text = jTextAreaPrograma.getText();
         //System.out.println(text);
 
         return true;

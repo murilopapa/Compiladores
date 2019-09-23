@@ -40,7 +40,9 @@ public class Interface extends JFrame {
 
         jMenuItem1 = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaPrograma = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextAreaErro = new javax.swing.JTextArea();
         barraMenu = new javax.swing.JMenuBar();
         arquivoButton = new javax.swing.JMenu();
         importarLPDItem = new javax.swing.JMenuItem();
@@ -51,13 +53,30 @@ public class Interface extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setBackground(new java.awt.Color(39, 40, 34));
-        jTextArea1.setColumns(20);
-        jTextArea1.setForeground(new java.awt.Color(250, 250, 250));
-        jTextArea1.setRows(5);
-        jTextArea1.setCaretColor(new java.awt.Color(255, 255, 255));
-        jTextArea1.setSelectedTextColor(new java.awt.Color(230, 230, 230));
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextAreaPrograma.setBackground(new java.awt.Color(39, 40, 34));
+        jTextAreaPrograma.setColumns(20);
+        jTextAreaPrograma.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jTextAreaPrograma.setForeground(new java.awt.Color(250, 250, 250));
+        jTextAreaPrograma.setRows(5);
+        jTextAreaPrograma.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 5, 1, 1));
+        jTextAreaPrograma.setCaretColor(new java.awt.Color(255, 255, 255));
+        jTextAreaPrograma.setSelectedTextColor(new java.awt.Color(250, 250, 250));
+        jTextAreaPrograma.setSelectionColor(new java.awt.Color(204, 204, 204));
+        jScrollPane1.setViewportView(jTextAreaPrograma);
+        jTextAreaPrograma.getAccessibleContext().setAccessibleDescription("");
+
+        jTextAreaErro.setEditable(false);
+        jTextAreaErro.setBackground(new java.awt.Color(39, 40, 34));
+        jTextAreaErro.setColumns(20);
+        jTextAreaErro.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        jTextAreaErro.setForeground(new java.awt.Color(204, 0, 0));
+        jTextAreaErro.setRows(5);
+        jTextAreaErro.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 3, 1, 1));
+        jTextAreaErro.setCaretColor(new java.awt.Color(39, 40, 34));
+        jTextAreaErro.setSelectedTextColor(new java.awt.Color(204, 0, 0));
+        jTextAreaErro.setSelectionColor(new java.awt.Color(204, 204, 204));
+        jScrollPane2.setViewportView(jTextAreaErro);
+        jTextAreaErro.getAccessibleContext().setAccessibleName("");
 
         arquivoButton.setText("Arquivo");
 
@@ -92,10 +111,14 @@ public class Interface extends JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -112,7 +135,7 @@ public class Interface extends JFrame {
         
         if (valor == JFileChooser.APPROVE_OPTION) {
             arquivo_lpd = abrir_arquivo.getSelectedFile(); //pego o arquivo escolhido
-            if (INSTANCE.LerArquivo(arquivo_lpd, jTextArea1) == false) {
+            if (INSTANCE.LerArquivo(arquivo_lpd, jTextAreaPrograma) == false) {
                 JOptionPane.showMessageDialog(null, "Erro ao abrir arquivo");
             }
             
@@ -121,10 +144,10 @@ public class Interface extends JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        String codigo = jTextArea1.getText();
+        String codigo = jTextAreaPrograma.getText();
         System.out.println(codigo);
         try {
-            analisadorLexico = new Lexico(codigo);
+            analisadorLexico = new Lexico(codigo, jTextAreaErro);
             
             INSTANCE.printaTokens();
         } catch (IOException ex) {
@@ -175,6 +198,8 @@ public class Interface extends JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextAreaErro;
+    private javax.swing.JTextArea jTextAreaPrograma;
     // End of variables declaration//GEN-END:variables
 }

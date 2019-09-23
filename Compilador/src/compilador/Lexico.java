@@ -13,7 +13,7 @@ public class Lexico {
     private boolean file_not_finished = true;
     private int char_to_read = 0;
 
-    Lexico(String reader) throws IOException {
+    Lexico(String reader, javax.swing.JTextArea jTextAreaErro) throws IOException {
         tamanho_string = reader.length();
         int caractere_int = reader.charAt(char_to_read);      //pego 1 char
         char_to_read++;
@@ -81,14 +81,14 @@ public class Lexico {
                     }
                     break;
                 default:
-                    pegaToken(reader);
+                    pegaToken(reader, jTextAreaErro);
                     break;
             }
 
         }
     }
 
-    public void pegaToken(String reader) throws IOException {
+    public void pegaToken(String reader, javax.swing.JTextArea jTextAreaErro) throws IOException {
         //se for digito
         int caractere_int;
         if (caracter >= 48 && caracter <= 57) {
@@ -139,7 +139,11 @@ public class Lexico {
             }
         }//se nao, erro
         else {
-            System.out.println("ERRO NA LINHA " + linha_atual + "!!");
+//            Integer intErro = new Integer(linha_atual);
+//            String strErro = intErro.toString();
+            jTextAreaErro.setText("Erro na Linha " + String.valueOf(linha_atual) + "!!");
+
+            System.err.println("Erro na Linha " + linha_atual + "!!");
             file_not_finished = false;
 
         }
