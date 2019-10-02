@@ -25,7 +25,7 @@ public class Gerenciador {
     private static Scanner scanner = new Scanner(System.in);
     private static Lexico analisadorLexico;
     private ArrayList<Token> tokens = new ArrayList<Token>();
-    
+
     public static Gerenciador getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new Gerenciador();
@@ -37,12 +37,12 @@ public class Gerenciador {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(lpdLido));
-            String atual = reader.readLine();
-            while (atual != null) {
-                //System.out.println(atual);
+            if(reader != null){
                 jTextAreaPrograma.read(reader, "jTextAreaPrograma");
-                atual = reader.readLine();
-        }
+            }
+            else{
+                return false;
+            }
             //analisadorLexico = new Lexico(reader);
             //printaTokens();
         } catch (FileNotFoundException ex) {

@@ -147,7 +147,7 @@ public class Interface extends JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         String codigo = jTextAreaPrograma.getText();
-        System.out.println(codigo);
+        jTextAreaErro.setText("");
         try {
             analisadorLexico = new Lexico(codigo, jTextAreaErro);
             

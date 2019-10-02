@@ -1,6 +1,5 @@
 package compilador;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Lexico {
@@ -69,6 +68,16 @@ public class Lexico {
                         caracter = (char) caractere_int;
                     }
                     break;
+                case 9:
+                    //n sei pq, mas tem que ler essa merda
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {        //se for eof, paro o loop
+                        file_not_finished = false;  //paro o while externo
+                    } else {
+                        caracter = (char) caractere_int;
+                    }
+                    break;
                 case '\n':
                     //se for \n eu tb so ignoro, mas eu add 1 na linha que eu to lendo, pra ter o controle de qual linha é e pego o prox char
                     linha_atual++;
@@ -102,6 +111,7 @@ public class Lexico {
             trataAtribuicao(reader);
             caractere_int = reader.charAt(char_to_read);      //pego 1 char
             char_to_read++;
+
             if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                 file_not_finished = false;  //paro o while externo
             } else {
@@ -119,14 +129,22 @@ public class Lexico {
             }
         } //se for < > = !=
         else if ((caracter >= 60 && caracter <= 62) || (caracter == 33)) {
-            trataOpRelacional(reader);
-            caractere_int = reader.charAt(char_to_read);      //pego 1 char
-            char_to_read++;
-            if (char_to_read == tamanho_string) {        //se for eof, paro o loop
-                file_not_finished = false;  //paro o while externo
+            if (trataOpRelacional(reader)) {
+                if (char_to_read == tamanho_string) {        //se for eof, paro o loop
+                    file_not_finished = false;  //paro o while externo
+                } else {
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    caracter = (char) caractere_int;
+                }
             } else {
-                caracter = (char) caractere_int;
+
+                jTextAreaErro.setText("Erro na Linha " + String.valueOf(linha_atual) + "!!");
+                System.err.println("Erro na Linha " + linha_atual + "!!");
+                file_not_finished = false;
+
             }
+
         } //se for ; , ( ) .
         else if (caracter == 59 || caracter == 44 || caracter == 40 || caracter == 41 || caracter == 46) {
             trataPontuacao(reader);
@@ -158,6 +176,7 @@ public class Lexico {
         do {
             int caractere_int = reader.charAt(char_to_read);      //pego 1 char
             char_to_read++;
+            System.out.println("char:" + char_to_read + "tam:" + tamanho_string);
             if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                 file_not_finished = false;
                 stop_loop = true;               //paro ESSE do while
@@ -332,7 +351,7 @@ public class Lexico {
 
     }
 
-    public void trataOpRelacional(String reader) throws IOException {
+    public boolean trataOpRelacional(String reader) throws IOException {
         String palavra = "";
         palavra = palavra.concat(String.valueOf(caracter));
         Token new_token = new Token();
@@ -361,7 +380,8 @@ public class Lexico {
                 } else {
                     caracter = (char) caractere_int; //se nao, continuo
                 }
-                if (caracter == 61) {
+                if (caracter == '=') {
+                    System.out.println("gg");
                     palavra = palavra.concat(String.valueOf(caracter));
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("sdif");
@@ -377,9 +397,12 @@ public class Lexico {
 
                 } else {
                     caracter = palavra.charAt(0);
+                    return false;
                 }
                 break;
+
         }
+        return true;
 
     }
 
