@@ -37,10 +37,9 @@ public class Gerenciador {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(lpdLido));
-            if(reader != null){
+            if (reader != null) {
                 jTextAreaPrograma.read(reader, "jTextAreaPrograma");
-            }
-            else{
+            } else {
                 return false;
             }
             //analisadorLexico = new Lexico(reader);
@@ -60,6 +59,10 @@ public class Gerenciador {
 
     public void addToken(Token new_token) {
         tokens.add(new_token);
+    }
+
+    public Token getToken() {
+        return tokens.remove(0);
     }
 
     public void printaTokens() {

@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package compilador;
 
 import java.io.IOException;
 
-/**
- *
- * @author math_
- */
 public class Sintatico {
+
     private Lexico lexico;
     private Token token;
-    
+    private Gerenciador INSTANCE = Gerenciador.getInstance();
+
     Sintatico(Lexico lexico) throws IOException {
         this.lexico = lexico;
         analisaInicio();
@@ -22,50 +15,74 @@ public class Sintatico {
 
     private void analisaInicio() {
         //pega token
-        if(token.getSimbolo().equals("sprograma")){
+        token = INSTANCE.getToken();
+        if (token.getSimbolo().equals("sprograma")) {
             //pega token
-            if(token.getSimbolo().equals(("sidentificador"))){
+            token = INSTANCE.getToken();
+            if (token.getSimbolo().equals(("sidentificador"))) {
                 //insere na tabela de simbolos
-               //pega token
-               if(token.getSimbolo().equals("sponto_virgula")){
-                   analisaBloco();
-                   if(token.getSimbolo().equals("sponto")){
-                       //acabou e sucesso
-                   } else {
-                       //mostra erros
-                   }
-               } else{
-                   //mostra erros
-               }
+                //pega token
+                token = INSTANCE.getToken();
+                if (token.getSimbolo().equals("sponto_virgula")) {
+                    analisaBloco();
+                    if (token.getSimbolo().equals("sponto")) {
+                        //acabou e sucesso
+                    } else {
+                        //mostra erros
+                        if (token.getSimbolo().equals("serro")) {
+                            //erro lexico
+                        }
+                    }
+                } else {
+                    //mostra erros
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                    }
+                }
             } else {
                 // mostra erros
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
         } else {
             // mostra erros
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
         }
     }
 
     private void analisaBloco() {
         //pega token
+        token = INSTANCE.getToken();
         analisaEtVariaveis();
         analisaSubRotinas();
         analisaComandos();
     }
 
     private void analisaEtVariaveis() {
-        if(token.getSimbolo().equals("svar")){
+        if (token.getSimbolo().equals("svar")) {
             //pega token
-            if(token.getSimbolo().equals("sidentificador")){
-                while(token.getSimbolo().equals("sidentificador")){
+            token = INSTANCE.getToken();
+            if (token.getSimbolo().equals("sidentificador")) {
+                while (token.getSimbolo().equals("sidentificador")) {
                     analisaVariaveis();
-                    if(token.getSimbolo().equals("sponto_virgula")){
+                    if (token.getSimbolo().equals("sponto_virgula")) {
                         //pega token
+                        token = INSTANCE.getToken();
                     } else {
                         //erro
+                        if (token.getSimbolo().equals("serro")) {
+                            //erro lexico
+                        }
                     }
                 }
             } else {
                 // erro
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
         }
     }
@@ -73,170 +90,236 @@ public class Sintatico {
     private void analisaSubRotinas() {
         //doidera
         int flag = 1;
-        if(token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sFuncao")){
+        if (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sFuncao")) {
             //fita de rotulo
         }
-        while(token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sFuncao")){
-            if(token.getSimbolo().equals("sprocedimento")){
+        while (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sFuncao")) {
+            if (token.getSimbolo().equals("sprocedimento")) {
                 analisaDeclaracaoProcedimento();
-            } else{
+            } else {
                 analisaDeclaracaoFuncao();
             }
-            if(token.getSimbolo().equals("sponto_virgula")){
+            if (token.getSimbolo().equals("sponto_virgula")) {
                 //pega token
-            } else{
+                token = INSTANCE.getToken();
+            } else {
                 //erro
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
         }
-        if(flag == 1){
+        if (flag == 1) {
             //doidera
         }
     }
 
     private void analisaComandos() {
-        if(token.getSimbolo().equals("sinicio")){
+        if (token.getSimbolo().equals("sinicio")) {
             //pega token
+            token = INSTANCE.getToken();
             analisaComandoSimples();
-            while(!token.getSimbolo().equals("sfim")){
-                if(token.getSimbolo().equals("sponto_virgula")){
+            while (!token.getSimbolo().equals("sfim")) {
+                if (token.getSimbolo().equals("sponto_virgula")) {
                     //pega token
-                    if(!token.getSimbolo().equals("sfim")){
+                    token = INSTANCE.getToken();
+                    if (!token.getSimbolo().equals("sfim")) {
                         analisaComandoSimples();
                     }
-                } else{
+                } else {
                     //erro
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                    }
                 }
             }
             //pega token
-        } else{
+            token = INSTANCE.getToken();
+        } else {
             //erro
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
         }
     }
 
     private void analisaVariaveis() {
-        do{
-            if(token.getSimbolo().equals("sidentificador")){
+        do {
+            if (token.getSimbolo().equals("sidentificador")) {
                 // insere lexema na tabela de simbolos se ja nao houver, se houver ERRO
                 //pega token 
-                if(token.getSimbolo().equals("svirgula") || token.getSimbolo().equals("sdoispontos")){
-                    if(token.getSimbolo().equals("svirgula")){
+                token = INSTANCE.getToken();
+                if (token.getSimbolo().equals("svirgula") || token.getSimbolo().equals("sdoispontos")) {
+                    if (token.getSimbolo().equals("svirgula")) {
                         //pega token
-                        if(token.getSimbolo().equals("sdoispontos")){
+                        token = INSTANCE.getToken();
+                        if (token.getSimbolo().equals("sdoispontos")) {
                             // erro
+                            if (token.getSimbolo().equals("serro")) {
+                                //erro lexico
+                            }
                         }
                     }
-                } else{
+                } else {
                     //erro
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                    }
                 }
-            } else{
+            } else {
                 //erro
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
-        }while(!token.getSimbolo().equals("sdoispontos"));
+        } while (!token.getSimbolo().equals("sdoispontos"));
         //pega token
+        token = INSTANCE.getToken();
         analisaTipo();
     }
 
     private void analisaTipo() {
-        if(!token.getSimbolo().equals("sinteiro") && !token.getSimbolo().equals("sbooleano")){
+        if (!token.getSimbolo().equals("sinteiro") && !token.getSimbolo().equals("sbooleano")) {
             //erro
-        } else{
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
+        } else {
             // coloca token.lexema na tabela como tipo
             //pega token
+            token = INSTANCE.getToken();
         }
     }
 
     private void analisaComandoSimples() {
-        if(token.getSimbolo().equals("sidentificador")){
+        if (token.getSimbolo().equals("sidentificador")) {
             analisaAtribChProcedimento();
-        } else if(token.getSimbolo().equals("sSe")){
+        } else if (token.getSimbolo().equals("sSe")) {
             analisaSe();
-        } else if(token.getSimbolo().equals("sEnquanto")){
+        } else if (token.getSimbolo().equals("sEnquanto")) {
             analisaEnquanto();
-        } else if(token.getSimbolo().equals("sLeia")){
+        } else if (token.getSimbolo().equals("sLeia")) {
             analisaLeia();
-        } else if(token.getSimbolo().equals("sEscreva")){
+        } else if (token.getSimbolo().equals("sEscreva")) {
             analisaEscreva();
-        } else{
+        } else {
             analisaComandos();
         }
     }
 
     private void analisaAtribChProcedimento() {
         //pega token
-        if(token.getSimbolo().equals("sAtribuicao")){
+        token = INSTANCE.getToken();
+        if (token.getSimbolo().equals("sAtribuicao")) {
             analisaAtribuicao();
-        }
-        else{
+        } else {
             analisaChProcedimento();
         }
     }
 
     private void analisaSe() {
         //pega token
+        token = INSTANCE.getToken();
         analisaExpressao();
-        if(token.getSimbolo().equals("sEntao")){
+        if (token.getSimbolo().equals("sEntao")) {
             //pega token
+            token = INSTANCE.getToken();
             analisaComandoSimples();
-            if(token.getSimbolo().equals("sSenao")){
+            if (token.getSimbolo().equals("sSenao")) {
                 //pega token
+                token = INSTANCE.getToken();
                 analisaComandoSimples();
             }
-        } else{
+        } else {
             //erro
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
         }
     }
 
     private void analisaEnquanto() {
         //negocio de rotulo doidera
         //pega token
+        token = INSTANCE.getToken();
         analisaExpressao();
-        if(token.getSimbolo().equals("sFaca")){
+        if (token.getSimbolo().equals("sFaca")) {
             // negocio de rotulo de novo
             //pega token
+            token = INSTANCE.getToken();
             analisaComandoSimples();
             // rotulo de novo gri
-        } else{
+        } else {
             //erro
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
         }
     }
 
     private void analisaLeia() {
         //pega token
-        if(token.getSimbolo().equals("sAbreParenteses")){
+        token = INSTANCE.getToken();
+        if (token.getSimbolo().equals("sAbreParenteses")) {
             //pega token
-            if(token.getSimbolo().equals("sidentificador")){
+            token = INSTANCE.getToken();
+            if (token.getSimbolo().equals("sidentificador")) {
                 // pesquisa declaracao na tabela com token.lexema
                 //pega token
-                if(token.getSimbolo().equals("sFechaParenteses")){
+                token = INSTANCE.getToken();
+                if (token.getSimbolo().equals("sFechaParenteses")) {
                     //pega token
-                } else{
+                    token = INSTANCE.getToken();
+                } else {
                     //erro
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                    }
                 }
-            } else{
+            } else {
                 //erro
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
-        } else{
+        } else {
             //erro
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
         }
     }
 
     private void analisaEscreva() {
         //pega token
-        if(token.getSimbolo().equals("sAbreParenteses")){
+        token = INSTANCE.getToken();
+        if (token.getSimbolo().equals("sAbreParenteses")) {
             //pega token
-            if(token.getSimbolo().equals("sidentificador")){
+            token = INSTANCE.getToken();
+            if (token.getSimbolo().equals("sidentificador")) {
                 // pesquisa declaracao na tabela com o token.lexema
                 //pega token
-                if(token.getSimbolo().equals("sFechaParenteses")){
+                token = INSTANCE.getToken();
+                if (token.getSimbolo().equals("sFechaParenteses")) {
                     //pega token
-                } else{
+                    token = INSTANCE.getToken();
+                } else {
                     //erro
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                    }
                 }
-            } else{
+            } else {
                 //erro
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
-        } else{
+        } else {
             //erro
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
         }
     }
 
@@ -250,98 +333,133 @@ public class Sintatico {
 
     private void analisaExpressao() {
         analisaExpressaoSimples();
-        if(token.getSimbolo().equals("sMaior") || token.getSimbolo().equals("sMaiorIgual") || token.getSimbolo().equals("sIgual") || token.getSimbolo().equals("sMenor") || token.getSimbolo().equals("sMenorIgual") || token.getSimbolo().equals("sDiferente")){
+        if (token.getSimbolo().equals("sMaior") || token.getSimbolo().equals("sMaiorIgual") || token.getSimbolo().equals("sIgual") || token.getSimbolo().equals("sMenor") || token.getSimbolo().equals("sMenorIgual") || token.getSimbolo().equals("sDiferente")) {
             //pega token
+            token = INSTANCE.getToken();
             analisaExpressaoSimples();
         }
     }
 
     private void analisaDeclaracaoProcedimento() {
         //pega token
+        token = INSTANCE.getToken();
         //doidera
-        if(token.getSimbolo().equals("sidentificador")){
+        if (token.getSimbolo().equals("sidentificador")) {
             //pesquisa proc na tabela 
             //insere na tabela
             //doidera
             //pega token
-            if(token.getSimbolo().equals("sponto_virgula")){
+            token = INSTANCE.getToken();
+            if (token.getSimbolo().equals("sponto_virgula")) {
                 analisaBloco();
-            } else{
+            } else {
                 //erro
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
-        } else{
+        } else {
             //erro
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
         }
     }
 
     private void analisaDeclaracaoFuncao() {
         //pega token
+        token = INSTANCE.getToken();
         // doidera
-        if(token.getSimbolo().equals("sidentificador")){
+        if (token.getSimbolo().equals("sidentificador")) {
             // doidera
             //insere token na tabela de simbolos das func
             // pega token
-            if(token.getSimbolo().equals("sdoispontos")){
+            token = INSTANCE.getToken();
+            if (token.getSimbolo().equals("sdoispontos")) {
                 //pega token
-                if(token.getSimbolo().equals("sinteiro") || token.getSimbolo().equals("sbooleano")){
+                token = INSTANCE.getToken();
+                if (token.getSimbolo().equals("sinteiro") || token.getSimbolo().equals("sbooleano")) {
                     //doidera
                     //pega token
-                    if(token.getSimbolo().equals("sponto_virgula")){
+                    token = INSTANCE.getToken();
+                    if (token.getSimbolo().equals("sponto_virgula")) {
                         analisaBloco();
                     }
-                } else{
+                } else {
                     //eroo
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                    }
                 }
-            } else{
+            } else {
                 //erro
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
-        } else{
+        } else {
             //erro
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
         }
     }
 
     private void analisaExpressaoSimples() {
-        if(token.getSimbolo().equals("smais") || token.getSimbolo().equals("smenos")){
+        if (token.getSimbolo().equals("smais") || token.getSimbolo().equals("smenos")) {
             //pega token
+            token = INSTANCE.getToken();
             analisaTermo();
         }
-        while(token.getSimbolo().equals("smenos") || token.getSimbolo().equals("smais") || token.getSimbolo().equals("sou")){
+        while (token.getSimbolo().equals("smenos") || token.getSimbolo().equals("smais") || token.getSimbolo().equals("sou")) {
             //pega token
+            token = INSTANCE.getToken();
             analisaTermo();
         }
     }
 
     private void analisaTermo() {
         analisaFator();
-        while(token.getSimbolo().equals("smult") || token.getSimbolo().equals("sdiv") || token.getSimbolo().equals("se")){
+        while (token.getSimbolo().equals("smult") || token.getSimbolo().equals("sdiv") || token.getSimbolo().equals("se")) {
             //pega token
+            token = INSTANCE.getToken();
             analisaFator();
         }
     }
 
     private void analisaFator() {
-        if(token.getSimbolo().equals("sidentificador")){
+        if (token.getSimbolo().equals("sidentificador")) {
             //doidera
-            
-            
-        } else if(token.getSimbolo().equals("snumero")){
-                //pega token
-        
-            } else if (token.getSimbolo().equals("snao")){
-                //pega token
-                analisaFator();
-            } else if(token.getSimbolo().equals("sabre_parenteses")){
-                //pega token
-                analisaExpressao();
-                if(token.getSimbolo().equals("sfecha_parenteses")){
-                    //pega token
-                } else{
-                    //erro
-                }
-            } else if(token.getLexema().equals("verdadeiro") || token.getLexema().equals("falso")){
+
+        } else if (token.getSimbolo().equals("snumero")) {
             //pega token
+            token = INSTANCE.getToken();
+
+        } else if (token.getSimbolo().equals("snao")) {
+            //pega token
+            token = INSTANCE.getToken();
+            analisaFator();
+        } else if (token.getSimbolo().equals("sabre_parenteses")) {
+            //pega token
+            token = INSTANCE.getToken();
+            analisaExpressao();
+            if (token.getSimbolo().equals("sfecha_parenteses")) {
+                //pega token
+                token = INSTANCE.getToken();
             } else {
-            //erro
+                //erro
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                }
             }
+        } else if (token.getLexema().equals("verdadeiro") || token.getLexema().equals("falso")) {
+            //pega token
+            token = INSTANCE.getToken();
+        } else {
+            //erro
+            if (token.getSimbolo().equals("serro")) {
+                //erro lexico
+            }
+        }
     }
 }
