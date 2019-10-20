@@ -133,10 +133,6 @@ public class Lexico {
             if (trataOpRelacional(reader)) {
                 if (char_to_read == tamanho_string) {        //se for eof, paro o loop
                     file_not_finished = false;  //paro o while externo
-                } else {
-                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
-                    char_to_read++;
-                    caracter = (char) caractere_int;
                 }
             } else {
                 Token new_token = new Token();
@@ -183,7 +179,7 @@ public class Lexico {
         do {
             int caractere_int = reader.charAt(char_to_read);      //pego 1 char
             char_to_read++;
-            
+
             if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                 file_not_finished = false;
                 stop_loop = true;               //paro ESSE do while
@@ -366,28 +362,11 @@ public class Lexico {
         String palavra = "";
         palavra = palavra.concat(String.valueOf(caracter));
         Token new_token = new Token();
+        int caractere_int;
 
         switch (palavra) {
             case "<":
-                new_token.setLexema(palavra);
-                new_token.setSimbolo("smenor");
-                new_token.setLinha(linha_atual);
-                INSTANCE.addToken(new_token);
-                break;
-            case ">":
-                new_token.setLexema(palavra);
-                new_token.setSimbolo("smaior");
-                new_token.setLinha(linha_atual);
-                INSTANCE.addToken(new_token);
-                break;
-            case "=":
-                new_token.setLexema(palavra);
-                new_token.setSimbolo("sig");
-                new_token.setLinha(linha_atual);
-                INSTANCE.addToken(new_token);
-                break;
-            case "!":
-                int caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                caractere_int = reader.charAt(char_to_read);      //pego 1 char
                 char_to_read++;
                 if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                     file_not_finished = false;
@@ -395,7 +374,97 @@ public class Lexico {
                     caracter = (char) caractere_int; //se nao, continuo
                 }
                 if (caracter == '=') {
-                    
+
+                    palavra = palavra.concat(String.valueOf(caracter));
+                    new_token.setLexema(palavra);
+                    new_token.setSimbolo("smenorig");
+                    new_token.setLinha(linha_atual);
+                    INSTANCE.addToken(new_token);
+
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {          //se for eof, paro o loop
+                        file_not_finished = false;
+                    } else {
+                        caracter = (char) caractere_int; //se nao, continuo
+                    }
+                } else {
+                    new_token.setLexema(palavra);
+                    new_token.setSimbolo("smenor");
+                    new_token.setLinha(linha_atual);
+                    INSTANCE.addToken(new_token);
+                }
+                break;
+            case ">":
+                caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                char_to_read++;
+                if (char_to_read == tamanho_string) {          //se for eof, paro o loop
+                    file_not_finished = false;
+                } else {
+                    caracter = (char) caractere_int; //se nao, continuo
+                }
+                if (caracter == '=') {
+
+                    palavra = palavra.concat(String.valueOf(caracter));
+                    new_token.setLexema(palavra);
+                    new_token.setSimbolo("smenorig");
+                    new_token.setLinha(linha_atual);
+                    INSTANCE.addToken(new_token);
+
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {          //se for eof, paro o loop
+                        file_not_finished = false;
+                    } else {
+                        caracter = (char) caractere_int; //se nao, continuo
+                    }
+                } else {
+                    new_token.setLexema(palavra);
+                    new_token.setSimbolo("smaior");
+                    new_token.setLinha(linha_atual);
+                    INSTANCE.addToken(new_token);
+                }
+                break;
+            case "=":
+                caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                char_to_read++;
+                if (char_to_read == tamanho_string) {          //se for eof, paro o loop
+                    file_not_finished = false;
+                } else {
+                    caracter = (char) caractere_int; //se nao, continuo
+                }
+                if (caracter == '=') {
+
+                    palavra = palavra.concat(String.valueOf(caracter));
+                    new_token.setLexema(palavra);
+                    new_token.setSimbolo("smenorig");
+                    new_token.setLinha(linha_atual);
+                    INSTANCE.addToken(new_token);
+
+                    caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                    char_to_read++;
+                    if (char_to_read == tamanho_string) {          //se for eof, paro o loop
+                        file_not_finished = false;
+                    } else {
+                        caracter = (char) caractere_int; //se nao, continuo
+                    }
+                } else {
+                    new_token.setLexema(palavra);
+                    new_token.setSimbolo("sig");
+                    new_token.setLinha(linha_atual);
+                    INSTANCE.addToken(new_token);
+                }
+                break;
+            case "!":
+                caractere_int = reader.charAt(char_to_read);      //pego 1 char
+                char_to_read++;
+                if (char_to_read == tamanho_string) {          //se for eof, paro o loop
+                    file_not_finished = false;
+                } else {
+                    caracter = (char) caractere_int; //se nao, continuo
+                }
+                if (caracter == '=') {
+
                     palavra = palavra.concat(String.valueOf(caracter));
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("sdif");

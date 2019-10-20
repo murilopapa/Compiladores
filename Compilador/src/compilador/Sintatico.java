@@ -103,10 +103,10 @@ public class Sintatico {
     private void analisaSubRotinas() {
         //doidera
         int flag = 1;
-        if (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sFuncao")) {
+        if (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sfuncao")) {
             //fita de rotulo
         }
-        while (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sFuncao")) {
+        while (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sfuncao")) {
             if (token.getSimbolo().equals("sprocedimento")) {
                 analisaDeclaracaoProcedimento();
             } else {
@@ -132,7 +132,7 @@ public class Sintatico {
             //pega token
             token = INSTANCE.getToken();
             analisaComandoSimples();
-            while (!token.getSimbolo().equals("sfim")) {
+            do {
                 if (token.getSimbolo().equals("sponto_virgula")) {
                     //pega token
                     token = INSTANCE.getToken();
@@ -145,7 +145,7 @@ public class Sintatico {
                         //erro lexico
                     }
                 }
-            }
+            } while (!token.getSimbolo().equals("sfim"));
             //pega token
             token = INSTANCE.getToken();
         } else {
@@ -202,16 +202,16 @@ public class Sintatico {
         } else {
             // coloca token.lexema na tabela como tipo
             ArrayList<Simbolo> simbolos = new ArrayList<Simbolo>();
-            
+
             for (Simbolo simbolo : INSTANCE.getSimbolos()) {
-                    
-                    if (simbolo instanceof SimboloVariavel) {
-                        if (((SimboloVariavel) simbolo).getTipo().contentEquals("")) {
-                            ((SimboloVariavel) simbolo).setTipo(token.getLexema());
-                        }
+
+                if (simbolo instanceof SimboloVariavel) {
+                    if (((SimboloVariavel) simbolo).getTipo().contentEquals("")) {
+                        ((SimboloVariavel) simbolo).setTipo(token.getLexema());
                     }
-                    simbolos.add(simbolo);
-                    
+                }
+                simbolos.add(simbolo);
+
             }
             INSTANCE.setSimbolos(simbolos);
 
@@ -223,13 +223,13 @@ public class Sintatico {
     private void analisaComandoSimples() {
         if (token.getSimbolo().equals("sidentificador")) {
             analisaAtribChProcedimento();
-        } else if (token.getSimbolo().equals("sSe")) {
+        } else if (token.getSimbolo().equals("sse")) {
             analisaSe();
-        } else if (token.getSimbolo().equals("sEnquanto")) {
+        } else if (token.getSimbolo().equals("senquanto")) {
             analisaEnquanto();
-        } else if (token.getSimbolo().equals("sLeia")) {
+        } else if (token.getSimbolo().equals("sleia")) {
             analisaLeia();
-        } else if (token.getSimbolo().equals("sEscreva")) {
+        } else if (token.getSimbolo().equals("sescreva")) {
             analisaEscreva();
         } else {
             analisaComandos();
@@ -239,7 +239,7 @@ public class Sintatico {
     private void analisaAtribChProcedimento() {
         //pega token
         token = INSTANCE.getToken();
-        if (token.getSimbolo().equals("sAtribuicao")) {
+        if (token.getSimbolo().equals("satribuicao")) {
             analisaAtribuicao();
         } else {
             analisaChProcedimento();
@@ -250,11 +250,11 @@ public class Sintatico {
         //pega token
         token = INSTANCE.getToken();
         analisaExpressao();
-        if (token.getSimbolo().equals("sEntao")) {
+        if (token.getSimbolo().equals("sentao")) {
             //pega token
             token = INSTANCE.getToken();
             analisaComandoSimples();
-            if (token.getSimbolo().equals("sSenao")) {
+            if (token.getSimbolo().equals("ssenao")) {
                 //pega token
                 token = INSTANCE.getToken();
                 analisaComandoSimples();
@@ -272,7 +272,7 @@ public class Sintatico {
         //pega token
         token = INSTANCE.getToken();
         analisaExpressao();
-        if (token.getSimbolo().equals("sFaca")) {
+        if (token.getSimbolo().equals("sfaca")) {
             // negocio de rotulo de novo
             //pega token
             token = INSTANCE.getToken();
@@ -289,14 +289,14 @@ public class Sintatico {
     private void analisaLeia() {
         //pega token
         token = INSTANCE.getToken();
-        if (token.getSimbolo().equals("sAbreParenteses")) {
+        if (token.getSimbolo().equals("sabre_parenteses")) {
             //pega token
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals("sidentificador")) {
                 // pesquisa declaracao na tabela com token.lexema
                 //pega token
                 token = INSTANCE.getToken();
-                if (token.getSimbolo().equals("sFechaParenteses")) {
+                if (token.getSimbolo().equals("sfecha_parenteses")) {
                     //pega token
                     token = INSTANCE.getToken();
                 } else {
@@ -322,14 +322,14 @@ public class Sintatico {
     private void analisaEscreva() {
         //pega token
         token = INSTANCE.getToken();
-        if (token.getSimbolo().equals("sAbreParenteses")) {
+        if (token.getSimbolo().equals("sabre_parenteses")) {
             //pega token
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals("sidentificador")) {
                 // pesquisa declaracao na tabela com o token.lexema
                 //pega token
                 token = INSTANCE.getToken();
-                if (token.getSimbolo().equals("sFechaParenteses")) {
+                if (token.getSimbolo().equals("sfecha_parenteses")) {
                     //pega token
                     token = INSTANCE.getToken();
                 } else {
@@ -363,7 +363,7 @@ public class Sintatico {
 
     private void analisaExpressao() {
         analisaExpressaoSimples();
-        if (token.getSimbolo().equals("smaior") || token.getSimbolo().equals("smaiorigual") || token.getSimbolo().equals("sigual") || token.getSimbolo().equals("smenor") || token.getSimbolo().equals("smenorigual") || token.getSimbolo().equals("sdif")) {
+        if (token.getSimbolo().equals("smaior") || token.getSimbolo().equals("smaiorig") || token.getSimbolo().equals("sig") || token.getSimbolo().equals("smenor") || token.getSimbolo().equals("smenorig") || token.getSimbolo().equals("sdif")) {
             //pega token
             token = INSTANCE.getToken();
             analisaExpressaoSimples();
@@ -445,8 +445,9 @@ public class Sintatico {
         if (token.getSimbolo().equals("smais") || token.getSimbolo().equals("smenos")) {
             //pega token
             token = INSTANCE.getToken();
-            analisaTermo();
+            
         }
+        analisaTermo();
         while (token.getSimbolo().equals("smenos") || token.getSimbolo().equals("smais") || token.getSimbolo().equals("sou")) {
             //pega token
             token = INSTANCE.getToken();
@@ -463,9 +464,22 @@ public class Sintatico {
         }
     }
 
+    private void analisaChamadaFuncao(){
+        token = INSTANCE.getToken();
+    }
+    
     private void analisaFator() {
         if (token.getSimbolo().equals("sidentificador")) {
             //doidera
+            if (true) {//lexema
+                if (true) {
+                    analisaChamadaFuncao();
+                } else {
+                    token = INSTANCE.getToken();
+                }
+            } else {
+                //erro semantico
+            }
 
         } else if (token.getSimbolo().equals("snumero")) {
             //pega token
