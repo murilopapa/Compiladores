@@ -1,6 +1,10 @@
 package compilador;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTextArea;
 
 public class Sintatico {
 
@@ -8,9 +12,15 @@ public class Sintatico {
     private Token token;
     private Gerenciador INSTANCE = Gerenciador.getInstance();
 
-    Sintatico(Lexico lexico) throws IOException {
-        this.lexico = lexico;
-        analisaInicio();
+    Sintatico(String codigo, JTextArea jTextAreaErro) {
+        try {
+            lexico = new Lexico(codigo, jTextAreaErro);
+            INSTANCE.printaTokens();
+            analisaInicio();
+            INSTANCE.printaSimbolos();
+        } catch (IOException ex) {
+            Logger.getLogger(Sintatico.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void analisaInicio() {
@@ -21,6 +31,9 @@ public class Sintatico {
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals(("sidentificador"))) {
                 //insere na tabela de simbolos
+                SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema());
+                INSTANCE.addSimbolo(newSimbolo);
+
                 //pega token
                 token = INSTANCE.getToken();
                 if (token.getSimbolo().equals("sponto_virgula")) {
@@ -147,6 +160,8 @@ public class Sintatico {
         do {
             if (token.getSimbolo().equals("sidentificador")) {
                 // insere lexema na tabela de simbolos se ja nao houver, se houver ERRO
+                SimboloVariavel newSimbolo = new SimboloVariavel(token.getLexema());
+                INSTANCE.addSimbolo(newSimbolo);
                 //pega token 
                 token = INSTANCE.getToken();
                 if (token.getSimbolo().equals("svirgula") || token.getSimbolo().equals("sdoispontos")) {
@@ -186,9 +201,23 @@ public class Sintatico {
             }
         } else {
             // coloca token.lexema na tabela como tipo
-            //pega token
-            token = INSTANCE.getToken();
+            ArrayList<Simbolo> simbolos = new ArrayList<Simbolo>();
+            
+            for (Simbolo simbolo : INSTANCE.getSimbolos()) {
+                    
+                    if (simbolo instanceof SimboloVariavel) {
+                        if (((SimboloVariavel) simbolo).getTipo().contentEquals("")) {
+                            ((SimboloVariavel) simbolo).setTipo(token.getLexema());
+                        }
+                    }
+                    simbolos.add(simbolo);
+                    
+            }
+            INSTANCE.setSimbolos(simbolos);
+
         }
+        //pega token
+        token = INSTANCE.getToken();
     }
 
     private void analisaComandoSimples() {
@@ -324,16 +353,17 @@ public class Sintatico {
     }
 
     private void analisaAtribuicao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        token = INSTANCE.getToken();
+        analisaExpressao();
     }
 
     private void analisaChProcedimento() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //nada acontece no sintatico, apenas no semantico
     }
 
     private void analisaExpressao() {
         analisaExpressaoSimples();
-        if (token.getSimbolo().equals("sMaior") || token.getSimbolo().equals("sMaiorIgual") || token.getSimbolo().equals("sIgual") || token.getSimbolo().equals("sMenor") || token.getSimbolo().equals("sMenorIgual") || token.getSimbolo().equals("sDiferente")) {
+        if (token.getSimbolo().equals("smaior") || token.getSimbolo().equals("smaiorigual") || token.getSimbolo().equals("sigual") || token.getSimbolo().equals("smenor") || token.getSimbolo().equals("smenorigual") || token.getSimbolo().equals("sdif")) {
             //pega token
             token = INSTANCE.getToken();
             analisaExpressaoSimples();
@@ -348,6 +378,10 @@ public class Sintatico {
             //pesquisa proc na tabela 
             //insere na tabela
             //doidera
+
+            SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema());
+            INSTANCE.addSimbolo(newSimbolo);
+
             //pega token
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals("sponto_virgula")) {
@@ -373,6 +407,8 @@ public class Sintatico {
         if (token.getSimbolo().equals("sidentificador")) {
             // doidera
             //insere token na tabela de simbolos das func
+            SimboloFuncao newSimbolo = new SimboloFuncao(token.getLexema());
+            INSTANCE.addSimbolo(newSimbolo);
             // pega token
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals("sdoispontos")) {

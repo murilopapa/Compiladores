@@ -19,12 +19,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author matheus
  */
 public class Interface extends JFrame {
+
     /**
      * Creates new form Interface
      */
     Gerenciador INSTANCE = Gerenciador.getInstance();
     private static Lexico analisadorLexico;
-    
+    private static Sintatico analisadorSintatico;
+
     public Interface() {
         initComponents();
     }
@@ -134,13 +136,13 @@ public class Interface extends JFrame {
         File arquivo_lpd;
         abrir_arquivo.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
         int valor = abrir_arquivo.showOpenDialog(null);
-        
+
         if (valor == JFileChooser.APPROVE_OPTION) {
             arquivo_lpd = abrir_arquivo.getSelectedFile(); //pego o arquivo escolhido
             if (INSTANCE.LerArquivo(arquivo_lpd, jTextAreaPrograma) == false) {
                 JOptionPane.showMessageDialog(null, "Erro ao abrir arquivo");
             }
-            
+
         }
     }//GEN-LAST:event_importarLPDItemActionPerformed
 
@@ -148,13 +150,7 @@ public class Interface extends JFrame {
         // TODO add your handling code here:
         String codigo = jTextAreaPrograma.getText();
         jTextAreaErro.setText("");
-        try {
-            analisadorLexico = new Lexico(codigo, jTextAreaErro);
-            
-            INSTANCE.printaTokens();
-        } catch (IOException ex) {
-            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        analisadorSintatico = new Sintatico(codigo, jTextAreaErro);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**

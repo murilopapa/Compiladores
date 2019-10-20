@@ -13,6 +13,7 @@ public class Lexico {
     private int char_to_read = 0;
 
     Lexico(String reader, javax.swing.JTextArea jTextAreaErro) throws IOException {
+        INSTANCE.resetaTokens();
         tamanho_string = reader.length();
         int caractere_int = reader.charAt(char_to_read);      //pego 1 char
         char_to_read++;
@@ -138,7 +139,11 @@ public class Lexico {
                     caracter = (char) caractere_int;
                 }
             } else {
-
+                Token new_token = new Token();
+                new_token.setLexema("ERRO");
+                new_token.setSimbolo("serro");
+                new_token.setLinha(linha_atual);
+                INSTANCE.addToken(new_token);
                 jTextAreaErro.setText("Erro na Linha " + String.valueOf(linha_atual) + "!!");
                 System.err.println("Erro na Linha " + linha_atual + "!!");
                 file_not_finished = false;
@@ -157,10 +162,12 @@ public class Lexico {
             }
         }//se nao, erro
         else {
-//            Integer intErro = new Integer(linha_atual);
-//            String strErro = intErro.toString();
+            Token new_token = new Token();
+            new_token.setLexema("ERRO");
+            new_token.setSimbolo("serro");
+            new_token.setLinha(linha_atual);
+            INSTANCE.addToken(new_token);
             jTextAreaErro.setText("Erro na Linha " + String.valueOf(linha_atual) + "!!");
-
             System.err.println("Erro na Linha " + linha_atual + "!!");
             file_not_finished = false;
 
@@ -176,7 +183,7 @@ public class Lexico {
         do {
             int caractere_int = reader.charAt(char_to_read);      //pego 1 char
             char_to_read++;
-            System.out.println("char:" + char_to_read + "tam:" + tamanho_string);
+            
             if (char_to_read == tamanho_string) {          //se for eof, paro o loop
                 file_not_finished = false;
                 stop_loop = true;               //paro ESSE do while
@@ -194,6 +201,7 @@ public class Lexico {
         Token new_token = new Token();
         new_token.setLexema(palavra);
         new_token.setSimbolo("snumero");
+        new_token.setLinha(linha_atual);
         INSTANCE.addToken(new_token);
     }
 
@@ -290,7 +298,7 @@ public class Lexico {
                 break;
 
         }
-
+        new_token.setLinha(linha_atual);
         INSTANCE.addToken(new_token);
     }
 
@@ -309,6 +317,7 @@ public class Lexico {
                 Token new_token = new Token();
                 new_token.setLexema(palavra);
                 new_token.setSimbolo("satribuicao");
+                new_token.setLinha(linha_atual);
                 INSTANCE.addToken(new_token);
                 //aqui eu leio um char de novo, pq eu trato o : e o =, entao tenho que ler outro
                 caractere_int = reader.charAt(char_to_read);      //pego 1 char
@@ -324,6 +333,7 @@ public class Lexico {
                 Token new_token = new Token();
                 new_token.setLexema(palavra);
                 new_token.setSimbolo("sdoispontos");
+                new_token.setLinha(linha_atual);
                 INSTANCE.addToken(new_token);
             }
 
@@ -347,6 +357,7 @@ public class Lexico {
                 new_token.setSimbolo("smult");
                 break;
         }
+        new_token.setLinha(linha_atual);
         INSTANCE.addToken(new_token);
 
     }
@@ -360,16 +371,19 @@ public class Lexico {
             case "<":
                 new_token.setLexema(palavra);
                 new_token.setSimbolo("smenor");
+                new_token.setLinha(linha_atual);
                 INSTANCE.addToken(new_token);
                 break;
             case ">":
                 new_token.setLexema(palavra);
                 new_token.setSimbolo("smaior");
+                new_token.setLinha(linha_atual);
                 INSTANCE.addToken(new_token);
                 break;
             case "=":
                 new_token.setLexema(palavra);
                 new_token.setSimbolo("sig");
+                new_token.setLinha(linha_atual);
                 INSTANCE.addToken(new_token);
                 break;
             case "!":
@@ -381,10 +395,11 @@ public class Lexico {
                     caracter = (char) caractere_int; //se nao, continuo
                 }
                 if (caracter == '=') {
-                    System.out.println("gg");
+                    
                     palavra = palavra.concat(String.valueOf(caracter));
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("sdif");
+                    new_token.setLinha(linha_atual);
                     INSTANCE.addToken(new_token);
 
                     caractere_int = reader.charAt(char_to_read);      //pego 1 char
@@ -429,6 +444,7 @@ public class Lexico {
                 new_token.setSimbolo("sponto");
                 break;
         }
+        new_token.setLinha(linha_atual);
         INSTANCE.addToken(new_token);
     }
 }

@@ -25,6 +25,7 @@ public class Gerenciador {
     private static Scanner scanner = new Scanner(System.in);
     private static Lexico analisadorLexico;
     private ArrayList<Token> tokens = new ArrayList<Token>();
+    private ArrayList<Simbolo> simbolos = new ArrayList<Simbolo>();
 
     public static Gerenciador getInstance() {
         if (INSTANCE == null) {
@@ -56,21 +57,40 @@ public class Gerenciador {
 
         return true;
     }
-
     public void addToken(Token new_token) {
         tokens.add(new_token);
     }
-
     public Token getToken() {
         return tokens.remove(0);
     }
-
+    public void resetaTokens(){
+        tokens.clear();
+    }
     public void printaTokens() {
+        System.out.println("LIISTA DE TOKENS");
         for (Token token : tokens) {
             System.out.println("token.lexema: " + token.getLexema());
             System.out.println("token.simbolo: " + token.getSimbolo());
             System.out.println("----------------");
         }
     }
+    public void addSimbolo(Simbolo simbolo){
+        this.simbolos.add(simbolo);
+    }
 
+    public ArrayList<Simbolo> getSimbolos() {
+        return simbolos;
+    }
+
+    public void setSimbolos(ArrayList<Simbolo> simbolos) {
+        this.simbolos = simbolos;
+    }
+    
+    void printaSimbolos() {
+        System.out.println("LIISTA DE SIMBOLOS");
+        for (Simbolo simbolo : simbolos) {
+            System.out.println("token.lexema: " + simbolo.getLexema());
+            System.out.println("----------------");
+        }
+    }
 }
