@@ -12,6 +12,8 @@ public class Sintatico {
     private Token token;
     private Gerenciador INSTANCE = Gerenciador.getInstance();
     private JTextArea jTextAreaErro;
+    private boolean erro = false;
+
     Sintatico(String codigo, JTextArea jTextAreaErro) {
         this.jTextAreaErro = jTextAreaErro;
         try {
@@ -40,49 +42,65 @@ public class Sintatico {
                 if (token.getSimbolo().equals("sponto_virgula")) {
                     analisaBloco();
                     if (token.getSimbolo().equals("sponto")) {
-                        //acabou e sucesso
+                        jTextAreaErro.setText("Completo !!");
                     } else {
                         //mostra erros
-                        if (token.getSimbolo().equals("serro")) {
-                            //erro lexico
-                            System.out.println("Erro Léxico linha " + token.getLinha());
-                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                        } else {
-                            System.err.println("Esperava ' . '" + token.getLinha());
-                            jTextAreaErro.setText("Esperava ' . ' na linha " + String.valueOf(token.getLinha()));
+                        if (erro == false) {
+                            if (token.getSimbolo().equals("serro")) {
+                                //erro lexico
+                                System.out.println("Erro Léxico linha " + token.getLinha());
+                                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                                erro = true;
+                            } else {
+                                System.err.println("Esperava ' . '" + token.getLinha());
+                                jTextAreaErro.setText("Esperava ' . ' na linha " + String.valueOf(token.getLinha()));
+                                erro = true;
+                            }
                         }
                     }
                 } else {
                     //mostra erros
-                    if (token.getSimbolo().equals("serro")) {
-                        //erro lexico
-                        System.out.println("Erro Léxico linha " + token.getLinha());
-                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                    } else {
-                        System.err.println("Esperava ' ; '" + token.getLinha());
-                        jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                    if (erro == false) {
+                        if (token.getSimbolo().equals("serro")) {
+                            //erro lexico
+                            System.out.println("Erro Léxico linha " + token.getLinha());
+                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                            erro = true;
+                        } else {
+                            System.err.println("Esperava ' ; '" + token.getLinha());
+                            jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                            erro = true;
+                        }
                     }
                 }
             } else {
                 // mostra erros
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());
-                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava identificador" + token.getLinha());
-                    jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava identificador" + token.getLinha());
+                        jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                        erro = true;
+                    }
                 }
             }
         } else {
             // mostra erros
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());
-                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava 'programa'" + token.getLinha());
-                jTextAreaErro.setText("Esperava 'programa' na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava 'programa'" + token.getLinha());
+                    jTextAreaErro.setText("Esperava 'programa' na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         }
     }
@@ -100,32 +118,40 @@ public class Sintatico {
             //pega token
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals("sidentificador")) {
-                while (token.getSimbolo().equals("sidentificador")) {
+                while (token.getSimbolo().equals("sidentificador") && erro == false) {
                     analisaVariaveis();
                     if (token.getSimbolo().equals("sponto_virgula")) {
                         //pega token
                         token = INSTANCE.getToken();
                     } else {
                         //erro
-                        if (token.getSimbolo().equals("serro")) {
-                            //erro lexico
-                            System.out.println("Erro Léxico linha " + token.getLinha());
-                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                        } else {
-                            System.err.println("Esperava ' ; '" + token.getLinha());
-                            jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                        if (erro == false) {
+                            if (token.getSimbolo().equals("serro")) {
+                                //erro lexico
+                                System.out.println("Erro Léxico linha " + token.getLinha());
+                                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                                erro = true;
+                            } else {
+                                System.err.println("Esperava ' ; '" + token.getLinha());
+                                jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                                erro = true;
+                            }
                         }
                     }
                 }
             } else {
                 // erro
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());
-                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava identificador" + token.getLinha());
-                    jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava identificador" + token.getLinha());
+                        jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                        erro = true;
+                    }
                 }
             }
         }
@@ -137,7 +163,7 @@ public class Sintatico {
         if (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sfuncao")) {
             //fita de rotulo
         }
-        while (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sfuncao")) {
+        while ((token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sfuncao")) && erro == false) {
             if (token.getSimbolo().equals("sprocedimento")) {
                 analisaDeclaracaoProcedimento();
             } else {
@@ -148,13 +174,17 @@ public class Sintatico {
                 token = INSTANCE.getToken();
             } else {
                 //erro
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());
-                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava ' ; '" + token.getLinha());
-                    jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava ' ; '" + token.getLinha());
+                        jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                        erro = true;
+                    }
                 }
             }
         }
@@ -168,7 +198,7 @@ public class Sintatico {
             //pega token
             token = INSTANCE.getToken();
             analisaComandoSimples();
-            while (!token.getSimbolo().equals("sfim")) {
+            while (!token.getSimbolo().equals("sfim") && erro == false) {
                 if (token.getSimbolo().equals("sponto_virgula")) {
                     //pega token
                     token = INSTANCE.getToken();
@@ -177,13 +207,17 @@ public class Sintatico {
                     }
                 } else {
                     //erro
-                    if (token.getSimbolo().equals("serro")) {
-                        //erro lexico
-                        System.out.println("Erro Léxico linha " + token.getLinha());
-                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                    } else {
-                        System.err.println("Esperava ' ; '" + token.getLinha());
-                        jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                    if (erro == false) {
+                        if (token.getSimbolo().equals("serro")) {
+                            //erro lexico
+                            System.out.println("Erro Léxico linha " + token.getLinha());
+                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                            erro = true;
+                        } else {
+                            System.err.println("Esperava ' ; '" + token.getLinha());
+                            jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                            erro = true;
+                        }
                     }
                 }
             }
@@ -191,13 +225,17 @@ public class Sintatico {
             token = INSTANCE.getToken();
         } else {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());
-                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava 'inicio'" + token.getLinha());
-                jTextAreaErro.setText("Esperava 'inicio' na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava 'inicio'" + token.getLinha());
+                    jTextAreaErro.setText("Esperava 'inicio' na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         }
     }
@@ -216,39 +254,51 @@ public class Sintatico {
                         token = INSTANCE.getToken();
                         if (token.getSimbolo().equals("sdoispontos")) {
                             // erro
-                            if (token.getSimbolo().equals("serro")) {
-                                //erro lexico
-                                System.out.println("Erro Léxico linha " + token.getLinha());
-                                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                            } else {
-                                System.err.println("Esperava ' : '" + token.getLinha());
-                                jTextAreaErro.setText("Esperava ' : ' na linha " + String.valueOf(token.getLinha()));
+                            if (erro == false) {
+                                if (token.getSimbolo().equals("serro")) {
+                                    //erro lexico
+                                    System.out.println("Erro Léxico linha " + token.getLinha());
+                                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                                    erro = true;
+                                } else {
+                                    System.err.println("Esperava ' : '" + token.getLinha());
+                                    jTextAreaErro.setText("Esperava ' : ' na linha " + String.valueOf(token.getLinha()));
+                                    erro = true;
+                                }
                             }
                         }
                     }
                 } else {
                     //erro
-                    if (token.getSimbolo().equals("serro")) {
-                        //erro lexico
-                        System.out.println("Erro Léxico linha " + token.getLinha());
-                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                    } else {
-                        System.err.println("Esperava ' , ' ou ' ; '" + token.getLinha());
-                        jTextAreaErro.setText("Esperava ' , ' ou ' ; ' na linha " + String.valueOf(token.getLinha()));
+                    if (erro == false) {
+                        if (token.getSimbolo().equals("serro")) {
+                            //erro lexico
+                            System.out.println("Erro Léxico linha " + token.getLinha());
+                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                            erro = true;
+                        } else {
+                            System.err.println("Esperava ' , ' ou ' ; '" + token.getLinha());
+                            jTextAreaErro.setText("Esperava ' , ' ou ' ; ' na linha " + String.valueOf(token.getLinha()));
+                            erro = true;
+                        }
                     }
                 }
             } else {
                 //erro
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());
-                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava identificador" + token.getLinha());
-                    jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava identificador" + token.getLinha());
+                        jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                        erro = true;
+                    }
                 }
             }
-        } while (!token.getSimbolo().equals("sdoispontos"));
+        } while (!token.getSimbolo().equals("sdoispontos") && erro == false);
         //pega token
         token = INSTANCE.getToken();
         analisaTipo();
@@ -257,13 +307,17 @@ public class Sintatico {
     private void analisaTipo() {
         if (!token.getSimbolo().equals("sinteiro") && !token.getSimbolo().equals("sbooleano")) {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());
-                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava 'inteiro' ou 'booleano'" + token.getLinha());
-                jTextAreaErro.setText("Esperava 'inteiro' ou 'booleano' na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava 'inteiro' ou 'booleano'" + token.getLinha());
+                    jTextAreaErro.setText("Esperava 'inteiro' ou 'booleano' na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         } else {
             // coloca token.lexema na tabela como tipo
@@ -327,13 +381,17 @@ public class Sintatico {
             }
         } else {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());
-                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava 'entao'");
-                jTextAreaErro.setText("Esperava 'entao' na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava 'entao'");
+                    jTextAreaErro.setText("Esperava 'entao' na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         }
     }
@@ -351,13 +409,17 @@ public class Sintatico {
             // rotulo de novo gri
         } else {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());
-                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava 'faca'" + token.getLinha());
-                jTextAreaErro.setText("Esperava 'faca' na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava 'faca'" + token.getLinha());
+                    jTextAreaErro.setText("Esperava 'faca' na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         }
     }
@@ -377,35 +439,47 @@ public class Sintatico {
                     token = INSTANCE.getToken();
                 } else {
                     //erro
-                    if (token.getSimbolo().equals("serro")) {
-                        //erro lexico
-                        System.out.println("Erro Léxico linha " + token.getLinha());
-                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                    } else {
-                        System.err.println("Esperava ' ) '" + token.getLinha());
-                        jTextAreaErro.setText("Esperava ' ) ' na linha " + String.valueOf(token.getLinha()));
+                    if (erro == false) {
+                        if (token.getSimbolo().equals("serro")) {
+                            //erro lexico
+                            System.out.println("Erro Léxico linha " + token.getLinha());
+                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                            erro = true;
+                        } else {
+                            System.err.println("Esperava ' ) '" + token.getLinha());
+                            jTextAreaErro.setText("Esperava ' ) ' na linha " + String.valueOf(token.getLinha()));
+                            erro = true;
+                        }
                     }
                 }
             } else {
                 //erro
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());
-                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava identificador" + token.getLinha());
-                    jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava identificador" + token.getLinha());
+                        jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                        erro = true;
+                    }
                 }
             }
         } else {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());
-                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava ' ( '" + token.getLinha());
-                jTextAreaErro.setText("Esperava ' ( ' na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava ' ( '" + token.getLinha());
+                    jTextAreaErro.setText("Esperava ' ( ' na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         }
     }
@@ -425,32 +499,47 @@ public class Sintatico {
                     token = INSTANCE.getToken();
                 } else {
                     //erro
-                    if (token.getSimbolo().equals("serro")) {
-                        //erro lexico
-                        System.out.println("Erro Léxico linha " + token.getLinha());                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                    } else {
-                        System.err.println("Esperava ' ) '" + token.getLinha());
-                        jTextAreaErro.setText("Esperava ' ) ' na linha " + String.valueOf(token.getLinha()));
+                    if (erro == false) {
+                        if (token.getSimbolo().equals("serro")) {
+                            //erro lexico
+                            System.out.println("Erro Léxico linha " + token.getLinha());
+                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                            erro = true;
+                        } else {
+                            System.err.println("Esperava ' ) '" + token.getLinha());
+                            jTextAreaErro.setText("Esperava ' ) ' na linha " + String.valueOf(token.getLinha()));
+                            erro = true;
+                        }
                     }
                 }
             } else {
                 //erro
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava identificador" + token.getLinha());
-                    jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava identificador" + token.getLinha());
+                        jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                        erro = true;
+                    }
                 }
             }
         } else {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava ' ( '" + token.getLinha());
-                jTextAreaErro.setText("Esperava ' ( ' na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava ' ( '" + token.getLinha());
+                    jTextAreaErro.setText("Esperava ' ( ' na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         }
     }
@@ -491,24 +580,32 @@ public class Sintatico {
                 analisaBloco();
             } else {
                 //erro
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());
-                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava ' ; '" + token.getLinha());
-                    jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava ' ; '" + token.getLinha());
+                        jTextAreaErro.setText("Esperava ' ; ' na linha " + String.valueOf(token.getLinha()));
+                        erro = true;
+                    }
                 }
             }
         } else {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());
-                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava identificador" + token.getLinha());
-                jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava identificador" + token.getLinha());
+                    jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         }
     }
@@ -536,32 +633,47 @@ public class Sintatico {
                     }
                 } else {
                     //eroo
-                    if (token.getSimbolo().equals("serro")) {
-                        //erro lexico
-                        System.out.println("Erro Léxico linha " + token.getLinha());                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                    } else {
-                        System.err.println("Esperava 'inteiro' ou 'booleano'" + token.getLinha());
-                        jTextAreaErro.setText("Esperava 'inteiro' ou 'booleano' na linha " + String.valueOf(token.getLinha()));
+                    if (erro == false) {
+                        if (token.getSimbolo().equals("serro")) {
+                            //erro lexico
+                            System.out.println("Erro Léxico linha " + token.getLinha());
+                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                            erro = true;
+                        } else {
+                            System.err.println("Esperava 'inteiro' ou 'booleano'" + token.getLinha());
+                            jTextAreaErro.setText("Esperava 'inteiro' ou 'booleano' na linha " + String.valueOf(token.getLinha()));
+                            erro = true;
+                        }
                     }
                 }
             } else {
                 //erro
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava ' : '" + token.getLinha());
-                    jTextAreaErro.setText("Esperava ' : ' na linha " + String.valueOf(token.getLinha()));
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava ' : '" + token.getLinha());
+                        jTextAreaErro.setText("Esperava ' : ' na linha " + String.valueOf(token.getLinha()));
+                        erro = true;
+                    }
                 }
             }
         } else {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());                            jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava identificador" + token.getLinha());
-                jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Esperava identificador" + token.getLinha());
+                    jTextAreaErro.setText("Esperava identificador na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+                }
             }
         }
     }
@@ -573,7 +685,7 @@ public class Sintatico {
 
         }
         analisaTermo();
-        while (token.getSimbolo().equals("smenos") || token.getSimbolo().equals("smais") || token.getSimbolo().equals("sou")) {
+        while ((token.getSimbolo().equals("smenos") || token.getSimbolo().equals("smais") || token.getSimbolo().equals("sou")) && erro == false) {
             //pega token
             token = INSTANCE.getToken();
             analisaTermo();
@@ -582,7 +694,7 @@ public class Sintatico {
 
     private void analisaTermo() {
         analisaFator();
-        while (token.getSimbolo().equals("smult") || token.getSimbolo().equals("sdiv") || token.getSimbolo().equals("se")) {
+        while ((token.getSimbolo().equals("smult") || token.getSimbolo().equals("sdiv") || token.getSimbolo().equals("se")) && erro == false) {
             //pega token
             token = INSTANCE.getToken();
             analisaFator();
@@ -623,12 +735,15 @@ public class Sintatico {
                 token = INSTANCE.getToken();
             } else {
                 //erro
-                if (token.getSimbolo().equals("serro")) {
-                    //erro lexico
-                    System.out.println("Erro Léxico linha " + token.getLinha());
-                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-                } else {
-                    System.err.println("Esperava ' ) '" + token.getLinha());
+                if (erro == false) {
+                    if (token.getSimbolo().equals("serro")) {
+                        //erro lexico
+                        System.out.println("Erro Léxico linha " + token.getLinha());
+                        jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                        erro = true;
+                    } else {
+                        System.err.println("Esperava ' ) '" + token.getLinha());
+                    }
                 }
             }
         } else if (token.getLexema().equals("verdadeiro") || token.getLexema().equals("falso")) {
@@ -636,14 +751,18 @@ public class Sintatico {
             token = INSTANCE.getToken();
         } else {
             //erro
-            if (token.getSimbolo().equals("serro")) {
-                //erro lexico
-                System.out.println("Erro Léxico linha " + token.getLinha());
-                jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
-            } else {
-                System.err.println("Esperava 'verdadeiro' ou 'falso'" + token.getLinha());
-                jTextAreaErro.setText("Esperava 'verdadeiro' ou 'falso' na linha " + String.valueOf(token.getLinha()));
-                
+            if (erro == false) {
+                if (token.getSimbolo().equals("serro")) {
+                    //erro lexico
+                    System.out.println("Erro Léxico linha " + token.getLinha());
+                    jTextAreaErro.setText("Erro na Léxico na linha " + String.valueOf(token.getLinha()) + "!!");
+                    erro = true;
+                } else {
+                    System.err.println("Erro Sintatico linha'" + token.getLinha());
+                    jTextAreaErro.setText("Erro Sintático na linha " + String.valueOf(token.getLinha()));
+                    erro = true;
+
+                }
             }
         }
     }

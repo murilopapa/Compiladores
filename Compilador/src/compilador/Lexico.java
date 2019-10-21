@@ -38,6 +38,9 @@ public class Lexico {
                             if (caracter == '}') {      //se for o fim do comentario
                                 stop_loop = true;       //paro o loop
                             }
+                            if(caracter == '\n'){
+                                linha_atual++;
+                            }
                         }
                     } while (!stop_loop);
                     //depois do loop, eu tenho que ler mais um, pra enviar na proxima vez do while
@@ -110,14 +113,7 @@ public class Lexico {
         } //se for :
         else if (caracter == 58) {
             trataAtribuicao(reader);
-            caractere_int = reader.charAt(char_to_read);      //pego 1 char
-            char_to_read++;
-
-            if (char_to_read == tamanho_string) {        //se for eof, paro o loop
-                file_not_finished = false;  //paro o while externo
-            } else {
-                caracter = (char) caractere_int;
-            }
+            
         } //se for + - *
         else if (caracter == 43 || caracter == 45 || caracter == 42) {
             trataOpAritimetica(reader);
