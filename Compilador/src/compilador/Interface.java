@@ -150,7 +150,8 @@ public class Interface extends JFrame {
         // TODO add your handling code here:
         String codigo = jTextAreaPrograma.getText();
         jTextAreaErro.setText("");
-        analisadorSintatico = new Sintatico(codigo, jTextAreaErro);
+        jTextAreaPrograma.getHighlighter().removeAllHighlights();
+        analisadorSintatico = new Sintatico(codigo, jTextAreaErro, jTextAreaPrograma);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**

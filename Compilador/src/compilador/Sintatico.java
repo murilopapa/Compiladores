@@ -6,26 +6,29 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
 public class Sintatico {
 
     private Lexico lexico;
     private Token token;
     private Gerenciador INSTANCE = Gerenciador.getInstance();
-    private JTextArea jTextAreaErro;
+    private JTextArea jTextAreaErro, jTextAreaPrograma;
     private boolean erro = false;
 
-    Sintatico(String codigo, JTextArea jTextAreaErro) {
+    Sintatico(String codigo, JTextArea jTextAreaErro, JTextArea jTextAreaPrograma) {
         this.jTextAreaErro = jTextAreaErro;
+        this.jTextAreaPrograma = jTextAreaPrograma;
         jTextAreaErro.setForeground(new java.awt.Color(204, 0, 0));
         try {
             lexico = new Lexico(codigo, jTextAreaErro);
             //INSTANCE.printaTokens();
-            try{
-            analisaInicio();
-            }
-            catch(IndexOutOfBoundsException c){
-                printaErro();
+            try {
+                analisaInicio();
+            } catch (IndexOutOfBoundsException c) {
+                printaErro("");
             }
             //INSTANCE.printaSimbolos();
         } catch (IOException ex) {
@@ -49,23 +52,23 @@ public class Sintatico {
                 if (token.getSimbolo().equals("sponto_virgula")) {
                     analisaBloco();
                     if (token.getSimbolo().equals("sponto")) {
-                        jTextAreaErro.setForeground(new java.awt.Color(0, 0, 204));
+                        jTextAreaErro.setForeground(new java.awt.Color(0, 204, 0));
                         jTextAreaErro.setText("Completo !!");
                     } else {
                         //mostra erros
-                        printaErro();
+                        printaErro("' . '");
                     }
                 } else {
                     //mostra erros
-                    printaErro();
+                    printaErro(" ; ");
                 }
             } else {
                 // mostra erros
-                printaErro();
+                printaErro("identificador");
             }
         } else {
             // mostra erros
-            printaErro();
+            printaErro("programa");
         }
     }
 
@@ -89,12 +92,12 @@ public class Sintatico {
                         token = INSTANCE.getToken();
                     } else {
                         //erro
-                        printaErro();
+                        printaErro("' ; '");
                     }
                 }
             } else {
                 // erro
-                printaErro();
+                printaErro("identificador");
             }
         }
     }
@@ -116,7 +119,7 @@ public class Sintatico {
                 token = INSTANCE.getToken();
             } else {
                 //erro
-                printaErro();
+                printaErro("' ; '");
             }
         }
         if (flag == 1) {
@@ -136,19 +139,16 @@ public class Sintatico {
                     if (!token.getSimbolo().equals("sfim")) {
                         analisaComandoSimples();
                     }
-                    else{
-                        printaErro();
-                    }
                 } else {
                     //erro
-                    printaErro();
+                    printaErro("' ; '");
                 }
             }
             //pega token
             token = INSTANCE.getToken();
         } else {
             //erro
-            printaErro();
+            printaErro("inicio");
         }
     }
 
@@ -166,16 +166,16 @@ public class Sintatico {
                         token = INSTANCE.getToken();
                         if (token.getSimbolo().equals("sdoispontos")) {
                             // erro
-                            printaErro();
+                            printaErro("nao ' : '");
                         }
                     }
                 } else {
                     //erro
-                    printaErro();
+                    printaErro("' , ' ou ' : '");
                 }
             } else {
                 //erro
-                printaErro();
+                printaErro("identificador");
             }
         } while (!token.getSimbolo().equals("sdoispontos") && erro == false);
         //pega token
@@ -186,7 +186,7 @@ public class Sintatico {
     private void analisaTipo() {
         if (!token.getSimbolo().equals("sinteiro") && !token.getSimbolo().equals("sbooleano")) {
             //erro
-            printaErro();
+            printaErro("inteiro ou booleano");
         } else {
             // coloca token.lexema na tabela como tipo
             ArrayList<Simbolo> simbolos = new ArrayList<Simbolo>();
@@ -249,7 +249,7 @@ public class Sintatico {
             }
         } else {
             //erro
-            printaErro();
+            printaErro("entao");
         }
     }
 
@@ -266,7 +266,7 @@ public class Sintatico {
             // rotulo de novo gri
         } else {
             //erro
-            printaErro();
+            printaErro("faca");
         }
     }
 
@@ -285,15 +285,15 @@ public class Sintatico {
                     token = INSTANCE.getToken();
                 } else {
                     //erro
-                    printaErro();
+                    printaErro("'' ) ");
                 }
             } else {
                 //erro
-                printaErro();
+                printaErro("identificador");
             }
         } else {
             //erro
-            printaErro();
+            printaErro("' ( '");
 
         }
     }
@@ -313,15 +313,15 @@ public class Sintatico {
                     token = INSTANCE.getToken();
                 } else {
                     //erro
-                    printaErro();
+                    printaErro("' ) '");
                 }
             } else {
                 //erro
-                printaErro();
+                printaErro("identificador");
             }
         } else {
             //erro
-            printaErro();
+            printaErro("' ( '");
         }
     }
 
@@ -361,11 +361,11 @@ public class Sintatico {
                 analisaBloco();
             } else {
                 //erro
-                printaErro();
+                printaErro("' ; '");
             }
         } else {
             //erro
-            printaErro();
+            printaErro("identificador");
         }
     }
 
@@ -392,15 +392,15 @@ public class Sintatico {
                     }
                 } else {
                     //eroo
-                    printaErro();
+                    printaErro("inteiro ou booleano");
                 }
             } else {
                 //erro
-                printaErro();
+                printaErro("' : '");
             }
         } else {
             //erro
-            printaErro();
+            printaErro("identificador");
         }
     }
 
@@ -461,18 +461,18 @@ public class Sintatico {
                 token = INSTANCE.getToken();
             } else {
                 //erro
-                printaErro();
+                printaErro(" ) ");
             }
         } else if (token.getLexema().equals("verdadeiro") || token.getLexema().equals("falso")) {
             //pega token
             token = INSTANCE.getToken();
         } else {
             //erro
-            printaErro();
+            printaErro("verdadeiro ou falso");
         }
     }
 
-    private void printaErro() {
+    private void printaErro(String esperado) {
         if (erro == false) {
             if (token.getSimbolo().equals("serro")) {
                 //erro lexico
@@ -481,10 +481,19 @@ public class Sintatico {
                 erro = true;
             } else {
                 System.err.println("Erro Sintatico linha'" + token.getLinha());
-                jTextAreaErro.setText("Erro Sintático na linha " + String.valueOf(token.getLinha()));
-                erro = true;
+                String texterro = "Erro Sintático na linha " + String.valueOf(token.getLinha()) + '\n' + "Recebido: '" + token.getLexema() + "' mas é esperado: '" + esperado + "'";
+                jTextAreaErro.setText(texterro);
 
+                erro = true;
             }
+            Highlighter.HighlightPainter painter;
+            painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+            try {
+                jTextAreaPrograma.getHighlighter().addHighlight(token.getIndexStart()-1, token.getIndexEnd()-1, painter);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(Sintatico.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //jTextAreaErro.getHighlighter().addHighlight(startIndex, endIndex, painter);
         }
     }
 }

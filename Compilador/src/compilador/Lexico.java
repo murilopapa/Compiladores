@@ -135,6 +135,8 @@ public class Lexico {
                 new_token.setLexema("ERRO");
                 new_token.setSimbolo("serro");
                 new_token.setLinha(linha_atual);
+                new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                new_token.setIndexEnd(char_to_read);
                 INSTANCE.addToken(new_token);
                 jTextAreaErro.setText("Erro na Linha " + String.valueOf(linha_atual) + "!!");
                 System.err.println("Erro na Linha " + linha_atual + "!!");
@@ -158,6 +160,8 @@ public class Lexico {
             new_token.setLexema("ERRO");
             new_token.setSimbolo("serro");
             new_token.setLinha(linha_atual);
+            new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+            new_token.setIndexEnd(char_to_read);
             INSTANCE.addToken(new_token);
             jTextAreaErro.setText("Erro na Linha " + String.valueOf(linha_atual) + "!!");
             System.err.println("Erro na Linha " + linha_atual + "!!");
@@ -194,6 +198,8 @@ public class Lexico {
         new_token.setLexema(palavra);
         new_token.setSimbolo("snumero");
         new_token.setLinha(linha_atual);
+        new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+        new_token.setIndexEnd(char_to_read);
         INSTANCE.addToken(new_token);
     }
 
@@ -291,6 +297,8 @@ public class Lexico {
 
         }
         new_token.setLinha(linha_atual);
+        new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+        new_token.setIndexEnd(char_to_read);
         INSTANCE.addToken(new_token);
     }
 
@@ -310,6 +318,8 @@ public class Lexico {
                 new_token.setLexema(palavra);
                 new_token.setSimbolo("satribuicao");
                 new_token.setLinha(linha_atual);
+                new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                new_token.setIndexEnd(char_to_read);
                 INSTANCE.addToken(new_token);
                 //aqui eu leio um char de novo, pq eu trato o : e o =, entao tenho que ler outro
                 caractere_int = reader.charAt(char_to_read);      //pego 1 char
@@ -326,6 +336,8 @@ public class Lexico {
                 new_token.setLexema(palavra);
                 new_token.setSimbolo("sdoispontos");
                 new_token.setLinha(linha_atual);
+                new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                new_token.setIndexEnd(char_to_read);
                 INSTANCE.addToken(new_token);
             }
 
@@ -350,6 +362,8 @@ public class Lexico {
                 break;
         }
         new_token.setLinha(linha_atual);
+        new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+        new_token.setIndexEnd(char_to_read);
         INSTANCE.addToken(new_token);
 
     }
@@ -375,6 +389,8 @@ public class Lexico {
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("smenorig");
                     new_token.setLinha(linha_atual);
+                    new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                    new_token.setIndexEnd(char_to_read);
                     INSTANCE.addToken(new_token);
 
                     caractere_int = reader.charAt(char_to_read);      //pego 1 char
@@ -388,6 +404,8 @@ public class Lexico {
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("smenor");
                     new_token.setLinha(linha_atual);
+                    new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                    new_token.setIndexEnd(char_to_read);
                     INSTANCE.addToken(new_token);
                 }
                 break;
@@ -405,6 +423,8 @@ public class Lexico {
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("smenorig");
                     new_token.setLinha(linha_atual);
+                    new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                    new_token.setIndexEnd(char_to_read);
                     INSTANCE.addToken(new_token);
 
                     caractere_int = reader.charAt(char_to_read);      //pego 1 char
@@ -418,6 +438,8 @@ public class Lexico {
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("smaior");
                     new_token.setLinha(linha_atual);
+                    new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                    new_token.setIndexEnd(char_to_read);
                     INSTANCE.addToken(new_token);
                 }
                 break;
@@ -435,6 +457,8 @@ public class Lexico {
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("smenorig");
                     new_token.setLinha(linha_atual);
+                    new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                    new_token.setIndexEnd(char_to_read);
                     INSTANCE.addToken(new_token);
 
                     caractere_int = reader.charAt(char_to_read);      //pego 1 char
@@ -448,6 +472,8 @@ public class Lexico {
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("sig");
                     new_token.setLinha(linha_atual);
+                    new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                    new_token.setIndexEnd(char_to_read);
                     INSTANCE.addToken(new_token);
                 }
                 break;
@@ -465,6 +491,8 @@ public class Lexico {
                     new_token.setLexema(palavra);
                     new_token.setSimbolo("sdif");
                     new_token.setLinha(linha_atual);
+                    new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+                    new_token.setIndexEnd(char_to_read);
                     INSTANCE.addToken(new_token);
 
                     caractere_int = reader.charAt(char_to_read);      //pego 1 char
@@ -510,6 +538,8 @@ public class Lexico {
                 break;
         }
         new_token.setLinha(linha_atual);
+        new_token.setIndexStart(char_to_read - new_token.getLexema().length());
+        new_token.setIndexEnd(char_to_read);
         INSTANCE.addToken(new_token);
     }
 }

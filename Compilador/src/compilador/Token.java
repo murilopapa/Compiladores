@@ -5,11 +5,28 @@ public class Token {
     private String simbolo;
     private String lexema;
     private int linha;
+    private int indexStart, indexEnd;
 
     public String getSimbolo() {
         return simbolo;
     }
 
+    public int getIndexStart() {
+        return indexStart;
+    }
+
+    public void setIndexStart(int indexStart) {
+        this.indexStart = indexStart;
+    }
+
+    public int getIndexEnd() {
+        return indexEnd;
+    }
+
+    public void setIndexEnd(int indexEnd) {
+        this.indexEnd = indexEnd;
+    }
+    
     public void setSimbolo(String simbolo) {
         this.simbolo = simbolo;
     }
