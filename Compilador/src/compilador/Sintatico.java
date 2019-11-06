@@ -1,6 +1,5 @@
 package compilador;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ public class Sintatico {
     private Token token;
     private Gerenciador INSTANCE = Gerenciador.getInstance();
     private JTextArea jTextAreaErro, jTextAreaPrograma;
+    private ArrayList<ElementoOperador> filaInFixa = new ArrayList<ElementoOperador>();
     private boolean erro = false;
 
     Sintatico(String codigo, JTextArea jTextAreaErro, JTextArea jTextAreaPrograma) {
@@ -31,9 +31,9 @@ public class Sintatico {
                 analisaInicio();
             } catch (IndexOutOfBoundsException c) {
                 printaErro(c.toString());
-                
+
             }
-            INSTANCE.printaSimbolos();
+            //INSTANCE.printaSimbolos();
         } catch (IOException ex) {
             Logger.getLogger(Sintatico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -148,7 +148,7 @@ public class Sintatico {
                     printaErro("' ; '");
                 }
             }
-            
+
             //pega token
             token = INSTANCE.getToken();
         } else {
@@ -256,6 +256,7 @@ public class Sintatico {
         //pega token
         token = INSTANCE.getToken();
         analisaExpressao();
+        printaInFixa();
         if (token.getSimbolo().equals("sentao")) {
             //pega token
             token = INSTANCE.getToken();
@@ -276,6 +277,7 @@ public class Sintatico {
         //pega token
         token = INSTANCE.getToken();
         analisaExpressao();
+        printaInFixa();
         if (token.getSimbolo().equals("sfaca")) {
             // negocio de rotulo de novo
             //pega token
@@ -329,20 +331,31 @@ public class Sintatico {
 
     private void analisaEscreva() {
         //pega token
+        boolean varExiste = false;
         token = INSTANCE.getToken();
         if (token.getSimbolo().equals("sabre_parenteses")) {
             //pega token
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals("sidentificador")) {
                 // pesquisa declaracao na tabela com o token.lexema
-                //pega token
-                token = INSTANCE.getToken();
-                if (token.getSimbolo().equals("sfecha_parenteses")) {
+                for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
+                    if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(token.getLexema())) {
+                        varExiste = true;
+                        break;
+                    }
+                }
+                if (varExiste) {
                     //pega token
                     token = INSTANCE.getToken();
+                    if (token.getSimbolo().equals("sfecha_parenteses")) {
+                        //pega token
+                        token = INSTANCE.getToken();
+                    } else {
+                        //erro
+                        printaErro("' ) '");
+                    }
                 } else {
-                    //erro
-                    printaErro("' ) '");
+                    printaErro("var nao declarada");
                 }
             } else {
                 //erro
@@ -357,6 +370,9 @@ public class Sintatico {
     private void analisaAtribuicao() {
         token = INSTANCE.getToken();
         analisaExpressao();
+        printaInFixa();
+        //
+        //aqui vai a funcao de gerar a pos fixa
     }
 
     private void analisaChProcedimento() {
@@ -367,30 +383,42 @@ public class Sintatico {
         analisaExpressaoSimples();
         if (token.getSimbolo().equals("smaior") || token.getSimbolo().equals("smaiorig") || token.getSimbolo().equals("sig") || token.getSimbolo().equals("smenor") || token.getSimbolo().equals("smenorig") || token.getSimbolo().equals("sdif")) {
             //pega token
+            filaInFixa.add(new ElementoOperador(token.getLexema()));
             token = INSTANCE.getToken();
             analisaExpressaoSimples();
         }
     }
 
     private void analisaDeclaracaoProcedimento() {
+        boolean procExiste = false;
         //pega token
         token = INSTANCE.getToken();
         //doidera
         if (token.getSimbolo().equals("sidentificador")) {
             //pesquisa proc na tabela 
-            //insere na tabela
-            //doidera
+            for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
+                if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(token.getLexema())) {
+                    procExiste = true;
+                    break;
+                }
+            }
+            if (!procExiste) {
+                //insere na tabela
+                //doidera
 
-            SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema());
-            INSTANCE.addSimbolo(newSimbolo);
+                SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema());
+                INSTANCE.addSimbolo(newSimbolo);
 
-            //pega token
-            token = INSTANCE.getToken();
-            if (token.getSimbolo().equals("sponto_virgula")) {
-                analisaBloco();
+                //pega token
+                token = INSTANCE.getToken();
+                if (token.getSimbolo().equals("sponto_virgula")) {
+                    analisaBloco();
+                } else {
+                    //erro
+                    printaErro("' ; '");
+                }
             } else {
-                //erro
-                printaErro("' ; '");
+                printaErro("proc ja declarado");
             }
         } else {
             //erro
@@ -399,33 +427,46 @@ public class Sintatico {
     }
 
     private void analisaDeclaracaoFuncao() {
+        boolean procExiste = false;
         //pega token
         token = INSTANCE.getToken();
         // doidera
         if (token.getSimbolo().equals("sidentificador")) {
             // doidera
-            //insere token na tabela de simbolos das func
-            SimboloFuncao newSimbolo = new SimboloFuncao(token.getLexema());
-            INSTANCE.addSimbolo(newSimbolo);
-            // pega token
-            token = INSTANCE.getToken();
-            if (token.getSimbolo().equals("sdoispontos")) {
-                //pega token
+            for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
+                if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(token.getLexema())) {
+                    procExiste = true;
+                    break;
+                }
+            }
+            if (!procExiste) {
+                //insere token na tabela de simbolos das func
+                SimboloFuncao newSimbolo = new SimboloFuncao(token.getLexema());
+
+                // pega token
                 token = INSTANCE.getToken();
-                if (token.getSimbolo().equals("sinteiro") || token.getSimbolo().equals("sbooleano")) {
-                    //doidera
+                if (token.getSimbolo().equals("sdoispontos")) {
                     //pega token
                     token = INSTANCE.getToken();
-                    if (token.getSimbolo().equals("sponto_virgula")) {
-                        analisaBloco();
+                    if (token.getSimbolo().equals("sinteiro") || token.getSimbolo().equals("sbooleano")) {
+                        //doidera
+                        newSimbolo.setTipo(token.getSimbolo());
+                        INSTANCE.addSimbolo(newSimbolo);
+                        //pega token
+                        token = INSTANCE.getToken();
+                        if (token.getSimbolo().equals("sponto_virgula")) {
+                            analisaBloco();
+                        }
+                    } else {
+                        //eroo
+                        printaErro("inteiro ou booleano");
                     }
                 } else {
-                    //eroo
-                    printaErro("inteiro ou booleano");
+                    //erro
+                    printaErro("' : '");
                 }
             } else {
-                //erro
-                printaErro("' : '");
+                printaErro("func ja declarada");
             }
         } else {
             //erro
@@ -436,12 +477,18 @@ public class Sintatico {
     private void analisaExpressaoSimples() {
         if (token.getSimbolo().equals("smais") || token.getSimbolo().equals("smenos")) {
             //pega token
+            if (token.getSimbolo().equals("smais")) {
+                filaInFixa.add(new ElementoOperador("+U"));
+            } else {
+                filaInFixa.add(new ElementoOperador("-U"));
+            }
             token = INSTANCE.getToken();
 
         }
         analisaTermo();
         while ((token.getSimbolo().equals("smenos") || token.getSimbolo().equals("smais") || token.getSimbolo().equals("sou")) && erro == false) {
             //pega token
+            filaInFixa.add(new ElementoOperador(token.getLexema()));
             token = INSTANCE.getToken();
             analisaTermo();
         }
@@ -451,6 +498,7 @@ public class Sintatico {
         analisaFator();
         while ((token.getSimbolo().equals("smult") || token.getSimbolo().equals("sdiv") || token.getSimbolo().equals("se")) && erro == false) {
             //pega token
+            filaInFixa.add(new ElementoOperador(token.getLexema()));
             token = INSTANCE.getToken();
             analisaFator();
         }
@@ -461,10 +509,20 @@ public class Sintatico {
     }
 
     private void analisaFator() {
+        boolean boolaux = false;
+        Simbolo simbaux = null;
         if (token.getSimbolo().equals("sidentificador")) {
             //doidera
-            if (true) {//lexema
-                if (true) {
+            for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
+                if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(token.getLexema())) {
+                    simbaux = INSTANCE.getSimbolos().get(i - 1);
+                    boolaux = true;
+                    break;
+                }
+            }
+            if (boolaux) {//if pesquisatabela
+                filaInFixa.add(new ElementoOperador(token.getLexema()));
+                if (simbaux instanceof SimboloVariavel || simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
                     analisaChamadaFuncao();
                 } else {
                     token = INSTANCE.getToken();
@@ -475,18 +533,23 @@ public class Sintatico {
 
         } else if (token.getSimbolo().equals("snumero")) {
             //pega token
+            filaInFixa.add(new ElementoOperador(token.getLexema()));
             token = INSTANCE.getToken();
 
         } else if (token.getSimbolo().equals("snao")) {
             //pega token
+            filaInFixa.add(new ElementoOperador(token.getLexema()));
             token = INSTANCE.getToken();
             analisaFator();
         } else if (token.getSimbolo().equals("sabre_parenteses")) {
             //pega token
+            filaInFixa.add(new ElementoOperador(token.getLexema()));
             token = INSTANCE.getToken();
             analisaExpressao();
+
             if (token.getSimbolo().equals("sfecha_parenteses")) {
                 //pega token
+                filaInFixa.add(new ElementoOperador(token.getLexema()));
                 token = INSTANCE.getToken();
             } else {
                 //erro
@@ -494,6 +557,7 @@ public class Sintatico {
             }
         } else if (token.getLexema().equals("verdadeiro") || token.getLexema().equals("falso")) {
             //pega token
+            filaInFixa.add(new ElementoOperador(token.getLexema()));
             token = INSTANCE.getToken();
         } else {
             //erro
@@ -522,7 +586,16 @@ public class Sintatico {
             } catch (BadLocationException ex) {
                 Logger.getLogger(Sintatico.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //jTextAreaErro.getHighlighter().addHighlight(startIndex, endIndex, painter);
         }
+    }
+
+    private void printaInFixa() {
+        System.out.println("IN FIXA:");
+        for (ElementoOperador e : filaInFixa) {
+            System.out.print(" " + e.getNome());
+        }
+        System.out.println("");
+        System.out.println("-------------------");
+        filaInFixa.clear();
     }
 }

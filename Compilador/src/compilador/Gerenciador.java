@@ -75,7 +75,7 @@ public class Gerenciador {
     }
 
     public void printaTokens() {
-        System.out.println("LIISTA DE TOKENS");
+        System.out.println("LISTA DE TOKENS");
         for (Token token : tokens) {
             System.out.println("token.lexema: " + token.getLexema());
             System.out.println("token.simbolo: " + token.getSimbolo());
@@ -111,7 +111,7 @@ public class Gerenciador {
     }
 
     void printaSimbolos() {
-        System.out.println("LIISTA DE SIMBOLOS");
+        System.out.println("LISTA DE SIMBOLOS");
         for (Simbolo simbolo : simbolos) {
             System.out.println("token.lexema: " + simbolo.getLexema());
             System.out.println("----------------");

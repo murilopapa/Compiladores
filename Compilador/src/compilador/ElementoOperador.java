@@ -2,7 +2,11 @@ package compilador;
 
 public class ElementoOperador {
     private String nome;
-
+    
+    public ElementoOperador(String nome){
+        this.nome = nome;
+    }
+    
     public String getNome() {
         return nome;
     }
