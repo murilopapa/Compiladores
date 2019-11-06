@@ -31,8 +31,9 @@ public class Sintatico {
                 analisaInicio();
             } catch (IndexOutOfBoundsException c) {
                 printaErro(c.toString());
+                
             }
-            //INSTANCE.printaSimbolos();
+            INSTANCE.printaSimbolos();
         } catch (IOException ex) {
             Logger.getLogger(Sintatico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -80,6 +81,7 @@ public class Sintatico {
         analisaEtVariaveis();
         analisaSubRotinas();
         analisaComandos();
+        INSTANCE.removeFuncProcSimbolos();
     }
 
     private void analisaEtVariaveis() {
@@ -146,6 +148,7 @@ public class Sintatico {
                     printaErro("' ; '");
                 }
             }
+            
             //pega token
             token = INSTANCE.getToken();
         } else {
@@ -160,11 +163,11 @@ public class Sintatico {
             if (token.getSimbolo().equals("sidentificador")) {
                 // insere lexema na tabela de simbolos se ja nao houver, se houver ERRO
                 SimboloVariavel newSimbolo = new SimboloVariavel(token.getLexema());
-                for (Simbolo e : INSTANCE.getSimbolos()) {
-                    if(e instanceof SimboloFuncao || e instanceof SimboloProcProg){
+                for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
+                    if (INSTANCE.getSimbolos().get(i - 1) instanceof SimboloFuncao || INSTANCE.getSimbolos().get(i - 1) instanceof SimboloProcProg) {
                         break;
                     }
-                    if (e.getLexema().equals(newSimbolo.getLexema())) {
+                    if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(newSimbolo.getLexema())) {
                         varExiste = true;
                     }
                 }
@@ -286,6 +289,7 @@ public class Sintatico {
     }
 
     private void analisaLeia() {
+        boolean varExiste = false;
         //pega token
         token = INSTANCE.getToken();
         if (token.getSimbolo().equals("sabre_parenteses")) {
@@ -293,14 +297,24 @@ public class Sintatico {
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals("sidentificador")) {
                 // pesquisa declaracao na tabela com token.lexema
-                //pega token
-                token = INSTANCE.getToken();
-                if (token.getSimbolo().equals("sfecha_parenteses")) {
+                for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
+                    if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(token.getLexema())) {
+                        varExiste = true;
+                        break;
+                    }
+                }
+                if (varExiste) {
                     //pega token
                     token = INSTANCE.getToken();
+                    if (token.getSimbolo().equals("sfecha_parenteses")) {
+                        //pega token
+                        token = INSTANCE.getToken();
+                    } else {
+                        //erro
+                        printaErro("'' ) ");
+                    }
                 } else {
-                    //erro
-                    printaErro("'' ) ");
+                    printaErro("var nao declarada");
                 }
             } else {
                 //erro

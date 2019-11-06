@@ -5,9 +5,12 @@
         <group>
             <file>file:/home/murilo/Github/Compiladores/Compilador/src/compilador/Sintatico.java</file>
             <file>file:/home/murilo/Github/Compiladores/Compilador/src/compilador/Gerenciador.java</file>
+            <file>file:/home/murilo/Github/Compiladores/Compilador/src/compilador/Simbolo.java</file>
             <file>file:/home/murilo/Github/Compiladores/Compilador/src/compilador/Token.java</file>
+            <file>file:/home/murilo/Github/Compiladores/Compilador/src/compilador/ElementoOperando.java</file>
             <file>file:/home/murilo/Github/Compiladores/Compilador/src/compilador/Interface.java</file>
             <file>file:/home/murilo/Github/Compiladores/Compilador/src/compilador/Lexico.java</file>
+            <file>file:/home/murilo/Github/Compiladores/Compilador/src/compilador/ElementoOperador.java</file>
         </group>
     </open-files>
 </project-private>

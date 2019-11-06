@@ -57,18 +57,23 @@ public class Gerenciador {
 
         return true;
     }
+
     public void addToken(Token new_token) {
         tokens.add(new_token);
     }
+
     public Token getToken() {
         return tokens.remove(0);
     }
-    public void resetaTokens(){
+
+    public void resetaTokens() {
         tokens.clear();
     }
-    public void resetaSimbolos(){
+
+    public void resetaSimbolos() {
         simbolos.clear();
     }
+
     public void printaTokens() {
         System.out.println("LIISTA DE TOKENS");
         for (Token token : tokens) {
@@ -77,7 +82,8 @@ public class Gerenciador {
             System.out.println("----------------");
         }
     }
-    public void addSimbolo(Simbolo simbolo){
+
+    public void addSimbolo(Simbolo simbolo) {
         this.simbolos.add(simbolo);
     }
 
@@ -85,10 +91,25 @@ public class Gerenciador {
         return simbolos;
     }
 
+    public void removeFuncProcSimbolos() {
+        boolean finish = false;
+
+        do {
+            if (!simbolos.get(simbolos.size() - 1).isEscopo()) {
+                simbolos.remove(simbolos.size() - 1);
+            } else {
+                Simbolo simbAux = simbolos.get(simbolos.size() - 1);
+                simbAux.setEscopo(false);
+                simbolos.set(simbolos.size() - 1, simbAux);
+                finish = true;
+            }
+        } while (!finish);
+    }
+
     public void setSimbolos(ArrayList<Simbolo> simbolos) {
         this.simbolos = simbolos;
     }
-    
+
     void printaSimbolos() {
         System.out.println("LIISTA DE SIMBOLOS");
         for (Simbolo simbolo : simbolos) {
