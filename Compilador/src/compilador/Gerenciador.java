@@ -66,6 +66,9 @@ public class Gerenciador {
     public void resetaTokens(){
         tokens.clear();
     }
+    public void resetaSimbolos(){
+        simbolos.clear();
+    }
     public void printaTokens() {
         System.out.println("LIISTA DE TOKENS");
         for (Token token : tokens) {

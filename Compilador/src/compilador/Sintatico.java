@@ -1,5 +1,6 @@
 package compilador;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Sintatico {
     private boolean erro = false;
 
     Sintatico(String codigo, JTextArea jTextAreaErro, JTextArea jTextAreaPrograma) {
+        INSTANCE.resetaSimbolos();
         this.jTextAreaErro = jTextAreaErro;
         this.jTextAreaPrograma = jTextAreaPrograma;
         jTextAreaErro.setForeground(new java.awt.Color(204, 0, 0));
@@ -28,7 +30,7 @@ public class Sintatico {
             try {
                 analisaInicio();
             } catch (IndexOutOfBoundsException c) {
-                printaErro("");
+                printaErro(c.toString());
             }
             //INSTANCE.printaSimbolos();
         } catch (IOException ex) {
@@ -153,25 +155,38 @@ public class Sintatico {
     }
 
     private void analisaVariaveis() {
+        boolean varExiste = false;
         do {
             if (token.getSimbolo().equals("sidentificador")) {
                 // insere lexema na tabela de simbolos se ja nao houver, se houver ERRO
                 SimboloVariavel newSimbolo = new SimboloVariavel(token.getLexema());
-                INSTANCE.addSimbolo(newSimbolo);
-                //pega token 
-                token = INSTANCE.getToken();
-                if (token.getSimbolo().equals("svirgula") || token.getSimbolo().equals("sdoispontos")) {
-                    if (token.getSimbolo().equals("svirgula")) {
-                        //pega token
-                        token = INSTANCE.getToken();
-                        if (token.getSimbolo().equals("sdoispontos")) {
-                            // erro
-                            printaErro("nao ' : '");
+                for (Simbolo e : INSTANCE.getSimbolos()) {
+                    if(e instanceof SimboloFuncao || e instanceof SimboloProcProg){
+                        break;
+                    }
+                    if (e.getLexema().equals(newSimbolo.getLexema())) {
+                        varExiste = true;
+                    }
+                }
+                if (!varExiste) {
+                    INSTANCE.addSimbolo(newSimbolo);
+                    //pega token 
+                    token = INSTANCE.getToken();
+                    if (token.getSimbolo().equals("svirgula") || token.getSimbolo().equals("sdoispontos")) {
+                        if (token.getSimbolo().equals("svirgula")) {
+                            //pega token
+                            token = INSTANCE.getToken();
+                            if (token.getSimbolo().equals("sdoispontos")) {
+                                // erro
+                                printaErro("nao ' : '");
+                            }
                         }
+                    } else {
+                        //erro
+                        printaErro("' , ' ou ' : '");
                     }
                 } else {
-                    //erro
-                    printaErro("' , ' ou ' : '");
+                    printaErro("var existe");
                 }
             } else {
                 //erro
@@ -489,7 +504,7 @@ public class Sintatico {
             Highlighter.HighlightPainter painter;
             painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
             try {
-                jTextAreaPrograma.getHighlighter().addHighlight(token.getIndexStart()-1, token.getIndexEnd()-1, painter);
+                jTextAreaPrograma.getHighlighter().addHighlight(token.getIndexStart() - 1, token.getIndexEnd() - 1, painter);
             } catch (BadLocationException ex) {
                 Logger.getLogger(Sintatico.class.getName()).log(Level.SEVERE, null, ex);
             }
