@@ -11,8 +11,9 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
 public class Sintatico {
-
+    
     private Lexico lexico;
+    private PosFixa posfixa = new PosFixa();
     private Token token;
     private Gerenciador INSTANCE = Gerenciador.getInstance();
     private JTextArea jTextAreaErro, jTextAreaPrograma;
@@ -256,7 +257,9 @@ public class Sintatico {
         //pega token
         token = INSTANCE.getToken();
         analisaExpressao();
+        posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        
         if (token.getSimbolo().equals("sentao")) {
             //pega token
             token = INSTANCE.getToken();
@@ -277,7 +280,9 @@ public class Sintatico {
         //pega token
         token = INSTANCE.getToken();
         analisaExpressao();
+        posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        
         if (token.getSimbolo().equals("sfaca")) {
             // negocio de rotulo de novo
             //pega token
@@ -370,7 +375,9 @@ public class Sintatico {
     private void analisaAtribuicao() {
         token = INSTANCE.getToken();
         analisaExpressao();
+        posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        
         //
         //aqui vai a funcao de gerar a pos fixa
     }
