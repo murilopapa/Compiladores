@@ -16,7 +16,7 @@ public class PosFixa {
         for (ElementoOperador auxElemento : elemento) {
             if (auxPosFixa.isEmpty()) {
                 auxPosFixa.add(auxElemento);
-            } else {
+            } else {          
                 if (auxElemento.getNome().equals("+u") || auxElemento.getNome().equals("-u") || auxElemento.getNome().equals("not")) {
 
                 } else if (auxElemento.getNome().equals("*") || auxElemento.getNome().equals("/")) {
@@ -57,6 +57,14 @@ public class PosFixa {
                 } else if (auxElemento.getNome().equals("ou")) {
                     posFixa.add(auxPosFixa.get(i));
                     auxPosFixa.remove(i);
+                    auxPosFixa.add(auxElemento); 
+                } else if (auxElemento.getNome().equals(")")){
+                    while(!auxPosFixa.get(auxPosFixa.size()-1).getNome().equals("(")){
+                        posFixa.add(auxPosFixa.get(auxPosFixa.size()-1));
+                        auxPosFixa.remove(auxPosFixa.size()-1);  
+                    }
+                    auxPosFixa.remove(auxPosFixa.size()-1); 
+                } else if (auxElemento.getNome().equals("(")){
                     auxPosFixa.add(auxElemento);
                 } else {
                     posFixa.add(auxElemento);
