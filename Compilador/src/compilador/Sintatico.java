@@ -28,12 +28,12 @@ public class Sintatico {
         try {
             lexico = new Lexico(codigo, jTextAreaErro);
             //INSTANCE.printaTokens();
-            try {
+            //try {
                 analisaInicio();
-            } catch (IndexOutOfBoundsException c) {
-                printaErro(c.toString());
+            //} catch (IndexOutOfBoundsException c) {
+                //printaErro(c.toString());
 
-            }
+            //}
             //INSTANCE.printaSimbolos();
         } catch (IOException ex) {
             Logger.getLogger(Sintatico.class.getName()).log(Level.SEVERE, null, ex);

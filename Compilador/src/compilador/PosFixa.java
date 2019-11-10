@@ -20,7 +20,8 @@ public class PosFixa {
                 if (auxElemento.getNome().equals("+u") || auxElemento.getNome().equals("-u") || auxElemento.getNome().equals("not")) {
 
                 } else if (auxElemento.getNome().equals("*") || auxElemento.getNome().equals("/")) {
-                    if (auxPosFixa.get(i).getNome().equals("*") || auxPosFixa.get(i).getNome().equals("/")) {
+                    
+                    if (!auxPosFixa.get(i).getNome().equals("(") && (auxPosFixa.get(i).getNome().equals("*") || auxPosFixa.get(i).getNome().equals("/"))) {
                         //caso a prioridade seja menor ou igual ao atual da pilha aux, coloco o elemento
                         // de menor prioridade na fila aux e o de maior na pos fixa 
                         posFixa.add(auxPosFixa.get(i));
@@ -31,7 +32,7 @@ public class PosFixa {
                         auxPosFixa.add(auxElemento);
                     }
                 } else if (auxElemento.getNome().equals("+") || auxElemento.getNome().equals("-")) {
-                    if (auxPosFixa.get(i).getNome().equals("*") || auxPosFixa.get(i).getNome().equals("/") || auxPosFixa.get(i).getNome().equals("+") || auxPosFixa.get(i).getNome().equals("-")) {
+                    if (!auxPosFixa.get(i).getNome().equals("(") && (auxPosFixa.get(i).getNome().equals("*") || auxPosFixa.get(i).getNome().equals("/") || auxPosFixa.get(i).getNome().equals("+") || auxPosFixa.get(i).getNome().equals("-"))) {
                         posFixa.add(auxPosFixa.get(i));
                         auxPosFixa.remove(i);
                         auxPosFixa.add(auxElemento);
@@ -39,7 +40,7 @@ public class PosFixa {
                         auxPosFixa.add(auxElemento);
                     }
                 } else if (auxElemento.getNome().equals(">") || auxElemento.getNome().equals("<") || auxElemento.getNome().equals(">=") || auxElemento.getNome().equals("<=") || auxElemento.getNome().equals("=") || auxElemento.getNome().equals("!=")) {
-                    if (!auxPosFixa.get(i).getNome().equals("e") || !auxPosFixa.get(i).getNome().equals("ou")) {
+                    if (!auxPosFixa.get(i).getNome().equals("(") && (!auxPosFixa.get(i).getNome().equals("e") || !auxPosFixa.get(i).getNome().equals("ou"))) {
                         posFixa.add(auxPosFixa.get(i));
                         auxPosFixa.remove(i);
                         auxPosFixa.add(auxElemento);
@@ -47,7 +48,7 @@ public class PosFixa {
                         auxPosFixa.add(auxElemento);
                     }
                 } else if (auxElemento.getNome().equals("e")) {
-                    if (!auxPosFixa.get(i).getNome().equals("ou")) {
+                    if (!auxPosFixa.get(i).getNome().equals("(") && !auxPosFixa.get(i).getNome().equals("ou")) {
                         posFixa.add(auxPosFixa.get(i));
                         auxPosFixa.remove(i);
                         auxPosFixa.add(auxElemento);
@@ -60,7 +61,6 @@ public class PosFixa {
                     auxPosFixa.add(auxElemento);
                 } else if (auxElemento.getNome().equals("(")){
                     auxPosFixa.add(auxElemento);
-                    System.out.println(" " + auxPosFixa.get(i + 1).getNome());
                 } else if (auxElemento.getNome().equals(")")){
                     while(!auxPosFixa.get(i).getNome().equals("(")){
                         posFixa.add(auxPosFixa.get(i));
