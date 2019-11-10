@@ -16,7 +16,7 @@ public class PosFixa {
         for (ElementoOperador auxElemento : elemento) {
             if (auxPosFixa.isEmpty()) {
                 auxPosFixa.add(auxElemento);
-            } else {          
+            } else {
                 if (auxElemento.getNome().equals("+u") || auxElemento.getNome().equals("-u") || auxElemento.getNome().equals("not")) {
 
                 } else if (auxElemento.getNome().equals("*") || auxElemento.getNome().equals("/")) {
@@ -57,26 +57,30 @@ public class PosFixa {
                 } else if (auxElemento.getNome().equals("ou")) {
                     posFixa.add(auxPosFixa.get(i));
                     auxPosFixa.remove(i);
-                    auxPosFixa.add(auxElemento); 
-                } else if (auxElemento.getNome().equals(")")){
-                    while(!auxPosFixa.get(auxPosFixa.size()-1).getNome().equals("(")){
-                        posFixa.add(auxPosFixa.get(auxPosFixa.size()-1));
-                        auxPosFixa.remove(auxPosFixa.size()-1);  
-                    }
-                    auxPosFixa.remove(auxPosFixa.size()-1); 
+                    auxPosFixa.add(auxElemento);
                 } else if (auxElemento.getNome().equals("(")){
                     auxPosFixa.add(auxElemento);
-                } else {
+                    System.out.println(" " + auxPosFixa.get(i + 1).getNome());
+                } else if (auxElemento.getNome().equals(")")){
+                    while(!auxPosFixa.get(i).getNome().equals("(")){
+                        posFixa.add(auxPosFixa.get(i));
+                        auxPosFixa.remove(i);
+                        i = auxPosFixa.size() - 1;
+                    }
+                    i = auxPosFixa.size() - 1;
+                    auxPosFixa.remove(i);
+                }
+                else {
                     posFixa.add(auxElemento);
                 }
             }
-            i = auxPosFixa.size()-1;
+            i = auxPosFixa.size() - 1;
         }
         //descarrega se sobrou algo na pilha auxiliar
         for (ElementoOperador aux : auxPosFixa) {
             posFixa.add(aux);
         }
-        
+
         System.out.println("POS FIXA:");
         for (ElementoOperador e : posFixa) {
             System.out.print(" " + e.getNome());
