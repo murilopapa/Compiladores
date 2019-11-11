@@ -1,6 +1,6 @@
 package compilador;
 
-public class ElementoOperando extends ElementoOperador{
+public class ElementoOperando extends Elemento{
     private String tipo;
 
     public ElementoOperando(String nome, String tipo) {

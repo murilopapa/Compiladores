@@ -17,7 +17,7 @@ public class Sintatico {
     private Token token;
     private Gerenciador INSTANCE = Gerenciador.getInstance();
     private JTextArea jTextAreaErro, jTextAreaPrograma;
-    private ArrayList<ElementoOperador> filaInFixa = new ArrayList<ElementoOperador>();
+    private ArrayList<Elemento> filaInFixa = new ArrayList<Elemento>();
     private boolean erro = false;
 
     Sintatico(String codigo, JTextArea jTextAreaErro, JTextArea jTextAreaPrograma) {
@@ -259,6 +259,7 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        System.out.println("TIPO: " + posfixa.getTipoPosfixa());
         
         if (token.getSimbolo().equals("sentao")) {
             //pega token
@@ -282,6 +283,7 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        System.out.println("TIPO: " + posfixa.getTipoPosfixa());
         
         if (token.getSimbolo().equals("sfaca")) {
             // negocio de rotulo de novo
@@ -377,6 +379,7 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        System.out.println("TIPO: " + posfixa.getTipoPosfixa());
         
         //
         //aqui vai a funcao de gerar a pos fixa
@@ -528,7 +531,13 @@ public class Sintatico {
                 }
             }
             if (boolaux) {//if pesquisatabela
-                filaInFixa.add(new ElementoOperador(token.getLexema()));
+                if(simbaux instanceof SimboloVariavel){
+                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloVariavel)simbaux).getTipo()));
+                }
+                else{
+                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao)simbaux).getTipo()));
+                }
+                
                 if (simbaux instanceof SimboloVariavel || simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
                     analisaChamadaFuncao();
                 } else {
@@ -540,7 +549,7 @@ public class Sintatico {
 
         } else if (token.getSimbolo().equals("snumero")) {
             //pega token
-            filaInFixa.add(new ElementoOperador(token.getLexema()));
+            filaInFixa.add(new ElementoOperando(token.getLexema(), "inteiro"));
             token = INSTANCE.getToken();
 
         } else if (token.getSimbolo().equals("snao")) {
@@ -598,7 +607,7 @@ public class Sintatico {
 
     private void printaInFixa() {
         System.out.println("IN FIXA:");
-        for (ElementoOperador e : filaInFixa) {
+        for (Elemento e : filaInFixa) {
             System.out.print(" " + e.getNome());
         }
         System.out.println("");
