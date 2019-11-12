@@ -11,7 +11,7 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
 public class Sintatico {
-    
+
     private Lexico lexico;
     private PosFixa posfixa = new PosFixa();
     private Token token;
@@ -29,9 +29,9 @@ public class Sintatico {
             lexico = new Lexico(codigo, jTextAreaErro);
             //INSTANCE.printaTokens();
             //try {
-                analisaInicio();
+            analisaInicio();
             //} catch (IndexOutOfBoundsException c) {
-                //printaErro(c.toString());
+            //printaErro(c.toString());
 
             //}
             //INSTANCE.printaSimbolos();
@@ -259,20 +259,24 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
-        System.out.println("TIPO: " + posfixa.getTipoPosfixa());
-        
-        if (token.getSimbolo().equals("sentao")) {
-            //pega token
-            token = INSTANCE.getToken();
-            analisaComandoSimples();
-            if (token.getSimbolo().equals("ssenao")) {
+        String tipo = posfixa.getTipoPosfixa();
+        if (tipo.equals("ERRO")) {
+            //erro de tipos de operandos
+            printaErro("TIPO VARIAVEL");
+        } else {
+            if (token.getSimbolo().equals("sentao")) {
                 //pega token
                 token = INSTANCE.getToken();
                 analisaComandoSimples();
+                if (token.getSimbolo().equals("ssenao")) {
+                    //pega token
+                    token = INSTANCE.getToken();
+                    analisaComandoSimples();
+                }
+            } else {
+                //erro
+                printaErro("entao");
             }
-        } else {
-            //erro
-            printaErro("entao");
         }
     }
 
@@ -283,17 +287,22 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
-        System.out.println("TIPO: " + posfixa.getTipoPosfixa());
-        
-        if (token.getSimbolo().equals("sfaca")) {
-            // negocio de rotulo de novo
-            //pega token
-            token = INSTANCE.getToken();
-            analisaComandoSimples();
-            // rotulo de novo gri
+        String tipo = posfixa.getTipoPosfixa();
+        if (tipo.equals("ERRO")) {
+            //erro de tipos de operandos
+            printaErro("TIPO VARIAVEL");
         } else {
-            //erro
-            printaErro("faca");
+
+            if (token.getSimbolo().equals("sfaca")) {
+                // negocio de rotulo de novo
+                //pega token
+                token = INSTANCE.getToken();
+                analisaComandoSimples();
+                // rotulo de novo gri
+            } else {
+                //erro
+                printaErro("faca");
+            }
         }
     }
 
@@ -379,10 +388,13 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
-        System.out.println("TIPO: " + posfixa.getTipoPosfixa());
+        String tipo = posfixa.getTipoPosfixa();
+        if (tipo.equals("ERRO")) {
+            //erro de tipos de operandos
+            printaErro("TIPO VARIAVEL");
+        }
+
         
-        //
-        //aqui vai a funcao de gerar a pos fixa
     }
 
     private void analisaChProcedimento() {
@@ -531,13 +543,12 @@ public class Sintatico {
                 }
             }
             if (boolaux) {//if pesquisatabela
-                if(simbaux instanceof SimboloVariavel){
-                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloVariavel)simbaux).getTipo()));
+                if (simbaux instanceof SimboloVariavel) {
+                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloVariavel) simbaux).getTipo()));
+                } else {
+                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo()));
                 }
-                else{
-                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao)simbaux).getTipo()));
-                }
-                
+
                 if (simbaux instanceof SimboloVariavel || simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
                     analisaChamadaFuncao();
                 } else {
