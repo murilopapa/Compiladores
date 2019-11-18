@@ -15,10 +15,36 @@ public class PosFixa {
         int i = 0;
         for (Elemento auxElemento : elemento) {
             if (auxPosFixa.isEmpty() && !posFixa.isEmpty()) {
-                auxPosFixa.add(auxElemento);
-            } else {
-                if (auxElemento.getNome().equals("+u") || auxElemento.getNome().equals("-u") || auxElemento.getNome().equals("not")) {
+                if (auxElemento.getNome().equals("+U") || auxElemento.getNome().equals("-U") || auxElemento.getNome().equals("not")) {
+                    switch (auxElemento.getNome()) {
+                        case "+U":
+                            break;
+                        case "-U":
+                            ElementoOperador auxUnitario = new ElementoOperador("-U");
+                            posFixa.add(auxUnitario);
+                            break;
+                        case "not":
+                            break;
+                    }
+                } else if (auxElemento instanceof ElementoOperando){
+                    posFixa.add(auxElemento);
+                }
+                else {
+                    auxPosFixa.add(auxElemento);
+                }
 
+            } else {
+                if (auxElemento.getNome().equals("+U") || auxElemento.getNome().equals("-U") || auxElemento.getNome().equals("not")) {
+                    switch (auxElemento.getNome()) {
+                        case "+U":
+                            break;
+                        case "-U":
+                            ElementoOperador auxUnitario = new ElementoOperador("-U");
+                            posFixa.add(auxUnitario);
+                            break;
+                        case "not":
+                            break;
+                    }
                 } else if (auxElemento.getNome().equals("*") || auxElemento.getNome().equals("div")) {
 
                     if (!auxPosFixa.get(i).getNome().equals("(") && (auxPosFixa.get(i).getNome().equals("*") || auxPosFixa.get(i).getNome().equals("div"))) {
@@ -111,15 +137,20 @@ public class PosFixa {
         while (auxPosFixa2.size() != 1) {
             if (auxPosFixa2.get(i) instanceof ElementoOperador) {
                 switch (auxPosFixa2.get(i).getNome()) {
+                    // case not??
+                    case "+U":
+                    case "-U":
+                        auxPosFixa2.remove(i);
+                        break;
                     case "+":
                     case "-":
                     case "*":
                     case "div":
                         if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("inteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("inteiro")) {
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.add(i-2, new ElementoOperando("AUX", "inteiro"));
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "inteiro"));
                         } else {
                             return "ERRO";
                         }
@@ -130,10 +161,10 @@ public class PosFixa {
                     case ">":
                     case ">=":
                         if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("inteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("inteiro")) {
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.add(i-2, new ElementoOperando("AUX", "booleano"));
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano"));
                         } else {
                             return "ERRO";
                         }
@@ -142,16 +173,16 @@ public class PosFixa {
                     case "=":
                     case "!=":
                         if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("inteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("inteiro")) {
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.add(i-2, new ElementoOperando("AUX", "booleano"));
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano"));
                         } else if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("booleano") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("booleano")) {
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.add(i-2, new ElementoOperando("AUX", "booleano"));
-                            
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano"));
+
                         } else {
                             return "ERRO";
                         }
@@ -160,21 +191,21 @@ public class PosFixa {
                     case "e":
                     case "ou":
                         if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("booleano") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("booleano")) {
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.remove(i-2);
-                            auxPosFixa2.add(i-2, new ElementoOperando("AUX", "booleano"));
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.remove(i - 2);
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano"));
                         } else {
                             return "ERRO";
                         }
                         break;
                 }
-                i=0;
+                i = 0;
             } else {
                 i++;
             }
         }
 
-        return ((ElementoOperando)auxPosFixa2.get(0)).getTipo();
+        return ((ElementoOperando) auxPosFixa2.get(0)).getTipo();
     }
 }
