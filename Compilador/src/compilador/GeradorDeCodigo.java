@@ -145,12 +145,64 @@ public class GeradorDeCodigo {
         String operacao = "RETURN";
         codigo.add(operacao);
     }
-    public void printaCodigo(){
-        for(String n : codigo){
+
+    public void printaCodigo() {
+        for (String n : codigo) {
             System.out.println(n);
         }
     }
-    public void geraPOSFIXA(ArrayList<Elemento> posFixa){
-        
+
+    public void geraPOSFIXA(ArrayList<Elemento> posFixa) {
+        for (Elemento e : posFixa) {
+            if (e instanceof ElementoOperando) {
+                try {
+                    Integer.parseInt(e.getNome());
+                    geraLDC(Integer.parseInt(e.getNome()));
+                } catch (NumberFormatException err) {
+                    geraLDV(((ElementoOperando) e).getMemoria());
+                }
+
+            } else {
+                switch (e.getNome()) {
+                    case "+":
+                        geraADD();
+                        break;
+                    case "-":
+                        geraSUB();
+                        break;
+                    case "*":
+                        geraMULT();
+                        break;
+                    case "div":
+                        geraDIVI();
+                        break;
+                    case "<":
+                        geraCME();
+                        break;
+                    case "<=":
+                        geraCMEQ();
+                        break;
+                    case ">":
+                        geraCMA();
+                        break;
+                    case ">=":
+                        geraCMAQ();
+                        break;
+                    case "=":
+                        geraCEQ();
+                        break;
+                    case "!=":
+                        geraCDIF();
+                        break;
+                    case "e":
+                        geraAND();
+                        break;
+                    case "ou":
+                        geraOR();
+                        break;
+
+                }
+            }
+        }
     }
 }

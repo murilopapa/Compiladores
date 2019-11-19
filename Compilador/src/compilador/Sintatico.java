@@ -51,7 +51,7 @@ public class Sintatico {
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals(("sidentificador"))) {
                 //insere na tabela de simbolos
-                SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema(),rotulo);
+                SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema(), rotulo);
                 rotulo++;
                 INSTANCE.addSimbolo(newSimbolo);
 
@@ -89,7 +89,7 @@ public class Sintatico {
         analisaEtVariaveis();
         analisaSubRotinas();
         analisaComandos();
-        
+
         INSTANCE.removeFuncProcSimbolos();
     }
 
@@ -277,7 +277,9 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        geraCodigo.geraPOSFIXA(posfixa.getPosFixa());
         String tipo = posfixa.getTipoPosfixa();
+        
         if (tipo.equals("ERRO")) {
             //erro de tipos de operandos
             printaErro("TIPO VARIAVEL");
@@ -305,7 +307,9 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        geraCodigo.geraPOSFIXA(posfixa.getPosFixa());
         String tipo = posfixa.getTipoPosfixa();
+        
         if (tipo.equals("ERRO")) {
             //erro de tipos de operandos
             printaErro("TIPO VARIAVEL");
@@ -406,7 +410,9 @@ public class Sintatico {
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        geraCodigo.geraPOSFIXA(posfixa.getPosFixa());
         String tipo = posfixa.getTipoPosfixa();
+        
         if (tipo.equals("ERRO")) {
             //erro de tipos de operandos
             printaErro("TIPO VARIAVEL");
@@ -448,7 +454,7 @@ public class Sintatico {
                 SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema(), rotulo);
                 geraCodigo.geraNULL(rotulo);
                 rotulo++;
-                
+
                 INSTANCE.addSimbolo(newSimbolo);
 
                 //pega token
@@ -486,7 +492,7 @@ public class Sintatico {
                 SimboloFuncao newSimbolo = new SimboloFuncao(token.getLexema(), rotulo);
                 geraCodigo.geraNULL(rotulo);
                 rotulo++;
-                
+
                 // pega token
                 token = INSTANCE.getToken();
                 if (token.getSimbolo().equals("sdoispontos")) {
@@ -566,9 +572,9 @@ public class Sintatico {
             }
             if (boolaux) {//if pesquisatabela
                 if (simbaux instanceof SimboloVariavel) {
-                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloVariavel) simbaux).getTipo()));
+                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloVariavel) simbaux).getTipo(), ((SimboloVariavel) simbaux).getMemoria()));
                 } else {
-                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo()));
+                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo(), 0));
                 }
 
                 if (simbaux instanceof SimboloVariavel || simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
@@ -582,7 +588,7 @@ public class Sintatico {
 
         } else if (token.getSimbolo().equals("snumero")) {
             //pega token
-            filaInFixa.add(new ElementoOperando(token.getLexema(), "inteiro"));
+            filaInFixa.add(new ElementoOperando(token.getLexema(), "inteiro",0));
             token = INSTANCE.getToken();
 
         } else if (token.getSimbolo().equals("snao")) {
@@ -639,12 +645,12 @@ public class Sintatico {
     }
 
     private void printaInFixa() {
-        System.out.println("IN FIXA:");
+        /*System.out.println("IN FIXA:");
         for (Elemento e : filaInFixa) {
             System.out.print(" " + e.getNome());
         }
         System.out.println("");
-        System.out.println("-------------------");
+        System.out.println("-------------------");*/
         filaInFixa.clear();
     }
 }

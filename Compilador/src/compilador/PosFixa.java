@@ -13,7 +13,7 @@ public class PosFixa {
         auxPosFixa.clear();
         posFixa.clear();
         int i = 0;
-        for (Elemento auxElemento : elemento) {
+        for (Elemento auxElemento : this.elemento) {
             if (auxPosFixa.isEmpty() && !posFixa.isEmpty()) {
                 if (auxElemento.getNome().equals("+U") || auxElemento.getNome().equals("-U") || auxElemento.getNome().equals("not")) {
                     switch (auxElemento.getNome()) {
@@ -109,12 +109,12 @@ public class PosFixa {
             posFixa.add(aux);
         }
 
-        System.out.println("POS FIXA:");
+        /*System.out.println("POS FIXA:");
         for (Elemento e : posFixa) {
-            System.out.print(" " + e.getNome());
+            System.out.print(" " + e.getNome() );
         }
         System.out.println("");
-        System.out.println("-------------------");
+        System.out.println("-------------------");*/
 
     }
 
@@ -154,7 +154,7 @@ public class PosFixa {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "inteiro"));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "inteiro", 0));
                         } else {
                             return "ERRO";
                         }
@@ -168,7 +168,7 @@ public class PosFixa {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano"));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano", 0));
                         } else {
                             return "ERRO";
                         }
@@ -180,12 +180,12 @@ public class PosFixa {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano"));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano", 0));
                         } else if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("booleano") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("booleano")) {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano"));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano", 0));
 
                         } else {
                             return "ERRO";
@@ -198,7 +198,7 @@ public class PosFixa {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano"));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano", 0));
                         } else {
                             return "ERRO";
                         }
@@ -211,5 +211,9 @@ public class PosFixa {
         }
 
         return ((ElementoOperando) auxPosFixa2.get(0)).getTipo();
+    }
+
+    public ArrayList<Elemento> getPosFixa() {
+        return posFixa;
     }
 }
