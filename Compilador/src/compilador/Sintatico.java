@@ -89,8 +89,12 @@ public class Sintatico {
         analisaEtVariaveis();
         analisaSubRotinas();
         analisaComandos();
+        int numVariaveisDalloc = INSTANCE.removeFuncProcSimbolos();
 
-        INSTANCE.removeFuncProcSimbolos();
+        if (numVariaveisDalloc != 0) {
+            geraCodigo.geraDALLOC(memoriaIndex - numVariaveisDalloc, numVariaveisDalloc);
+            memoriaIndex = memoriaIndex - numVariaveisDalloc;
+        }
     }
 
     private void analisaEtVariaveis() { //ok gera codigo
@@ -263,12 +267,35 @@ public class Sintatico {
 
     private void analisaAtribChProcedimento() {
         //pega token
+        Token tokenAnterior = token;
         token = INSTANCE.getToken();
-        if (token.getSimbolo().equals("satribuicao")) {
-            analisaAtribuicao();
+        if (token.getSimbolo().equals("satribuicao")) {     //se for atrb, tenho que ver se o elemento anterior foi declarado na tabela de simbolos
+            boolean existe = false;
+            SimboloVariavel auxSimb = null;
+            for (Simbolo e : INSTANCE.getSimbolos()) {
+
+                if (e.getLexema().equals(tokenAnterior.getLexema())) {
+                    existe = true;
+                    auxSimb = (SimboloVariavel) e;
+                    break;
+                }
+
+            }
+            if (existe) {
+                String tipo = analisaAtribuicao();
+                if (tipo.equals(auxSimb.getTipo())) {
+                    //gera o codigo da atribuicao
+                    geraCodigo.geraSTR(auxSimb.getMemoria());
+                } else {
+                    printaErro("Tipos incompativeis");
+                }
+            } else {
+                printaErro("Var n declarada");
+            }
         } else {
             analisaChProcedimento();
         }
+
     }
 
     private void analisaSe() {
@@ -279,7 +306,7 @@ public class Sintatico {
         printaInFixa();
         geraCodigo.geraPOSFIXA(posfixa.getPosFixa());
         String tipo = posfixa.getTipoPosfixa();
-        
+
         if (tipo.equals("ERRO")) {
             //erro de tipos de operandos
             printaErro("TIPO VARIAVEL");
@@ -309,7 +336,7 @@ public class Sintatico {
         printaInFixa();
         geraCodigo.geraPOSFIXA(posfixa.getPosFixa());
         String tipo = posfixa.getTipoPosfixa();
-        
+
         if (tipo.equals("ERRO")) {
             //erro de tipos de operandos
             printaErro("TIPO VARIAVEL");
@@ -405,19 +432,19 @@ public class Sintatico {
         }
     }
 
-    private void analisaAtribuicao() {
+    private String analisaAtribuicao() {
         token = INSTANCE.getToken();
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
         geraCodigo.geraPOSFIXA(posfixa.getPosFixa());
         String tipo = posfixa.getTipoPosfixa();
-        
+
         if (tipo.equals("ERRO")) {
             //erro de tipos de operandos
             printaErro("TIPO VARIAVEL");
         }
-
+        return tipo;
     }
 
     private void analisaChProcedimento() {
@@ -588,7 +615,7 @@ public class Sintatico {
 
         } else if (token.getSimbolo().equals("snumero")) {
             //pega token
-            filaInFixa.add(new ElementoOperando(token.getLexema(), "inteiro",0));
+            filaInFixa.add(new ElementoOperando(token.getLexema(), "inteiro", 0));
             token = INSTANCE.getToken();
 
         } else if (token.getSimbolo().equals("snao")) {

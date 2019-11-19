@@ -102,17 +102,17 @@ public class GeradorDeCodigo {
     }
 
     public void geraJMP(int label) {
-        String operacao = "JMP " + label;
+        String operacao = "JMP L" + label;
         codigo.add(operacao);
     }
 
     public void geraJMPF(int label) {
-        String operacao = "JMPF " + label;
+        String operacao = "JMPF L" + label;
         codigo.add(operacao);
     }
 
     public void geraNULL(int label) {
-        String operacao = label + " NULL";
+        String operacao = "L" + label + " NULL";
         codigo.add(operacao);
     }
 

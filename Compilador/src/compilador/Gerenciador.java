@@ -91,12 +91,17 @@ public class Gerenciador {
         return simbolos;
     }
 
-    public void removeFuncProcSimbolos() {
+    public int removeFuncProcSimbolos() {
         boolean finish = false;
-
+        int aux = 0;
         do {
             if (!simbolos.get(simbolos.size() - 1).isEscopo()) {
+                if (simbolos.get(simbolos.size() - 1) instanceof SimboloVariavel) {
+                    aux++;
+                }
+                
                 simbolos.remove(simbolos.size() - 1);
+
             } else {
                 Simbolo simbAux = simbolos.get(simbolos.size() - 1);
                 simbAux.setEscopo(false);
@@ -104,6 +109,7 @@ public class Gerenciador {
                 finish = true;
             }
         } while (!finish);
+        return aux;
     }
 
     public void setSimbolos(ArrayList<Simbolo> simbolos) {
