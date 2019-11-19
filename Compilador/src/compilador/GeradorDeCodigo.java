@@ -101,17 +101,17 @@ public class GeradorDeCodigo {
         codigo.add(operacao);
     }
 
-    public void geraJMP(String label) {
+    public void geraJMP(int label) {
         String operacao = "JMP " + label;
         codigo.add(operacao);
     }
 
-    public void geraJMPF(String label) {
+    public void geraJMPF(int label) {
         String operacao = "JMPF " + label;
         codigo.add(operacao);
     }
 
-    public void geraNULL(String label) {
+    public void geraNULL(int label) {
         String operacao = label + " NULL";
         codigo.add(operacao);
     }
@@ -136,8 +136,8 @@ public class GeradorDeCodigo {
         codigo.add(operacao);
     }
 
-    public void geraCALL(String label) {
-        String operacao = "CALL " + label;
+    public void geraCALL(int label) {
+        String operacao = "CALL L" + label;
         codigo.add(operacao);
     }
 
@@ -149,5 +149,8 @@ public class GeradorDeCodigo {
         for(String n : codigo){
             System.out.println(n);
         }
+    }
+    public void geraPOSFIXA(ArrayList<Elemento> posFixa){
+        
     }
 }

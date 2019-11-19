@@ -11,7 +11,10 @@ package compilador;
  */
 public class SimboloProcProg extends Simbolo {
 
-    public SimboloProcProg(String lexema) {
+    private int rotulo;
+    
+    public SimboloProcProg(String lexema, int rotulo) {
+        this.rotulo = rotulo;
         this.setLexema(lexema);
         this.setEscopo(true);
     }

@@ -13,11 +13,14 @@ import javax.swing.text.Highlighter;
 public class Sintatico {
 
     private Lexico lexico;
+    private int memoriaIndex = 0, rotulo = 0;
     private PosFixa posfixa = new PosFixa();
     private Token token;
     private Gerenciador INSTANCE = Gerenciador.getInstance();
     private JTextArea jTextAreaErro, jTextAreaPrograma;
     private ArrayList<Elemento> filaInFixa = new ArrayList<Elemento>();
+    private GeradorDeCodigo geraCodigo = new GeradorDeCodigo();
+
     private boolean erro = false;
 
     Sintatico(String codigo, JTextArea jTextAreaErro, JTextArea jTextAreaPrograma) {
@@ -40,7 +43,7 @@ public class Sintatico {
         }
     }
 
-    private void analisaInicio() {
+    private void analisaInicio() {//ok gera codigo
         //pega token
         token = INSTANCE.getToken();
         if (token.getSimbolo().equals("sprograma")) {
@@ -48,16 +51,20 @@ public class Sintatico {
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals(("sidentificador"))) {
                 //insere na tabela de simbolos
-                SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema());
+                SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema(),rotulo);
+                rotulo++;
                 INSTANCE.addSimbolo(newSimbolo);
 
                 //pega token
                 token = INSTANCE.getToken();
                 if (token.getSimbolo().equals("sponto_virgula")) {
+                    geraCodigo.geraSTART();
                     analisaBloco();
                     if (token.getSimbolo().equals("sponto")) {
                         jTextAreaErro.setForeground(new java.awt.Color(0, 204, 0));
                         jTextAreaErro.setText("Completo !!");
+                        geraCodigo.geraHLT();
+                        geraCodigo.printaCodigo();
                     } else {
                         //mostra erros
                         printaErro("' . '");
@@ -82,10 +89,11 @@ public class Sintatico {
         analisaEtVariaveis();
         analisaSubRotinas();
         analisaComandos();
+        
         INSTANCE.removeFuncProcSimbolos();
     }
 
-    private void analisaEtVariaveis() {
+    private void analisaEtVariaveis() { //ok gera codigo
         if (token.getSimbolo().equals("svar")) {
             //pega token
             token = INSTANCE.getToken();
@@ -109,9 +117,13 @@ public class Sintatico {
 
     private void analisaSubRotinas() {
         //doidera
-        int flag = 1;
+        int flag = 0, auxRot = 0;
         if (token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sfuncao")) {
             //fita de rotulo
+            auxRot = rotulo;
+            geraCodigo.geraJMP(rotulo);
+            rotulo++;
+            flag = 1;
         }
         while ((token.getSimbolo().equals("sprocedimento") || token.getSimbolo().equals("sfuncao")) && erro == false) {
             if (token.getSimbolo().equals("sprocedimento")) {
@@ -128,7 +140,7 @@ public class Sintatico {
             }
         }
         if (flag == 1) {
-            //doidera
+            geraCodigo.geraNULL(auxRot);
         }
     }
 
@@ -160,6 +172,7 @@ public class Sintatico {
 
     private void analisaVariaveis() {
         boolean varExiste = false;
+        int count = 0;
         do {
             if (token.getSimbolo().equals("sidentificador")) {
                 // insere lexema na tabela de simbolos se ja nao houver, se houver ERRO
@@ -172,7 +185,11 @@ public class Sintatico {
                         varExiste = true;
                     }
                 }
+
                 if (!varExiste) {
+                    newSimbolo.setMemoria(memoriaIndex);
+                    count++;
+                    memoriaIndex++;
                     INSTANCE.addSimbolo(newSimbolo);
                     //pega token 
                     token = INSTANCE.getToken();
@@ -199,6 +216,7 @@ public class Sintatico {
         } while (!token.getSimbolo().equals("sdoispontos") && erro == false);
         //pega token
         token = INSTANCE.getToken();
+        geraCodigo.geraALLOC(memoriaIndex - count, count);
         analisaTipo();
     }
 
@@ -394,7 +412,6 @@ public class Sintatico {
             printaErro("TIPO VARIAVEL");
         }
 
-        
     }
 
     private void analisaChProcedimento() {
@@ -428,7 +445,10 @@ public class Sintatico {
                 //insere na tabela
                 //doidera
 
-                SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema());
+                SimboloProcProg newSimbolo = new SimboloProcProg(token.getLexema(), rotulo);
+                geraCodigo.geraNULL(rotulo);
+                rotulo++;
+                
                 INSTANCE.addSimbolo(newSimbolo);
 
                 //pega token
@@ -463,8 +483,10 @@ public class Sintatico {
             }
             if (!procExiste) {
                 //insere token na tabela de simbolos das func
-                SimboloFuncao newSimbolo = new SimboloFuncao(token.getLexema());
-
+                SimboloFuncao newSimbolo = new SimboloFuncao(token.getLexema(), rotulo);
+                geraCodigo.geraNULL(rotulo);
+                rotulo++;
+                
                 // pega token
                 token = INSTANCE.getToken();
                 if (token.getSimbolo().equals("sdoispontos")) {

@@ -11,8 +11,8 @@ package compilador;
  */
 public class SimboloFuncao extends Simbolo {
 
-    String tipo;
-
+    private String tipo;
+    private int rotulo;
     public String getTipo() {
         return tipo;
     }
@@ -21,7 +21,8 @@ public class SimboloFuncao extends Simbolo {
         this.tipo = tipo;
     }
 
-    public SimboloFuncao(String lexema) {
+    public SimboloFuncao(String lexema, int rotulo) {
+        this.rotulo = rotulo;
         this.setLexema(lexema);
         this.setEscopo(true);
     }
