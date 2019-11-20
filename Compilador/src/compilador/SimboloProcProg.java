@@ -18,4 +18,13 @@ public class SimboloProcProg extends Simbolo {
         this.setLexema(lexema);
         this.setEscopo(true);
     }
+
+    public int getRotulo() {
+        return rotulo;
+    }
+
+    public void setRotulo(int rotulo) {
+        this.rotulo = rotulo;
+    }
+    
 }

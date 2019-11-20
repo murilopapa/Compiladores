@@ -90,7 +90,6 @@ public class Sintatico {
         analisaSubRotinas();
         analisaComandos();
         int numVariaveisDalloc = INSTANCE.removeFuncProcSimbolos();
-
         if (numVariaveisDalloc != 0) {
             geraCodigo.geraDALLOC(memoriaIndex - numVariaveisDalloc, numVariaveisDalloc);
             memoriaIndex = memoriaIndex - numVariaveisDalloc;
@@ -272,11 +271,12 @@ public class Sintatico {
         if (token.getSimbolo().equals("satribuicao")) {     //se for atrb, tenho que ver se o elemento anterior foi declarado na tabela de simbolos
             boolean existe = false;
             SimboloVariavel auxSimb = null;
-            for (Simbolo e : INSTANCE.getSimbolos()) {
+            ArrayList<Simbolo> simb = INSTANCE.getSimbolos();
+            for (int i = simb.size() - 1; i >= 0; i--) {
 
-                if (e.getLexema().equals(tokenAnterior.getLexema())) {
+                if (simb.get(i).getLexema().equals(tokenAnterior.getLexema())) {
                     existe = true;
-                    auxSimb = (SimboloVariavel) e;
+                    auxSimb = (SimboloVariavel) simb.get(i);
                     break;
                 }
 
@@ -293,20 +293,22 @@ public class Sintatico {
                 printaErro("Var n declarada");
             }
         } else {
-            analisaChProcedimento();
+            analisaChProcedimento(tokenAnterior);
         }
 
     }
 
     private void analisaSe() {
         //pega token
+        int rotuloAux = rotulo;
         token = INSTANCE.getToken();
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
         geraCodigo.geraPOSFIXA(posfixa.getPosFixa());
         String tipo = posfixa.getTipoPosfixa();
-
+        geraCodigo.geraJMPF(rotuloAux);
+        rotulo++;
         if (tipo.equals("ERRO")) {
             //erro de tipos de operandos
             printaErro("TIPO VARIAVEL");
@@ -317,8 +319,17 @@ public class Sintatico {
                 analisaComandoSimples();
                 if (token.getSimbolo().equals("ssenao")) {
                     //pega token
+                    //jmp pro fim do senao
+                    geraCodigo.geraJMP(rotulo);
+                    int aux = rotulo;
+                    rotulo++;
+                    geraCodigo.geraNULL(rotuloAux);
                     token = INSTANCE.getToken();
                     analisaComandoSimples();
+                    //null com o fim do senao
+                    geraCodigo.geraNULL(aux);
+                } else {
+                    geraCodigo.geraNULL(rotuloAux);
                 }
             } else {
                 //erro
@@ -357,6 +368,7 @@ public class Sintatico {
 
     private void analisaLeia() {
         boolean varExiste = false;
+        SimboloVariavel simb = null;
         //pega token
         token = INSTANCE.getToken();
         if (token.getSimbolo().equals("sabre_parenteses")) {
@@ -367,6 +379,7 @@ public class Sintatico {
                 for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
                     if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(token.getLexema())) {
                         varExiste = true;
+                        simb = (SimboloVariavel) INSTANCE.getSimbolos().get(i - 1);
                         break;
                     }
                 }
@@ -376,6 +389,8 @@ public class Sintatico {
                     if (token.getSimbolo().equals("sfecha_parenteses")) {
                         //pega token
                         token = INSTANCE.getToken();
+                        geraCodigo.geraRD();
+                        geraCodigo.geraSTR(simb.getMemoria());
                     } else {
                         //erro
                         printaErro("'' ) ");
@@ -397,6 +412,8 @@ public class Sintatico {
     private void analisaEscreva() {
         //pega token
         boolean varExiste = false;
+        SimboloVariavel simb = null;
+
         token = INSTANCE.getToken();
         if (token.getSimbolo().equals("sabre_parenteses")) {
             //pega token
@@ -406,6 +423,7 @@ public class Sintatico {
                 for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
                     if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(token.getLexema())) {
                         varExiste = true;
+                        simb = (SimboloVariavel) INSTANCE.getSimbolos().get(i - 1);
                         break;
                     }
                 }
@@ -415,6 +433,8 @@ public class Sintatico {
                     if (token.getSimbolo().equals("sfecha_parenteses")) {
                         //pega token
                         token = INSTANCE.getToken();
+                        geraCodigo.geraRD();
+                        geraCodigo.geraSTR(simb.getMemoria());
                     } else {
                         //erro
                         printaErro("' ) '");
@@ -447,8 +467,22 @@ public class Sintatico {
         return tipo;
     }
 
-    private void analisaChProcedimento() {
-        //nada acontece no sintatico, apenas no semantico
+    private void analisaChProcedimento(Token tk) {
+        boolean existe = false;
+        SimboloProcProg aux=null;
+        for (Simbolo e : INSTANCE.getSimbolos()) {
+            if (e.getLexema().equals(tk.getLexema())) {
+                existe = true;
+                aux = (SimboloProcProg) e;
+                break;
+            }
+        }
+        if (existe) {
+            geraCodigo.geraCALL(aux.getRotulo());
+        } else {
+            printaErro("Chamada nao existe");
+        }
+
     }
 
     private void analisaExpressao() {
@@ -488,6 +522,7 @@ public class Sintatico {
                 token = INSTANCE.getToken();
                 if (token.getSimbolo().equals("sponto_virgula")) {
                     analisaBloco();
+                    geraCodigo.geraRETURN();
                 } else {
                     //erro
                     printaErro("' ; '");

@@ -145,6 +145,10 @@ public class GeradorDeCodigo {
         String operacao = "RETURN";
         codigo.add(operacao);
     }
+    public void geraRETURNF(int m, int n) {
+        String operacao = "RETURN";
+        codigo.add(operacao);
+    }
 
     public void printaCodigo() {
         for (String n : codigo) {
