@@ -64,7 +64,11 @@ public class Sintatico {
                         jTextAreaErro.setForeground(new java.awt.Color(0, 204, 0));
                         jTextAreaErro.setText("Completo !!");
                         geraCodigo.geraHLT();
-                        geraCodigo.printaCodigo();
+                        try {
+                            geraCodigo.printaCodigo();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Sintatico.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } else {
                         //mostra erros
                         printaErro("' . '");
@@ -90,10 +94,21 @@ public class Sintatico {
         analisaSubRotinas();
         analisaComandos();
         int numVariaveisDalloc = INSTANCE.removeFuncProcSimbolos();
+
         if (numVariaveisDalloc != 0) {
-            geraCodigo.geraDALLOC(memoriaIndex - numVariaveisDalloc, numVariaveisDalloc);
-            memoriaIndex = memoriaIndex - numVariaveisDalloc;
+            if (INSTANCE.getSimbolos().get(INSTANCE.getSimbolos().size() - 1) instanceof SimboloFuncao) {
+                geraCodigo.geraRETURNF(memoriaIndex - numVariaveisDalloc, numVariaveisDalloc);
+                memoriaIndex = memoriaIndex - numVariaveisDalloc;
+            } else {
+                geraCodigo.geraDALLOC(memoriaIndex - numVariaveisDalloc, numVariaveisDalloc);
+                memoriaIndex = memoriaIndex - numVariaveisDalloc;
+            }
+        } else {
+            if (INSTANCE.getSimbolos().get(INSTANCE.getSimbolos().size() - 1) instanceof SimboloFuncao) {
+                geraCodigo.geraRETURNF(0, 0);
+            }
         }
+
     }
 
     private void analisaEtVariaveis() { //ok gera codigo
@@ -267,13 +282,14 @@ public class Sintatico {
     private void analisaAtribChProcedimento() {
         //pega token
         Token tokenAnterior = token;
+        tokenAnterior = new Token(token);
         token = INSTANCE.getToken();
         if (token.getSimbolo().equals("satribuicao")) {     //se for atrb, tenho que ver se o elemento anterior foi declarado na tabela de simbolos
             boolean existe = false;
             SimboloVariavel auxSimb = null;
             ArrayList<Simbolo> simb = INSTANCE.getSimbolos();
             for (int i = simb.size() - 1; i >= 0; i--) {
-
+                System.out.println(tokenAnterior.getLexema() + "=" + simb.get(i).getLexema());
                 if (simb.get(i).getLexema().equals(tokenAnterior.getLexema())) {
                     existe = true;
                     auxSimb = (SimboloVariavel) simb.get(i);
@@ -341,12 +357,18 @@ public class Sintatico {
     private void analisaEnquanto() {
         //negocio de rotulo doidera
         //pega token
+        int rotuloInicio = rotulo, rotuloFim;
         token = INSTANCE.getToken();
         analisaExpressao();
         posfixa.geraPosFixa(filaInFixa);
         printaInFixa();
+        geraCodigo.geraNULL(rotulo);
+        rotulo++;
         geraCodigo.geraPOSFIXA(posfixa.getPosFixa());
         String tipo = posfixa.getTipoPosfixa();
+        rotuloFim = rotulo;
+        rotulo++;
+        geraCodigo.geraJMPF(rotuloFim);
 
         if (tipo.equals("ERRO")) {
             //erro de tipos de operandos
@@ -358,6 +380,8 @@ public class Sintatico {
                 //pega token
                 token = INSTANCE.getToken();
                 analisaComandoSimples();
+                geraCodigo.geraJMP(rotuloInicio);
+                geraCodigo.geraNULL(rotuloFim);
                 // rotulo de novo gri
             } else {
                 //erro
@@ -433,8 +457,8 @@ public class Sintatico {
                     if (token.getSimbolo().equals("sfecha_parenteses")) {
                         //pega token
                         token = INSTANCE.getToken();
-                        geraCodigo.geraRD();
-                        geraCodigo.geraSTR(simb.getMemoria());
+                        geraCodigo.geraLDV(simb.getMemoria());
+                        geraCodigo.geraPRN();
                     } else {
                         //erro
                         printaErro("' ) '");
@@ -469,7 +493,7 @@ public class Sintatico {
 
     private void analisaChProcedimento(Token tk) {
         boolean existe = false;
-        SimboloProcProg aux=null;
+        SimboloProcProg aux = null;
         for (Simbolo e : INSTANCE.getSimbolos()) {
             if (e.getLexema().equals(tk.getLexema())) {
                 existe = true;
@@ -639,7 +663,8 @@ public class Sintatico {
                     filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo(), 0));
                 }
 
-                if (simbaux instanceof SimboloVariavel || simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
+                if (simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
+                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo(), 9999));
                     analisaChamadaFuncao();
                 } else {
                     token = INSTANCE.getToken();

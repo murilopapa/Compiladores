@@ -7,6 +7,18 @@ public class Token {
     private int linha;
     private int indexStart, indexEnd;
 
+    Token(){
+        
+    }
+    Token(Token token){
+        simbolo= token.getSimbolo();
+        lexema= token.getSimbolo();
+        linha= token.getLinha();
+        indexStart= token.getIndexStart();
+        indexEnd= token.getIndexEnd();
+        
+    }
+    
     public String getSimbolo() {
         return simbolo;
     }

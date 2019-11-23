@@ -386,6 +386,25 @@ public class Gerenciador {
             case "RETURN":
                 memoria.setI(pilha.getTopoPilha());
                 break;
+            case "RETURNF":
+                int auxReturnF = pilha.getTopoPilha();
+                
+                arg1s = funcao_atual.getArg1();
+                arg2s = funcao_atual.getArg2();
+                arg1i = Integer.parseInt(arg1s);
+                arg2i = Integer.parseInt(arg2s);
+                // O ERRO DO EXEMPLO 2 ESTA NA CONDIÇÃO DO IF, ARRUMAR
+                for (int i = arg2i - 1; i >= 0; i--) {
+                    if ((arg1i + i) >= pilha.getDadosSize() - 1) {
+                        pilha.getTopoPilha();
+                    } else {
+                        pilha.setIndexPilha(arg1i + i, pilha.getTopoPilha());
+                    }
+
+                }                
+                memoria.setI(pilha.getTopoPilha());
+                pilha.setTopoPilha(auxReturnF);
+                break;
         }
         if (finished) {
             prints.clear();
@@ -420,5 +439,5 @@ public class Gerenciador {
     public static ArrayList<String> getPrints() {
         return prints;
     }
-    
+
 }

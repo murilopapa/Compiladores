@@ -1,5 +1,8 @@
 package compilador;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GeradorDeCodigo {
@@ -127,12 +130,12 @@ public class GeradorDeCodigo {
     }
 
     public void geraALLOC(int m, int n) {
-        String operacao = "ALLOC " + m + "," + n;
+        String operacao = "ALLOC " + m + " " + n;
         codigo.add(operacao);
     }
 
     public void geraDALLOC(int m, int n) {
-        String operacao = "DALLOC " + m + "," + n;
+        String operacao = "DALLOC " + m + " " + n;
         codigo.add(operacao);
     }
 
@@ -145,15 +148,22 @@ public class GeradorDeCodigo {
         String operacao = "RETURN";
         codigo.add(operacao);
     }
+
     public void geraRETURNF(int m, int n) {
         String operacao = "RETURN";
         codigo.add(operacao);
     }
 
-    public void printaCodigo() {
+    public void printaCodigo() throws IOException {
+        String str = "";
         for (String n : codigo) {
             System.out.println(n);
+            str = str + n + "\n";
         }
+        
+        BufferedWriter writer = new BufferedWriter(new FileWriter("output.obj"));
+        writer.write(str);
+        writer.close();
     }
 
     public void geraPOSFIXA(ArrayList<Elemento> posFixa) {
