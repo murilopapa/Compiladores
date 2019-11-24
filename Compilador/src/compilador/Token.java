@@ -12,7 +12,7 @@ public class Token {
     }
     Token(Token token){
         simbolo= token.getSimbolo();
-        lexema= token.getSimbolo();
+        lexema= token.getLexema();
         linha= token.getLinha();
         indexStart= token.getIndexStart();
         indexEnd= token.getIndexEnd();

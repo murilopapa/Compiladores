@@ -289,7 +289,7 @@ public class Sintatico {
             SimboloVariavel auxSimb = null;
             ArrayList<Simbolo> simb = INSTANCE.getSimbolos();
             for (int i = simb.size() - 1; i >= 0; i--) {
-                System.out.println(tokenAnterior.getLexema() + "=" + simb.get(i).getLexema());
+                
                 if (simb.get(i).getLexema().equals(tokenAnterior.getLexema())) {
                     existe = true;
                     auxSimb = (SimboloVariavel) simb.get(i);
@@ -659,18 +659,16 @@ public class Sintatico {
             if (boolaux) {//if pesquisatabela
                 if (simbaux instanceof SimboloVariavel) {
                     filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloVariavel) simbaux).getTipo(), ((SimboloVariavel) simbaux).getMemoria()));
-                } else {
-                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo(), 0));
-                }
-
-                if (simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
-                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo(), 9999));
+                    token = INSTANCE.getToken();
+                } else if (simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
+                    filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo(), ((SimboloFuncao) simbaux).getRotulo()));
                     analisaChamadaFuncao();
                 } else {
-                    token = INSTANCE.getToken();
+                    printaErro("erro de fator");
                 }
+
             } else {
-                //erro semantico
+                printaErro("identificador nao declarado");
             }
 
         } else if (token.getSimbolo().equals("snumero")) {

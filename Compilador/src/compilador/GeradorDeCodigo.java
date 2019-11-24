@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class GeradorDeCodigo {
 
+    private Gerenciador INSTANCE = Gerenciador.getInstance();
     ArrayList<String> codigo = new ArrayList<String>();
 
     public void geraLDC(int k) {
@@ -150,7 +151,7 @@ public class GeradorDeCodigo {
     }
 
     public void geraRETURNF(int m, int n) {
-        String operacao = "RETURN";
+        String operacao = "RETURNF " + m + " " + n;
         codigo.add(operacao);
     }
 
@@ -160,7 +161,7 @@ public class GeradorDeCodigo {
             System.out.println(n);
             str = str + n + "\n";
         }
-        
+
         BufferedWriter writer = new BufferedWriter(new FileWriter("output.obj"));
         writer.write(str);
         writer.close();
@@ -173,7 +174,19 @@ public class GeradorDeCodigo {
                     Integer.parseInt(e.getNome());
                     geraLDC(Integer.parseInt(e.getNome()));
                 } catch (NumberFormatException err) {
-                    geraLDV(((ElementoOperando) e).getMemoria());
+                    boolean funcao = false;
+                    for (Simbolo x : INSTANCE.getSimbolos()) {
+                        if (x.getLexema().equals(e.getNome())) {
+                            if (x instanceof SimboloFuncao) {
+                                geraCALL(((ElementoOperando) e).getMemoria());
+                                funcao = true;
+                            }
+                        }
+                    }
+                    if (!funcao) {
+                        geraLDV(((ElementoOperando) e).getMemoria());
+                    }
+
                 }
 
             } else {
