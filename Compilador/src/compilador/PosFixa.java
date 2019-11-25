@@ -150,11 +150,11 @@ public class PosFixa {
                     case "-":
                     case "*":
                     case "div":
-                        if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("inteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("inteiro")) {
+                        if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("sinteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("sinteiro")) {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "inteiro", 0));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "sinteiro", 0));
                         } else {
                             return "ERRO";
                         }
@@ -164,11 +164,11 @@ public class PosFixa {
                     case "<=":
                     case ">":
                     case ">=":
-                        if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("inteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("inteiro")) {
+                        if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("sinteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("sinteiro")) {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano", 0));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "sbooleano", 0));
                         } else {
                             return "ERRO";
                         }
@@ -176,16 +176,16 @@ public class PosFixa {
 
                     case "=":
                     case "!=":
-                        if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("inteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("inteiro")) {
+                        if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("sinteiro") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("sinteiro")) {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano", 0));
-                        } else if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("booleano") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("booleano")) {
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "sbooleano", 0));
+                        } else if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("sbooleano") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("sbooleano")) {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano", 0));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "sbooleano", 0));
 
                         } else {
                             return "ERRO";
@@ -194,11 +194,11 @@ public class PosFixa {
 
                     case "e":
                     case "ou":
-                        if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("booleano") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("booleano")) {
+                        if (((ElementoOperando) auxPosFixa2.get(i - 1)).getTipo().equals("sbooleano") && ((ElementoOperando) auxPosFixa2.get(i - 2)).getTipo().equals("sbooleano")) {
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
                             auxPosFixa2.remove(i - 2);
-                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "booleano", 0));
+                            auxPosFixa2.add(i - 2, new ElementoOperando("AUX", "sbooleano", 0));
                         } else {
                             return "ERRO";
                         }
@@ -206,6 +206,7 @@ public class PosFixa {
                 }
                 i = 0;
             } else {
+                
                 i++;
             }
         }

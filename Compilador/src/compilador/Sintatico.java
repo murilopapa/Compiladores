@@ -9,6 +9,7 @@ import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
+import java.sql.Timestamp;
 
 public class Sintatico {
 
@@ -62,7 +63,8 @@ public class Sintatico {
                     analisaBloco();
                     if (token.getSimbolo().equals("sponto")) {
                         jTextAreaErro.setForeground(new java.awt.Color(0, 204, 0));
-                        jTextAreaErro.setText("Completo !!");
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        jTextAreaErro.setText("Completo em " + timestamp + " !");
                         geraCodigo.geraHLT();
                         try {
                             geraCodigo.printaCodigo();
@@ -97,7 +99,7 @@ public class Sintatico {
 
         if (numVariaveisDalloc != 0) {
             if (INSTANCE.getSimbolos().get(INSTANCE.getSimbolos().size() - 1) instanceof SimboloFuncao) {
-                geraCodigo.geraRETURNF(memoriaIndex - numVariaveisDalloc, numVariaveisDalloc);
+                
                 memoriaIndex = memoriaIndex - numVariaveisDalloc;
             } else {
                 geraCodigo.geraDALLOC(memoriaIndex - numVariaveisDalloc, numVariaveisDalloc);
@@ -105,7 +107,7 @@ public class Sintatico {
             }
         } else {
             if (INSTANCE.getSimbolos().get(INSTANCE.getSimbolos().size() - 1) instanceof SimboloFuncao) {
-                geraCodigo.geraRETURNF(0, 0);
+                
             }
         }
 
@@ -250,7 +252,7 @@ public class Sintatico {
 
                 if (simbolo instanceof SimboloVariavel) {
                     if (((SimboloVariavel) simbolo).getTipo().contentEquals("")) {
-                        ((SimboloVariavel) simbolo).setTipo(token.getLexema());
+                        ((SimboloVariavel) simbolo).setTipo(token.getSimbolo());
                     }
                 }
                 simbolos.add(simbolo);
@@ -281,30 +283,63 @@ public class Sintatico {
 
     private void analisaAtribChProcedimento() {
         //pega token
+        boolean isFuncao = false;
         Token tokenAnterior = token;
         tokenAnterior = new Token(token);
         token = INSTANCE.getToken();
         if (token.getSimbolo().equals("satribuicao")) {     //se for atrb, tenho que ver se o elemento anterior foi declarado na tabela de simbolos
             boolean existe = false;
-            SimboloVariavel auxSimb = null;
+            Simbolo auxSimb = null;
             ArrayList<Simbolo> simb = INSTANCE.getSimbolos();
             for (int i = simb.size() - 1; i >= 0; i--) {
-                
+
                 if (simb.get(i).getLexema().equals(tokenAnterior.getLexema())) {
                     existe = true;
-                    auxSimb = (SimboloVariavel) simb.get(i);
+                    if (simb.get(i) instanceof SimboloFuncao) {
+                        isFuncao = true;
+                        auxSimb = (SimboloFuncao) simb.get(i);
+                    } else {
+                        auxSimb = (SimboloVariavel) simb.get(i);
+                    }
+
                     break;
                 }
 
             }
             if (existe) {
                 String tipo = analisaAtribuicao();
-                if (tipo.equals(auxSimb.getTipo())) {
-                    //gera o codigo da atribuicao
-                    geraCodigo.geraSTR(auxSimb.getMemoria());
+                if (isFuncao) {
+                    if (tipo.equals(((SimboloFuncao) auxSimb).getTipo())) {
+                        //gera o codigo da atribuicao
+                        int count = 0;
+                        for (int i = INSTANCE.getSimbolos().size() - 1; i >= 0; i--) {
+                            if (INSTANCE.getSimbolos().get(i) instanceof SimboloVariavel) {
+                                count++;
+                            }
+                            if (INSTANCE.getSimbolos().get(i) instanceof SimboloFuncao) {
+                                break;
+                            }
+                        }
+                        if(count == 0){
+                            geraCodigo.geraRETURNF(0, 0);
+                        }
+                        else{
+                            geraCodigo.geraRETURNF(memoriaIndex - count, memoriaIndex);
+                        }
+                        
+                    } else {
+                        printaErro("Tipos incompativeis");
+                    }
                 } else {
-                    printaErro("Tipos incompativeis");
+                    
+                    if (tipo.equals(((SimboloVariavel) auxSimb).getTipo())) {
+                        //gera o codigo da atribuicao
+                        geraCodigo.geraSTR(((SimboloVariavel) auxSimb).getMemoria());
+                    } else {
+                        printaErro("Tipos incompativeis");
+                    }
                 }
+
             } else {
                 printaErro("Var n declarada");
             }
@@ -673,7 +708,7 @@ public class Sintatico {
 
         } else if (token.getSimbolo().equals("snumero")) {
             //pega token
-            filaInFixa.add(new ElementoOperando(token.getLexema(), "inteiro", 0));
+            filaInFixa.add(new ElementoOperando(token.getLexema(), "sinteiro", 0));
             token = INSTANCE.getToken();
 
         } else if (token.getSimbolo().equals("snao")) {
