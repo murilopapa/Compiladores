@@ -743,11 +743,15 @@ public class Sintatico {
                 //erro
                 printaErro(" ) ");
             }
-        } else if (token.getLexema().equals("verdadeiro") || token.getLexema().equals("falso")) {
+        } else if (token.getLexema().equals("verdadeiro")) {
             //pega token
-            filaInFixa.add(new ElementoOperador(token.getLexema()));
+            filaInFixa.add(new ElementoOperando("1", "sbooleano", 0));
             token = INSTANCE.getToken();
-        } else {
+        } else if(token.getLexema().equals("falso")){
+            filaInFixa.add(new ElementoOperando("0", "sbooleano", 0));
+            token = INSTANCE.getToken();
+        } 
+        else {
             //erro
             printaErro("verdadeiro ou falso");
         }
