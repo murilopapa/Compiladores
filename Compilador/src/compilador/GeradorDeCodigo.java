@@ -227,6 +227,9 @@ public class GeradorDeCodigo {
                     case "ou":
                         geraOR();
                         break;
+                    case "nao":
+                        geraNEG();
+                        break;
 
                 }
             }

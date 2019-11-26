@@ -24,8 +24,8 @@ public class PosFixa {
                             posFixa.add(auxUnitario);
                             break;
                         case "nao":
-                            ElementoOperador auxUnitarioNot = new ElementoOperador("not");
-                            posFixa.add(auxUnitarioNot);
+                            ElementoOperador auxUnitarioNot = new ElementoOperador("nao");
+                            auxPosFixa.add(auxUnitarioNot);
                             break;
                     }
                 } else if (auxElemento instanceof ElementoOperando) {
@@ -35,7 +35,7 @@ public class PosFixa {
                 }
 
             } else {
-                if (auxElemento.getNome().equals("+U") || auxElemento.getNome().equals("-U") || auxElemento.getNome().equals("not")) {
+                if (auxElemento.getNome().equals("+U") || auxElemento.getNome().equals("-U") || auxElemento.getNome().equals("nao")) {
                     switch (auxElemento.getNome()) {
                         case "+U":
                             break;
@@ -43,9 +43,9 @@ public class PosFixa {
                             ElementoOperador auxUnitario = new ElementoOperador("-U");
                             posFixa.add(auxUnitario);
                             break;
-                        case "not":
-                            ElementoOperador auxUnitarioNot = new ElementoOperador("not");
-                            posFixa.add(auxUnitarioNot);
+                        case "nao":
+                            ElementoOperador auxUnitarioNot = new ElementoOperador("nao");
+                            auxPosFixa.add(auxUnitarioNot);
                             break;
                     }
                 } else if (auxElemento.getNome().equals("*") || auxElemento.getNome().equals("div")) {
