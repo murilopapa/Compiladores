@@ -99,7 +99,7 @@ public class Sintatico {
 
         if (numVariaveisDalloc != 0) {
             if (INSTANCE.getSimbolos().get(INSTANCE.getSimbolos().size() - 1) instanceof SimboloFuncao) {
-                
+
                 memoriaIndex = memoriaIndex - numVariaveisDalloc;
             } else {
                 geraCodigo.geraDALLOC(memoriaIndex - numVariaveisDalloc, numVariaveisDalloc);
@@ -107,7 +107,7 @@ public class Sintatico {
             }
         } else {
             if (INSTANCE.getSimbolos().get(INSTANCE.getSimbolos().size() - 1) instanceof SimboloFuncao) {
-                
+
             }
         }
 
@@ -320,18 +320,17 @@ public class Sintatico {
                                 break;
                             }
                         }
-                        if(count == 0){
+                        if (count == 0) {
                             geraCodigo.geraRETURNF(0, 0);
+                        } else {
+                            geraCodigo.geraRETURNF(memoriaIndex - count, count);
                         }
-                        else{
-                            geraCodigo.geraRETURNF(memoriaIndex - count, memoriaIndex);
-                        }
-                        
+
                     } else {
                         printaErro("Tipos incompativeis");
                     }
                 } else {
-                    
+
                     if (tipo.equals(((SimboloVariavel) auxSimb).getTipo())) {
                         //gera o codigo da atribuicao
                         geraCodigo.geraSTR(((SimboloVariavel) auxSimb).getMemoria());
@@ -471,7 +470,8 @@ public class Sintatico {
     private void analisaEscreva() {
         //pega token
         boolean varExiste = false;
-        SimboloVariavel simb = null;
+        boolean isFuncao = false;
+        Simbolo simb = null;
 
         token = INSTANCE.getToken();
         if (token.getSimbolo().equals("sabre_parenteses")) {
@@ -479,10 +479,16 @@ public class Sintatico {
             token = INSTANCE.getToken();
             if (token.getSimbolo().equals("sidentificador")) {
                 // pesquisa declaracao na tabela com o token.lexema
+
                 for (int i = INSTANCE.getSimbolos().size(); i > 0; i--) {
                     if (INSTANCE.getSimbolos().get(i - 1).getLexema().equals(token.getLexema())) {
                         varExiste = true;
-                        simb = (SimboloVariavel) INSTANCE.getSimbolos().get(i - 1);
+                        if (INSTANCE.getSimbolos().get(i - 1) instanceof SimboloFuncao) {
+                            isFuncao = true;
+                            simb = (SimboloFuncao) INSTANCE.getSimbolos().get(i - 1);
+                        } else {
+                            simb = (SimboloVariavel) INSTANCE.getSimbolos().get(i - 1);
+                        }
                         break;
                     }
                 }
@@ -491,9 +497,15 @@ public class Sintatico {
                     token = INSTANCE.getToken();
                     if (token.getSimbolo().equals("sfecha_parenteses")) {
                         //pega token
-                        token = INSTANCE.getToken();
-                        geraCodigo.geraLDV(simb.getMemoria());
-                        geraCodigo.geraPRN();
+                        if (isFuncao) {
+                            token = INSTANCE.getToken();
+                            geraCodigo.geraCALL(((SimboloFuncao) simb).getRotulo());
+                            geraCodigo.geraPRN();
+                        } else {
+                            token = INSTANCE.getToken();
+                            geraCodigo.geraLDV(((SimboloVariavel)simb).getMemoria());
+                            geraCodigo.geraPRN();
+                        }
                     } else {
                         //erro
                         printaErro("' ) '");
@@ -698,6 +710,7 @@ public class Sintatico {
                 } else if (simbaux instanceof SimboloFuncao) {//se inteiro ou booleano
                     filaInFixa.add(new ElementoOperando(token.getLexema(), ((SimboloFuncao) simbaux).getTipo(), ((SimboloFuncao) simbaux).getRotulo()));
                     analisaChamadaFuncao();
+
                 } else {
                     printaErro("erro de fator");
                 }
