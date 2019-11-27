@@ -270,6 +270,7 @@ public class Gerenciador {
                 break;  //OK
 
             case "START":       //inicia o codigo
+                prints.clear();
                 System.out.println("Iniciado!");
                 memoria.setI(memoria.getI() + 1);
                 printaPilha(pilha, funcao_atual.getFuncao());
@@ -407,7 +408,6 @@ public class Gerenciador {
                 break;
         }
         if (finished) {
-            prints.clear();
             return true;
         } else {
             return false;

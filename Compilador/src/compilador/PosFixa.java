@@ -91,10 +91,11 @@ public class PosFixa {
                 } else if (auxElemento.getNome().equals("(")) {
                     auxPosFixa.add(auxElemento);
                 } else if (auxElemento.getNome().equals(")")) {
+                    boolean  xesqdl = false;
                     while (!auxPosFixa.get(i).getNome().equals("(")) {
                         posFixa.add(auxPosFixa.get(i));
                         auxPosFixa.remove(i);
-                        i = auxPosFixa.size() - 1;
+                        i = auxPosFixa.size() - 1;                       
                     }
                     i = auxPosFixa.size() - 1;
                     auxPosFixa.remove(i);
@@ -115,7 +116,6 @@ public class PosFixa {
         }
         System.out.println("");
         System.out.println("-------------------");*/
-
     }
 
     public String getTipoPosfixa() {
@@ -206,7 +206,7 @@ public class PosFixa {
                 }
                 i = 0;
             } else {
-                
+
                 i++;
             }
         }

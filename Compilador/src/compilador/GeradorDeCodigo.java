@@ -168,71 +168,83 @@ public class GeradorDeCodigo {
     }
 
     public void geraPOSFIXA(ArrayList<Elemento> posFixa) {
+        int i = 0;
+        boolean skipVar = false;
         for (Elemento e : posFixa) {
-            if (e instanceof ElementoOperando) {
-                try {
-                    Integer.parseInt(e.getNome());
-                    geraLDC(Integer.parseInt(e.getNome()));
-                } catch (NumberFormatException err) {
-                    boolean funcao = false;
-                    for (Simbolo x : INSTANCE.getSimbolos()) {
-                        if (x.getLexema().equals(e.getNome())) {
-                            if (x instanceof SimboloFuncao) {
-                                geraCALL(((ElementoOperando) e).getMemoria());
-                                funcao = true;
+            if (!skipVar) {
+                if (e instanceof ElementoOperando) {
+                    try {
+                        Integer.parseInt(e.getNome());
+                        geraLDC(Integer.parseInt(e.getNome()));
+                    } catch (NumberFormatException err) {
+                        boolean funcao = false;
+                        for (Simbolo x : INSTANCE.getSimbolos()) {
+                            if (x.getLexema().equals(e.getNome())) {
+                                if (x instanceof SimboloFuncao) {
+                                    geraCALL(((ElementoOperando) e).getMemoria());
+                                    funcao = true;
+                                }
                             }
                         }
-                    }
-                    if (!funcao) {
-                        geraLDV(((ElementoOperando) e).getMemoria());
+                        if (!funcao) {
+                            geraLDV(((ElementoOperando) e).getMemoria());
+                        }
+
                     }
 
+                } else {
+                    switch (e.getNome()) {
+                        case "+":
+                            geraADD();
+                            break;
+                        case "-":
+                            geraSUB();
+                            break;
+                        case "*":
+                            geraMULT();
+                            break;
+                        case "div":
+                            geraDIVI();
+                            break;
+                        case "<":
+                            geraCME();
+                            break;
+                        case "<=":
+                            geraCMEQ();
+                            break;
+                        case ">":
+                            geraCMA();
+                            break;
+                        case ">=":
+                            geraCMAQ();
+                            break;
+                        case "=":
+                            geraCEQ();
+                            break;
+                        case "!=":
+                            geraCDIF();
+                            break;
+                        case "e":
+                            geraAND();
+                            break;
+                        case "ou":
+                            geraOR();
+                            break;
+                        case "nao":
+                            geraNEG();
+                            break;
+                        case "-U":
+                            geraLDV(((ElementoOperando) posFixa.get(i + 1)).getMemoria());
+                            geraINV();
+                            skipVar = true;
+                            break;
+
+                    }
                 }
-
             } else {
-                switch (e.getNome()) {
-                    case "+":
-                        geraADD();
-                        break;
-                    case "-":
-                        geraSUB();
-                        break;
-                    case "*":
-                        geraMULT();
-                        break;
-                    case "div":
-                        geraDIVI();
-                        break;
-                    case "<":
-                        geraCME();
-                        break;
-                    case "<=":
-                        geraCMEQ();
-                        break;
-                    case ">":
-                        geraCMA();
-                        break;
-                    case ">=":
-                        geraCMAQ();
-                        break;
-                    case "=":
-                        geraCEQ();
-                        break;
-                    case "!=":
-                        geraCDIF();
-                        break;
-                    case "e":
-                        geraAND();
-                        break;
-                    case "ou":
-                        geraOR();
-                        break;
-                    case "nao":
-                        geraNEG();
-                        break;
-
-                }
+                skipVar = false;
             }
+            i++;
         }
     }
 }

@@ -359,9 +359,9 @@ public class Sintatico {
         String tipo = posfixa.getTipoPosfixa();
         geraCodigo.geraJMPF(rotuloAux);
         rotulo++;
-        if (tipo.equals("ERRO")) {
+        if (!tipo.equals("sbooleano")) {
             //erro de tipos de operandos
-            printaErro("TIPO VARIAVEL");
+            printaErro("Esperada uma expressao booleana");
         } else {
             if (token.getSimbolo().equals("sentao")) {
                 //pega token
@@ -404,9 +404,9 @@ public class Sintatico {
         rotulo++;
         geraCodigo.geraJMPF(rotuloFim);
 
-        if (tipo.equals("ERRO")) {
+        if (!tipo.equals("sbooleano")) {
             //erro de tipos de operandos
-            printaErro("TIPO VARIAVEL");
+            printaErro("Esperada uma expressao booleana");
         } else {
 
             if (token.getSimbolo().equals("sfaca")) {

@@ -46,7 +46,6 @@ public class teste extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Maquina Virtual");
-        setFocusableWindowState(false);
         setFont(new java.awt.Font("SansSerif", 1, 10)); // NOI18N
         setResizable(false);
 
@@ -119,6 +118,7 @@ public class teste extends javax.swing.JFrame {
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/maquina/virtual/imagens/arquivoImg.png"))); // NOI18N
         jMenu1.setText("Arquivo");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/maquina/virtual/imagens/importarImg.png"))); // NOI18N
         jMenuItem1.setText("Importar OBJ");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +133,7 @@ public class teste extends javax.swing.JFrame {
         jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/maquina/virtual/imagens/executarImg.png"))); // NOI18N
         jMenu2.setText("Executar");
 
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
         jMenuItem2.setText("Executar");
         jMenuItem2.setEnabled(false);
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -146,6 +147,7 @@ public class teste extends javax.swing.JFrame {
         jMenuItem3.setEnabled(false);
         jMenu2.add(jMenuItem3);
 
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         jMenuItem4.setText("Passo a passo");
         jMenuItem4.setEnabled(false);
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
@@ -313,20 +315,19 @@ public class teste extends javax.swing.JFrame {
             if (jTable2.getColumnModel().getColumnCount() > 0) {
                 jTable2.getColumnModel().getColumn(0).setResizable(false);
             }
-            //ate ai em cima, é codigo do builder, re-utilizado
-            String output_text = "";    //crio uma string vazia pra mostrar os outputs
-            java.util.ArrayList<String> prints = INSTANCE.getPrints();  //pego a lista de outputs feitos
-            for (int i = 0; i < prints.size(); i++) {
-                output_text.concat("OUTPUT: " + prints.get(i) + "\n");   //trato elas melhor, pra printar com o /n
-            }
-            //codigo do builder para instanciar bonitinho o textarea
-            jTextArea1 = new javax.swing.JTextArea(output_text);
-            jTextArea1.setColumns(20);
-            jTextArea1.setRows(5);
-            jTextArea1.setEditable(false);
-            jScrollPane4.setViewportView(jTextArea1);
+            //ate ai em cima, é codigo do builder, re-utilizado            
         } while (!finished);    //faço o loop enquanto aquela primeira variavel booleana nao for alterada
         //eu achei melhor fazer por while, pq pode ser que no codigo eu tenha um "loop infinito", entao aqui ficaria em loop infinito
+        
+        String output = "";
+        for (String e:INSTANCE.getPrints()) {
+            output = output + e;
+        }
+        jTextArea1 = new javax.swing.JTextArea(output);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setEditable(false);
+        jScrollPane4.setViewportView(jTextArea1);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
 //opção de passo-a-passo, na hr que eu clico, ele executa o codigo uma vez
