@@ -85,17 +85,18 @@ public class PosFixa {
                         auxPosFixa.add(auxElemento);
                     }
                 } else if (auxElemento.getNome().equals("ou")) {
-                    posFixa.add(auxPosFixa.get(i));
-                    auxPosFixa.remove(i);
+                    if (!auxPosFixa.get(i).getNome().equals("(")) {
+                        posFixa.add(auxPosFixa.get(i));
+                        auxPosFixa.remove(i);
+                    }
                     auxPosFixa.add(auxElemento);
                 } else if (auxElemento.getNome().equals("(")) {
                     auxPosFixa.add(auxElemento);
                 } else if (auxElemento.getNome().equals(")")) {
-                    boolean  xesqdl = false;
                     while (!auxPosFixa.get(i).getNome().equals("(")) {
                         posFixa.add(auxPosFixa.get(i));
                         auxPosFixa.remove(i);
-                        i = auxPosFixa.size() - 1;                       
+                        i = auxPosFixa.size() - 1;
                     }
                     i = auxPosFixa.size() - 1;
                     auxPosFixa.remove(i);
