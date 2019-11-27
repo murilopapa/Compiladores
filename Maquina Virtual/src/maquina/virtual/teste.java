@@ -208,6 +208,8 @@ public class teste extends javax.swing.JFrame {
         abrir_arquivo.setFileFilter(filter);
         File arquivo_obj;
         abrir_arquivo.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
+        INSTANCE.setjTextArea1(jTextArea1);
+        INSTANCE.setjScrollPane4(jScrollPane4);
         int valor = abrir_arquivo.showOpenDialog(null);
 
         if (valor == JFileChooser.APPROVE_OPTION) {
@@ -284,11 +286,12 @@ public class teste extends javax.swing.JFrame {
 
     //ação do botao executar, que executa o codigo todo
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        boolean finished = false;   //para saber se acabou o codigo ou nao        
+        boolean finished = false;   //para saber se acabou o codigo ou nao  
+        INSTANCE.setjTextArea1(jTextArea1);
+        INSTANCE.setjScrollPane4(jScrollPane4);
         do {
             jTable1.updateUI();
             jTable2.updateUI();
-            jTextArea1.updateUI();
             finished = INSTANCE.ExecutaLinha(); //executo a linha
             Pilha pilha_aux = INSTANCE.getPilha();  //pego toda a pilha
             Object[][] dados_pilha = new Object[pilha_aux.getDadosSize()][2];   //instancio um object do tamanho da pilha (numero de linhas)
@@ -318,20 +321,14 @@ public class teste extends javax.swing.JFrame {
             //ate ai em cima, é codigo do builder, re-utilizado            
         } while (!finished);    //faço o loop enquanto aquela primeira variavel booleana nao for alterada
         //eu achei melhor fazer por while, pq pode ser que no codigo eu tenha um "loop infinito", entao aqui ficaria em loop infinito
+       
         
-        String output = "";
-        for (String e:INSTANCE.getPrints()) {
-            output = output + e;
-        }
-        jTextArea1 = new javax.swing.JTextArea(output);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setEditable(false);
-        jScrollPane4.setViewportView(jTextArea1);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
 //opção de passo-a-passo, na hr que eu clico, ele executa o codigo uma vez
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        INSTANCE.setjTextArea1(jTextArea1);
+        INSTANCE.setjScrollPane4(jScrollPane4);
         jButton1.setEnabled(true);  //habilito o botao pra poder dar o proximo passo
         boolean finished = INSTANCE.ExecutaLinha(); //executo uma linha
         //mesma coisa do codigo acima, mas tirando o loop, pq é uma linha por vez
@@ -357,17 +354,7 @@ public class teste extends javax.swing.JFrame {
             }
         });
 
-        String output_text = "";
-        java.util.ArrayList<String> prints = INSTANCE.getPrints();
-        for (int i = 0; i < prints.size(); i++) {
-            output_text.concat(prints.get(i) + "\n");
-        }
-
-        jTextArea1 = new javax.swing.JTextArea(output_text);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setEditable(false);
-        jScrollPane4.setViewportView(jTextArea1);
+        
         jScrollPane2.setViewportView(jTable2);
 
         if (jTable2.getColumnModel().getColumnCount() > 0) {
@@ -392,6 +379,8 @@ public class teste extends javax.swing.JFrame {
     //botao de execução passo-a-passo
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //mesmo codigo da func acima
+        INSTANCE.setjTextArea1(jTextArea1);
+        INSTANCE.setjScrollPane4(jScrollPane4);
         jButton1.setEnabled(false);
         boolean finished = INSTANCE.ExecutaLinha();
         Pilha pilha_aux = INSTANCE.getPilha();
@@ -419,17 +408,7 @@ public class teste extends javax.swing.JFrame {
         if (jTable2.getColumnModel().getColumnCount() > 0) {
             jTable2.getColumnModel().getColumn(0).setResizable(false);
         }
-        String output_text = "";
-        java.util.ArrayList<String> prints = INSTANCE.getPrints();
-        for (int i = 0; i < prints.size(); i++) {
-            output_text = output_text.concat(prints.get(i) + "\n");
-        }
-        System.out.println("OUTPUT TEXT:" + output_text);
-        jTextArea1 = new javax.swing.JTextArea(output_text);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setEditable(false);
-        jScrollPane4.setViewportView(jTextArea1);
+        
         jButton1.setEnabled(true);
         if (finished) {
             jButton1.setEnabled(false);

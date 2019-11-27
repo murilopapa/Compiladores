@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class Gerenciador {
 
@@ -17,8 +19,24 @@ public class Gerenciador {
     private static Memoria memoria = new Memoria();
     private static Pilha pilha = new Pilha();
     private static ArrayList<Label> labels = new ArrayList<Label>();      //pego todas as labels que registrei
-    private static ArrayList<String> prints = new ArrayList<String>();
+    private static JTextArea jTextArea1;
+    private static JScrollPane jScrollPane4;
+    private static ArrayList<String> outputs = new ArrayList<String>();
+    public static JScrollPane getjScrollPane4() {
+        return jScrollPane4;
+    }
 
+    public static void setjScrollPane4(JScrollPane jScrollPane4) {
+        Gerenciador.jScrollPane4 = jScrollPane4;
+    }
+
+    public static JTextArea getjTextArea1() {
+        return jTextArea1;
+    }
+
+    public static void setjTextArea1(JTextArea jTextArea1) {
+        Gerenciador.jTextArea1 = jTextArea1;
+    }
     public static Gerenciador getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new Gerenciador();
@@ -29,7 +47,7 @@ public class Gerenciador {
 
     public boolean LerArquivo(File objLido) {
         BufferedReader reader = null;
-
+        
         try {
             reader = new BufferedReader(new FileReader(objLido));
             String text;
@@ -269,8 +287,10 @@ public class Gerenciador {
                 printaPilha(pilha, funcao_atual.getFuncao());
                 break;  //OK
 
-            case "START":       //inicia o codigo
-                prints.clear();
+            case "START":       //inicia o 
+                outputs.clear();
+                printOutput("");
+                outputs.clear();
                 System.out.println("Iniciado!");
                 memoria.setI(memoria.getI() + 1);
                 printaPilha(pilha, funcao_atual.getFuncao());
@@ -333,11 +353,11 @@ public class Gerenciador {
                 break;  //OK
             case "PRN":         //printa o valor do topo e remove ele
                 arg1i = pilha.getTopoPilha();
-                prints.add("" + arg1i);
+                printOutput("" + arg1i);
                 System.out.println("SAIDA: " + arg1i);
                 memoria.setI(memoria.getI() + 1);
                 printaPilha(pilha, funcao_atual.getFuncao());
-                break;  //OK
+                break;  //OK  //OK
             case "ALLOC":
                 arg1s = funcao_atual.getArg1();
                 arg2s = funcao_atual.getArg2();
@@ -436,8 +456,14 @@ public class Gerenciador {
         return pilha;
     }
 
-    public static ArrayList<String> getPrints() {
-        return prints;
-    }
+    
 
+    public void printOutput(String output){
+        outputs.add(output);
+        jTextArea1 = new javax.swing.JTextArea(outputs.toString());
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setEditable(false);
+        jScrollPane4.setViewportView(jTextArea1);
+    }
 }
