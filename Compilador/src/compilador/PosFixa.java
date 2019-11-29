@@ -107,8 +107,8 @@ public class PosFixa {
             i = auxPosFixa.size() - 1;
         }
         //descarrega se sobrou algo na pilha auxiliar
-        for (Elemento aux : auxPosFixa) {
-            posFixa.add(aux);
+        for (int j = auxPosFixa.size() - 1; j >= 0; j--) {
+            posFixa.add(auxPosFixa.get(j));
         }
 
         /*System.out.println("POS FIXA:");
