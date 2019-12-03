@@ -21,6 +21,7 @@ public class Sintatico {
     private JTextArea jTextAreaErro, jTextAreaPrograma;
     private ArrayList<Elemento> filaInFixa = new ArrayList<Elemento>();
     private GeradorDeCodigo geraCodigo = new GeradorDeCodigo();
+    private int auxRetorno = 0;
 
     private boolean erro = false;
 
@@ -309,6 +310,7 @@ public class Sintatico {
             if (existe) {
                 String tipo = analisaAtribuicao();
                 if (isFuncao) {
+                    auxRetorno++;
                     if (tipo.equals(((SimboloFuncao) auxSimb).getTipo())) {
                         //gera o codigo da atribuicao
                         int count = 0;
@@ -622,6 +624,7 @@ public class Sintatico {
             }
             if (!procExiste) {
                 //insere token na tabela de simbolos das func
+                auxRetorno = 0;
                 SimboloFuncao newSimbolo = new SimboloFuncao(token.getLexema(), rotulo);
                 geraCodigo.geraNULL(rotulo);
                 rotulo++;
@@ -639,6 +642,9 @@ public class Sintatico {
                         token = INSTANCE.getToken();
                         if (token.getSimbolo().equals("sponto_virgula")) {
                             analisaBloco();
+                            if (auxRetorno == 0){
+                                printaErro("função retorno");
+                            }
                         }
                     } else {
                         //eroo

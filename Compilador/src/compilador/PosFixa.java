@@ -15,7 +15,7 @@ public class PosFixa {
         int i = 0;
         for (Elemento auxElemento : this.elemento) {
             if (auxPosFixa.isEmpty() && !posFixa.isEmpty()) {
-                if (auxElemento.getNome().equals("+U") || auxElemento.getNome().equals("-U") || auxElemento.getNome().equals("not")) {
+                if (auxElemento.getNome().equals("+U") || auxElemento.getNome().equals("-U") || auxElemento.getNome().equals("nao")) {
                     switch (auxElemento.getNome()) {
                         case "+U":
                             break;
