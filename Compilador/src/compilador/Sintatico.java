@@ -22,6 +22,7 @@ public class Sintatico {
     private ArrayList<Elemento> filaInFixa = new ArrayList<Elemento>();
     private GeradorDeCodigo geraCodigo = new GeradorDeCodigo();
     private int auxRetorno = 0;
+    private boolean seFuncao = false;
 
     private boolean erro = false;
 
