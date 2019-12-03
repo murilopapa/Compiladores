@@ -288,7 +288,7 @@ public class Sintatico {
         Token tokenAnterior = token;
         tokenAnterior = new Token(token);
         token = INSTANCE.getToken();
-        if (token.getSimbolo().equals("satribuicao")) {     //se for atrb, tenho que ver se o elemento anterior foi declarado na tabela de simbolos
+        if (token.getSimbolo().equals("satribuicao") && erro == false) {     //se for atrb, tenho que ver se o elemento anterior foi declarado na tabela de simbolos
             boolean existe = false;
             Simbolo auxSimb = null;
             ArrayList<Simbolo> simb = INSTANCE.getSimbolos();
