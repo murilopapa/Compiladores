@@ -167,6 +167,7 @@ public class Sintatico {
 
     private void analisaComandos() {
         if (token.getSimbolo().equals("sinicio")) {
+            auxRetorno = 0;
             //pega token
             token = INSTANCE.getToken();
             analisaComandoSimples();
@@ -624,7 +625,7 @@ public class Sintatico {
             }
             if (!procExiste) {
                 //insere token na tabela de simbolos das func
-                auxRetorno = 0;
+                //auxRetorno = 0;
                 SimboloFuncao newSimbolo = new SimboloFuncao(token.getLexema(), rotulo);
                 geraCodigo.geraNULL(rotulo);
                 rotulo++;
@@ -643,7 +644,7 @@ public class Sintatico {
                         if (token.getSimbolo().equals("sponto_virgula")) {
                             analisaBloco();
                             if (auxRetorno == 0){
-                                printaErro("função retorno");
+                                printaErro("função sem retorno");
                             }
                         }
                     } else {
