@@ -62,8 +62,11 @@ public class PosFixa {
                     }
                 } else if (auxElemento.getNome().equals("+") || auxElemento.getNome().equals("-")) {
                     if (!auxPosFixa.get(i).getNome().equals("(") && (auxPosFixa.get(i).getNome().equals("*") || auxPosFixa.get(i).getNome().equals("div") || auxPosFixa.get(i).getNome().equals("+") || auxPosFixa.get(i).getNome().equals("-"))) {
-                        posFixa.add(auxPosFixa.get(i));
-                        auxPosFixa.remove(i);
+                         while (i >= 0 && !auxPosFixa.get(i).getNome().equals("(") && (auxPosFixa.get(i).getNome().equals("*") || auxPosFixa.get(i).getNome().equals("div") || auxPosFixa.get(i).getNome().equals("+") || auxPosFixa.get(i).getNome().equals("-"))) {
+                            posFixa.add(auxPosFixa.get(i));
+                            auxPosFixa.remove(i);
+                            i = auxPosFixa.size() - 1;
+                        }
                         auxPosFixa.add(auxElemento);
                     } else {
                         auxPosFixa.add(auxElemento);
